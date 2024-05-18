@@ -178,6 +178,7 @@ ADD CONSTRAINT CK_UsernameLength CHECK (LEN(Username) >= 3);
 -- Consider which fields are always required and which are optional. 
 -- Submit your CREATE TABLE and INSERT statements as Run queries & check DB.
 
+USE Movies
 
 CREATE TABLE Directors (
     Id INT PRIMARY KEY IDENTITY,
@@ -200,17 +201,184 @@ CREATE TABLE Categories (
 CREATE TABLE Movies (
     Id INT PRIMARY KEY IDENTITY,
     Title VARCHAR(30) NOT NULL,
-    DirectorId
-	CopyrightYear, 
-	Length, 
-	GenreId, 
-	CategoryId, 
-	Rating, 
-	Notes
+    DirectorId INT,
+	CopyrightYear DATETIME2, 
+	[Length] INT, 
+	GenreId INT, 
+	CategoryId INT, 
+	Rating DECIMAL (2,1), 
+	Notes VARCHAR(200)
+);
+
+
+INSERT INTO Directors (DirectorName)
+	 VALUES 
+			('Copolla'),
+			('Martin Scorsese'),
+			('Steven Spielberg'),
+			('Tim Burton'),
+			('Quentin Tarantino');
+
+INSERT INTO Genres (GenreName)
+	 VALUES 
+			('Horror'),
+			('Science fiction'),
+			('Drama'),
+			('Action'),
+			('Thriller');
+
+INSERT INTO Categories (CategoryName)
+	 VALUES 
+			('Documentaries'),
+			('Fantasy films'),
+			('Political films'),
+			('Comedy films'),
+			('Apocalyptic films');
+
+INSERT INTO Movies (Title)
+	 VALUES 
+			('The Dark Knight'),
+			('The Godfather'),
+			('The Shawshank Redemption'),
+			('Inception'),
+			('The Matrix');
+
+SELECT * FROM Directors;
+SELECT * FROM Genres;
+SELECT * FROM Categories;
+SELECT * FROM Movies;
+
+DROP TABLE Directors;
+DROP TABLE Genres;
+DROP TABLE Categories;
+DROP TABLE Movies;
+
+-- 14. Car Rental Database
+-- Using SQL queries create CarRental database with the following entities:
+--	•	Categories (Id, CategoryName, DailyRate, WeeklyRate, MonthlyRate, WeekendRate)
+--	•	Cars (Id, PlateNumber, Manufacturer, Model, CarYear, CategoryId, Doors, Picture, Condition, Available)
+--	•	Employees (Id, FirstName, LastName, Title, Notes)
+--	•	Customers (Id, DriverLicenceNumber, FullName, Address, City, ZIPCode, Notes)
+--	•	RentalOrders (Id, EmployeeId, CustomerId, CarId, TankLevel, KilometrageStart, KilometrageEnd, TotalKilometrage, StartDate, EndDate, TotalDays, RateApplied, TaxRate, OrderStatus, Notes)
+-- Set the most appropriate data types for each column. Set a primary key to each table. Populate each table with only 3 records. 
+-- Make sure the columns that are present in 2 tables would be of the same data type. 
+-- Consider which fields are always required and which are optional. Submit your CREATE TABLE and INSERT statements as Run queries & check DB.
+
+CREATE DATABASE CarRental
+USE CarRental
+
+SELECT * FROM Categories;
+SELECT * FROM Cars;
+SELECT * FROM Employees;
+SELECT * FROM Customers;
+SELECT * FROM RentalOrders;
+
+DROP TABLE Categories;
+DROP TABLE Cars;
+DROP TABLE Employees;
+DROP TABLE Customers;
+DROP TABLE RentalOrders;
+
+CREATE TABLE Categories  (
+    Id INT PRIMARY KEY IDENTITY,
+    CategoryName VARCHAR(30) NOT NULL,
+    DailyRate DECIMAL(4,2),
+	WeeklyRate DECIMAL(5,2),
+	MonthlyRate DECIMAL(6,2),
+	WeekendRate DECIMAL(4,2)
+);
+
+CREATE TABLE Cars (
+    Id INT PRIMARY KEY IDENTITY,
+    PlateNumber VARCHAR(8),
+    Manufacturer VARCHAR(200) NOT NULL,
+	Model VARCHAR(50) NOT NULL,
+	CarYear INT,
+	CategoryId INT,
+	Doors INT,
+	Picture VARBINARY(MAX),
+	Condition VARCHAR(50),
+	Available CHAR(1) 
+);
+
+CREATE TABLE Employees  (
+    Id INT PRIMARY KEY IDENTITY,
+    FirstName VARCHAR(15) NOT NULL,
+    LastName VARCHAR(30) NOT NULL,
+	Title VARCHAR(30) NOT NULL,
+	Notes VARCHAR(200)
+);
+
+CREATE TABLE Customers  (
+    Id INT PRIMARY KEY IDENTITY,
+    DriverLicenceNumber BIGINT NOT NULL,
+    FullName VARCHAR(50) NOT NULL,
+	[Address] VARCHAR(50), 
+	City VARCHAR(30), 
+	ZIPCode INT,  
+	Notes VARCHAR(200)
+);
+
+CREATE TABLE RentalOrders (
+    Id INT PRIMARY KEY IDENTITY,
+    EmployeeId INT,
+    CustomerId INT NOT NULL,
+	CarId INT NOT NULL, 
+	TankLevel INT, 
+	KilometrageStart INT NOT NULL,  
+	KilometrageEnd INT NOT NULL,  
+	TotalKilometrage INT,
+	StartDate DATE NOT NULL,
+	EndDate DATE NOT NULL,  
+	TotalDays INT,
+	RateApplied DECIMAL(6,2) NOT NULL,
+	TaxRate DECIMAL(5,2) NOT NULL,
+	OrderStatus CHAR(1),
+	Notes VARCHAR(200)
 );
 
 
 
+INSERT INTO Categories (CategoryName)
+	 VALUES 
+			('Business Class'),
+			('Sport'),
+			('OffRoad');
 
+INSERT INTO Cars (Manufacturer, Model)
+	 VALUES 
+			('Mitsubishi', 'Outlander'),
+			('Toyota', 'Celica'),
+			('WV', 'Golf');
 
+INSERT INTO Employees (FirstName, LastName, Title)
+	 VALUES 
+			('Ivan', 'Ivanov', 'CEO'),
+			('Sofia', 'Tudjarova', 'Sales Representative'),
+			('Ivo', 'Andonov', 'Operations Manager');
 
+INSERT INTO Customers (DriverLicenceNumber, FullName)
+	 VALUES 
+			('1234566789', 'Goshko Todorov'),
+			('9635842890', 'Pesho Mahlenski'),
+			('4564565645', 'Krum Pulev');
+
+INSERT INTO RentalOrders (CustomerId, CarId, KilometrageStart, KilometrageEnd, StartDate, EndDate, RateApplied, TaxRate)
+	 VALUES 
+			(1, 1, 25000, 32000, '2008-11-11', '2008-11-21', 2500.00, 250.00),
+			(2, 3, 150000, 150050, '2008-12-08', '2008-12-09', 600.00, 80.00),
+			(3, 2, 215659, 216967, '2012-03-03', '2012-04-03', 5175.00, 485.00 );
+
+												-- 15.	Hotel Database --
+
+--Using SQL queries create Hotel database with the following entities:
+--	•	Employees (Id, FirstName, LastName, Title, Notes)
+--	•	Customers (AccountNumber, FirstName, LastName, PhoneNumber, EmergencyName, EmergencyNumber, Notes)
+--	•	RoomStatus (RoomStatus, Notes)
+--	•	RoomTypes (RoomType, Notes)
+--	•	BedTypes (BedType, Notes)
+--	•	Rooms (RoomNumber, RoomType, BedType, Rate, RoomStatus, Notes)
+--	•	Payments (Id, EmployeeId, PaymentDate, AccountNumber, FirstDateOccupied, LastDateOccupied, TotalDays, AmountCharged, TaxRate, TaxAmount, PaymentTotal, Notes)
+--	•	Occupancies (Id, EmployeeId, DateOccupied, AccountNumber, RoomNumber, RateApplied, PhoneCharge, Notes)
+-- Set the most appropriate data types for each column. Set a primary key to each table. Populate each table with only 3 records. 
+-- Make sure the columns that are present in 2 tables would be of the same data type. Consider which fields are always required and which are optional. Submit your CREATE TABLE and INSERT statements as Run queries & check DB.
