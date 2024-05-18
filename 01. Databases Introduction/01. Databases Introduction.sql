@@ -4,6 +4,8 @@
 -- In that task (and the several following it) you will be required to create the database from the previous exercise using only SQL queries. 
 -- First, just create new database named Minions.
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 -- 2. Create TABLES --
 
 -- In the newly created database Minions add table Minions (Id, Name, Age). Then add a new table Towns (Id, Name). 
@@ -12,6 +14,8 @@
 
 SELECT * FROM Minions;
 SELECT * FROM Towns;
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 3. Alter Minions Table
 
@@ -25,6 +29,7 @@ ADD TownId int;
 ALTER TABLE Minions
 ADD CONSTRAINT FK_TownId FOREIGN KEY (TownId) REFERENCES Towns(Id);
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 4.	Insert Records in Both Tables
 -- Populate both tables with sample records, given in the table below.
@@ -49,17 +54,23 @@ VALUES
     (2, 'Bob', 15, 3),
     (3, 'Steward', NULL, 2);
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 -- 5.	Truncate Table Minions
 -- Delete all the data from the Minions table using SQL query.
 
 TRUNCATE TABLE Minions;
 TRUNCATE TABLE Towns;
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 -- 6.	Drop All Tables
 -- Delete all tables from the Minions database using SQL query.
 
 DROP TABLE Minions
 DROP TABLE Towns
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 7. Create Table People
 -- Using SQL query, create table People with the following columns:
@@ -97,6 +108,8 @@ VALUES
 SELECT * FROM People; -- Show the whole table 
 DROP TABLE People; -- Drop the table 
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 -- 8. Create Table Users
 -- Using SQL query create table Users with columns:
 -- •	Id – unique number for every user. There will be no more than 263-1 users (auto incremented).
@@ -131,6 +144,8 @@ SELECT * FROM Users; -- Show the whole table
 DROP TABLE Users; -- Drop the table // DELETE information and the table 
 TRUNCATE TABLE Users; -- Clean the information in the table, BUT NOT DROP THE WHOLE TABLE 
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 -- 9. Change Primary Key
 -- Using SQL queries modify table Users from the previous task. 
 -- First remove the current primary key and then create a new primary key that would be a combination of fields Id and Username.
@@ -141,11 +156,15 @@ DROP CONSTRAINT PK_Users; -- Drop the existing primary key constraint
 ALTER TABLE Users
 ADD CONSTRAINT PK_Users PRIMARY KEY (Id, Username); -- Add a new primary key constraint that combines Id and Username
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 -- 10.	Add Check Constraint
 -- Using SQL queries modify table Users. Add check constraint to ensure that the values in the Password field are at least 5 symbols long. 
 
 ALTER TABLE Users
 ADD CONSTRAINT CK_PasswordLength CHECK (LEN([Password]) >= 5);
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 11. Set Default Value of a Field
 -- Using SQL queries modify table Users. Make the default value of LastLoginTime field to be the current time.
@@ -153,6 +172,8 @@ ADD CONSTRAINT CK_PasswordLength CHECK (LEN([Password]) >= 5);
 -- add a constaint that would get the current date and time and put it in the LastLoginTime column for NEW ENTRIES !!!
 ALTER TABLE Users
 ADD CONSTRAINT DF_LastLoginTime DEFAULT GETDATE() FOR LastLoginTime; 
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- 12. Set Unique Field
 -- Using SQL queries modify table Users. Remove Username field from the primary key so only the field Id would be primary key. 
@@ -167,7 +188,9 @@ ADD CONSTRAINT PK_Users PRIMARY KEY (Id); -- Add a new primary key constraint ju
 ALTER TABLE Users
 ADD CONSTRAINT CK_UsernameLength CHECK (LEN(Username) >= 3);
 
--- 13. Movies Database
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+												-- 13. Movies Database
 -- Using SQL queries create Movies database with the following entities:
 -- •	Directors (Id, DirectorName, Notes)
 -- •	Genres (Id, GenreName, Notes)
@@ -253,7 +276,10 @@ DROP TABLE Genres;
 DROP TABLE Categories;
 DROP TABLE Movies;
 
--- 14. Car Rental Database
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+															-- 14. Car Rental Database
+
 -- Using SQL queries create CarRental database with the following entities:
 --	•	Categories (Id, CategoryName, DailyRate, WeeklyRate, MonthlyRate, WeekendRate)
 --	•	Cars (Id, PlateNumber, Manufacturer, Model, CarYear, CategoryId, Doors, Picture, Condition, Available)
@@ -337,8 +363,6 @@ CREATE TABLE RentalOrders (
 	Notes VARCHAR(200)
 );
 
-
-
 INSERT INTO Categories (CategoryName)
 	 VALUES 
 			('Business Class'),
@@ -369,6 +393,8 @@ INSERT INTO RentalOrders (CustomerId, CarId, KilometrageStart, KilometrageEnd, S
 			(2, 3, 150000, 150050, '2008-12-08', '2008-12-09', 600.00, 80.00),
 			(3, 2, 215659, 216967, '2012-03-03', '2012-04-03', 5175.00, 485.00 );
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
 												-- 15.	Hotel Database --
 
 --Using SQL queries create Hotel database with the following entities:
@@ -382,3 +408,214 @@ INSERT INTO RentalOrders (CustomerId, CarId, KilometrageStart, KilometrageEnd, S
 --	•	Occupancies (Id, EmployeeId, DateOccupied, AccountNumber, RoomNumber, RateApplied, PhoneCharge, Notes)
 -- Set the most appropriate data types for each column. Set a primary key to each table. Populate each table with only 3 records. 
 -- Make sure the columns that are present in 2 tables would be of the same data type. Consider which fields are always required and which are optional. Submit your CREATE TABLE and INSERT statements as Run queries & check DB.
+
+CREATE DATABASE Hotel
+USE Hotel
+
+SELECT * FROM Employees;
+SELECT * FROM Customers;
+SELECT * FROM RoomStatus;
+SELECT * FROM RoomTypes;
+SELECT * FROM BedTypes;
+SELECT * FROM Rooms;
+SELECT * FROM Payments;
+SELECT * FROM Occupancies;
+
+DROP TABLE Employees;
+DROP TABLE Customers;
+DROP TABLE RoomStatus;
+DROP TABLE RoomTypes;
+DROP TABLE BedTypes;
+DROP TABLE Rooms;
+DROP TABLE Payments;
+DROP TABLE Occupancies;
+
+
+CREATE TABLE Employees  (
+    Id INT PRIMARY KEY IDENTITY,
+    FirstName VARCHAR(15) NOT NULL,
+    LastName VARCHAR(30) NOT NULL,
+	Title VARCHAR(30) NOT NULL,
+	Notes VARCHAR(200)
+);
+
+CREATE TABLE Customers  (
+    AccountNumber INT PRIMARY KEY NOT NULL,
+	FirstName VARCHAR(15) NOT NULL,
+    LastName VARCHAR(30) NOT NULL,
+	PhoneNumber BIGINT NOT NULL, 
+	EmergencyName VARCHAR(30), 
+	EmergencyNumber BIGINT,  
+	Notes VARCHAR(200)
+);
+
+CREATE TABLE RoomStatus   (
+	Id INT PRIMARY KEY IDENTITY,
+    RoomStatus VARCHAR(8) NOT NULL CHECK (RoomStatus IN ('occupied', 'empty')),
+	Notes VARCHAR(200)
+);
+
+CREATE TABLE RoomTypes    (
+    RoomType VARCHAR(30) PRIMARY KEY NOT NULL,
+	Notes VARCHAR(200)
+);
+
+CREATE TABLE BedTypes    (
+    BedType VARCHAR(30) PRIMARY KEY NOT NULL,
+	Notes VARCHAR(200)
+);
+
+CREATE TABLE Rooms  (
+    RoomNumber INT PRIMARY KEY NOT NULL,
+	RoomType VARCHAR(30),
+    BedType  VARCHAR(30),
+	Rate DECIMAL(5,2) NOT NULL, 
+	RoomStatus VARCHAR(8) NOT NULL CHECK (RoomStatus IN ('occupied', 'empty')),
+	Notes VARCHAR(200)
+);
+
+CREATE TABLE Payments  (
+    Id INT PRIMARY KEY IDENTITY,
+	EmployeeId INT NOT NULL,
+    PaymentDate  DATE NOT NULL,
+	AccountNumber INT NOT NULL, 
+	FirstDateOccupied DATE, 
+	LastDateOccupied DATE,
+	TotalDays INT NOT NULL,
+	AmountCharged DECIMAL(7,2),
+	TaxRate DECIMAL(5,2),
+	TaxAmount DECIMAL(5,2),
+	PaymentTotal DECIMAL(8,2) NOT NULL, 
+	Notes VARCHAR(350)
+);
+
+CREATE TABLE Occupancies   (
+    Id INT PRIMARY KEY IDENTITY,
+	EmployeeId INT NOT NULL,
+	DateOccupied DATE NOT NULL, 
+	AccountNumber INT NOT NULL, 
+	RoomNumber INT NOT NULL,
+	PhoneCharge DECIMAL(5,2),
+	Notes VARCHAR(350)
+);
+
+
+INSERT INTO Employees (FirstName, LastName, Title)
+	 VALUES 
+			('Ivan', 'Ivanov', 'Hotel Manager'),
+			('Petar', 'Petrov', 'Groundskeeper'),
+			('Georgi', 'Georgiev', 'Piccolo');
+
+INSERT INTO Customers (AccountNumber, FirstName, LastName, PhoneNumber)
+	 VALUES 
+			(565423181, 'Pesho', 'Petrov', 0884565491),
+			(564658133, 'Kiril', 'Stoyanov', 0883613689),
+			(951357146, 'Michael', 'Dudikov', 0878894623);
+
+INSERT INTO RoomStatus (RoomStatus)
+	 VALUES 
+			('occupied'),
+			('empty'),
+			('occupied');
+
+INSERT INTO RoomTypes (RoomType)
+	 VALUES 
+			('Ocean-View Room'),
+			('First Floor Room'),
+			('Second Floor Room');
+
+INSERT INTO BedTypes (BedType)
+	 VALUES 
+			('Queen-Sized Bed'),
+			('King-Sized Bed'),
+			('Couch Bed');
+
+INSERT INTO Rooms (RoomNumber, Rate, RoomStatus )
+	 VALUES 
+			(303, 499.59, 'empty'),
+			(501, 749.99, 'occupied'),
+			(106, 255.75, 'empty');
+
+INSERT INTO Payments(EmployeeId, PaymentDate, AccountNumber, TotalDays, PaymentTotal )
+	 VALUES 
+			(123456, '2008-11-23', 565423181, 6, 2555.89),
+			(789459, '2023-12-23', 564658133, 3, 1277.94),
+			(965412, '2008-06-11', 951357146, 10, 4189.65);
+
+INSERT INTO Occupancies(EmployeeId, DateOccupied, AccountNumber, RoomNumber)
+	 VALUES 
+			(123456, '2008-11-23', 565423181, 106),
+			(789459, '2023-12-23', 565423181,  303),
+			(965412, '2008-06-11', 565423181, 501);
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+													-- 16.	Create SoftUni Database --
+	-- Now create bigger database called SoftUni. You will use the same database in the future tasks. It should hold information about
+	--	• Towns (Id, Name)
+	--	• Addresses (Id, AddressText, TownId)
+	--	• Departments (Id, Name)
+	--	• Employees (Id, FirstName, MiddleName, LastName, JobTitle, DepartmentId, HireDate, Salary, AddressId)
+	-- The Id columns are auto incremented, starting from 1 and increased by 1 (1, 2, 3, 4…). 
+	-- Make sure you use appropriate data types for each column. Add primary and foreign keys as constraints for each table. 
+	-- Use only SQL queries. Consider which fields are always required and which are optional.
+
+CREATE DATABASE SoftUni 
+			USE SoftUni 
+
+CREATE TABLE Towns   (
+    Id INT PRIMARY KEY IDENTITY,
+    [Name] VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE Addresses    (
+    Id INT PRIMARY KEY IDENTITY,
+    AddressText VARCHAR(30),
+	TownId INT
+);
+
+CREATE TABLE Departments     (
+    Id INT PRIMARY KEY IDENTITY,
+    [Name] VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE Employees      (
+    Id INT PRIMARY KEY IDENTITY,
+    FirstName VARCHAR(30) NOT NULL,
+	MiddleName VARCHAR(30),
+	LastName VARCHAR(30) NOT NULL,
+	JobTitle VARCHAR(30) NOT NULL,
+	DepartmentId INT,
+	HireDate DATE,
+	Salary DECIMAL(6,2),
+	AddressId INT
+);
+
+-- Adding Foreign Key to Addresses table
+
+ALTER TABLE Addresses
+ADD CONSTRAINT FK_Addresses_TownId FOREIGN KEY (TownId)
+REFERENCES Towns(Id);
+
+-- Adding Foreign Keys to Employees table
+
+ALTER TABLE Employees
+ADD CONSTRAINT FK_Employees_DepartmentId FOREIGN KEY (DepartmentId)
+REFERENCES Departments(Id);
+
+ALTER TABLE Employees
+ADD CONSTRAINT FK_Employees_AddressId FOREIGN KEY (AddressId)
+REFERENCES Addresses(Id);
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+										--17.	Backup Database --
+--		Backup the database SoftUni from the previous task into a file named "softuni-backup.bak". 
+--		Delete your database from SQL Server Management Studio. 
+--		Then restore the database from the created backup.
+ 
+
+BACKUP DATABASE SoftUni
+TO DISK = 'W:\softuni-backup.bak'
+WITH FORMAT, INIT, 
+NAME = 'SoftUni-Full Backup';
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
