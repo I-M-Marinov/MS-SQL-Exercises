@@ -483,7 +483,7 @@ CREATE TABLE Payments  (
 	LastDateOccupied DATE,
 	TotalDays INT NOT NULL,
 	AmountCharged DECIMAL(7,2),
-	TaxRate DECIMAL(5,2),
+	TaxRate DECIMAL(5,2) NOT NULL,
 	TaxAmount DECIMAL(5,2),
 	PaymentTotal DECIMAL(8,2) NOT NULL, 
 	Notes VARCHAR(350)
@@ -498,6 +498,7 @@ CREATE TABLE Occupancies   (
 	PhoneCharge DECIMAL(5,2),
 	Notes VARCHAR(350)
 );
+
 
 
 INSERT INTO Employees (FirstName, LastName, Title)
@@ -536,11 +537,11 @@ INSERT INTO Rooms (RoomNumber, Rate, RoomStatus )
 			(501, 749.99, 'occupied'),
 			(106, 255.75, 'empty');
 
-INSERT INTO Payments(EmployeeId, PaymentDate, AccountNumber, TotalDays, PaymentTotal )
+INSERT INTO Payments(EmployeeId, PaymentDate, AccountNumber, TotalDays, TaxRate, PaymentTotal )
 	 VALUES 
-			(123456, '2008-11-23', 565423181, 6, 2555.89),
-			(789459, '2023-12-23', 564658133, 3, 1277.94),
-			(965412, '2008-06-11', 951357146, 10, 4189.65);
+			(123456, '2008-11-23', 565423181, 6, 15.00, 2555.89),
+			(789459, '2023-12-23', 564658133, 3, 15.00, 1277.94),
+			(965412, '2008-06-11', 951357146, 10, 15.00, 4189.65);
 
 INSERT INTO Occupancies(EmployeeId, DateOccupied, AccountNumber, RoomNumber)
 	 VALUES 
@@ -562,30 +563,40 @@ INSERT INTO Occupancies(EmployeeId, DateOccupied, AccountNumber, RoomNumber)
 CREATE DATABASE SoftUni 
 			USE SoftUni 
 
+SELECT * FROM Towns;
+SELECT * FROM Addresses;
+SELECT * FROM Departments;
+SELECT * FROM Employees;
+
+DROP TABLE Towns;
+DROP TABLE Addresses;
+DROP TABLE Departments;
+DROP TABLE Employees;
+
 CREATE TABLE Towns   (
-    Id INT PRIMARY KEY IDENTITY,
+    Id INT PRIMARY KEY IDENTITY(1,1),
     [Name] VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE Addresses    (
-    Id INT PRIMARY KEY IDENTITY,
+    Id INT PRIMARY KEY IDENTITY(1,1),
     AddressText VARCHAR(30),
 	TownId INT
 );
 
 CREATE TABLE Departments     (
-    Id INT PRIMARY KEY IDENTITY,
+    Id INT PRIMARY KEY IDENTITY(1,1),
     [Name] VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE Employees      (
-    Id INT PRIMARY KEY IDENTITY,
+    Id INT PRIMARY KEY IDENTITY(1,1),
     FirstName VARCHAR(30) NOT NULL,
-	MiddleName VARCHAR(30),
+	MiddleName VARCHAR(30) NOT NULL,
 	LastName VARCHAR(30) NOT NULL,
 	JobTitle VARCHAR(30) NOT NULL,
 	DepartmentId INT,
-	HireDate DATE,
+	HireDate VARCHAR(10),
 	Salary DECIMAL(6,2),
 	AddressId INT
 );
@@ -619,3 +630,125 @@ NAME = 'SoftUni-Full Backup';
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+/*												18.	Basic Insert
+Use the SoftUni database and insert some data using SQL queries.
+•	Towns: Sofia, Plovdiv, Varna, Burgas
+•	Departments: Engineering, Sales, Marketing, Software Development, Quality Assurance
+•	Employees:
+	Name					Job Title				Department				Hire Date			Salary
+Ivan Ivanov Ivanov		.NET Developer			Software Development		01/02/2013			3500.00
+Petar Petrov Petrov		Senior Engineer				Engineering				02/03/2004			4000.00
+Maria Petrova Ivanova		Intern				Quality Assurance			28/08/2016			525.25
+Georgi Teziev Ivanov		 CEO					  Sales					09/12/2007			3000.00
+Peter Pan Pan				Intern					Marketing				28/08/2016			599.88   */ 
+
+
+
+INSERT INTO Towns ([Name])
+	 VALUES 
+			('Sofia'),
+			('Plovdiv'),
+			('Varna'),
+			('Burgas');
+
+INSERT INTO Departments ([Name])
+	 VALUES 
+			('Engineering'),
+			('Sales'),
+			('Marketing'),
+			('Software Development'),
+			('Quality Assurance');
+
+INSERT INTO Employees (FirstName, MiddleName, LastName, JobTitle, DepartmentId, HireDate, Salary)
+	 VALUES 
+			('Ivan ', 'Ivanov', 'Ivanov', '.NET Developer', 4, '01/02/2013', 3500.00),
+			('Petar  ', 'Petrov ', 'Petrov ', 'Senior Engineer', 1, '02/03/2004', 4000.00),
+			('Maria  ', 'Petrova ', 'Ivanova', 'Intern', 5, '28/08/2016', 525.25),
+			('Georgi  ', 'Terziev', 'Ivanov', 'CEO', 2, '09/12/2007', 3500.00),
+			('Peter  ', 'Pan', 'Pan', 'Intern', 3, '28/08/2016', 599.88);
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+/* 19.	Basic Select All Fields
+Use the SoftUni database and first select all records from the Towns, then from Departments and finally from Employees table. 
+Use SQL queries and submit them to Judge at once. Submit your query statements as Prepare DB & Run queries. */
+
+SELECT * FROM Towns;
+SELECT * FROM Departments;
+SELECT * FROM Employees;
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*									20.	Basic Select All Fields and Order Them
+		Modify the queries from the previous problem by sorting:
+		•	Towns - alphabetically by name
+		•	Departments - alphabetically by name
+		•	Employees - descending by salary    */
+
+SELECT * FROM Towns
+	 ORDER BY [Name];
+
+SELECT * FROM Departments
+     ORDER BY [Name];
+
+SELECT * FROM Employees
+	 ORDER BY Salary DESC;
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*										21.	Basic Select Some Fields
+		Modify the queries from the previous problem to show only some of the columns. For table:
+		•	Towns – Name
+		•	Departments – Name
+		•	Employees – FirstName, LastName, JobTitle, Salary
+		Keep the ordering from the previous problem. Submit your query statements as Prepare DB & Run queries. */
+
+SELECT [Name] FROM Towns
+	 ORDER BY [Name];
+
+SELECT [Name] FROM Departments
+     ORDER BY [Name];
+
+SELECT FirstName, LastName, JobTitle, Salary FROM Employees
+	 ORDER BY Salary DESC;
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+/* 22.	Increase Employees Salary
+Use SoftUni database and increase the salary of all employees by 10%. 
+Then show only Salary column for all the records in the Employees table. 
+Submit your query statements as Prepare DB & Run queries. */
+
+UPDATE Employees 
+SET Salary  += Salary*0.10
+
+SELECT Salary FROM Employees
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+/* 23.	Decrease Tax Rate
+Use Hotel database and decrease tax rate by 3% to all payments. 
+Then select only TaxRate column from the Payments table. 
+Submit your query statements as Prepare DB & Run queries. */
+
+USE Hotel
+
+UPDATE Payments 
+   SET TaxRate -= TaxRate*0.03
+
+SELECT TaxRate FROM Payments
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+/* 24.	Delete All Records
+Use Hotel database and delete all records from the Occupancies table. 
+Use SQL query. Submit your query statements as Run skeleton, run queries & check DB. */
+
+	 USE Hotel
+TRUNCATE TABLE Occupancies
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
