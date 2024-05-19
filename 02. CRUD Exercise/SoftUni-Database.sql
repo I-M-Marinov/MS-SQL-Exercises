@@ -4889,7 +4889,7 @@ Create a SQL query that finds the full name of all employees whose salary is exa
 The result should be displayed in a column, named "Full Name", which is a combination of the first, middle and last names, separated by a single space.
 */
 
-SELECT FirstName + ' ' + MiddleName + ' ' + LastName as [Full Name] FROM Employees
+SELECT FirstName + ' ' + MiddleName + ' ' + LastName AS [Full Name] FROM Employees
 WHERE Salary IN ( 25000, 14000, 12500, 23600 );
 
 
@@ -4926,3 +4926,95 @@ SELECT TOP (5) FirstName, LastName FROM Employees
 ORDER BY Salary DESC;
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+/* 14.	Find All Employees Except Marketing
+Create a SQL query that finds the first and last names of all employees whose department ID is not 4. */
+
+
+SELECT FirstName, LastName FROM Employees
+WHERE DepartmentId <> 4
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+/*  15.	Sort Employees Table
+Create a SQL query that sorts all the records in the Employees table by the following criteria:
+•	By salary in decreasing order
+•	Then by the first name alphabetically
+•	Then by the last name descending
+•	Then by middle name alphabetically
+*/
+
+
+SELECT * FROM Employees
+ORDER BY Salary DESC, FirstName, LastName DESC, MiddleName;
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+/*  
+16.	Create View Employees with Salaries
+Create a SQL query that creates a view "V_EmployeesSalaries" with first name, last name and salary for each employee.
+*/
+
+CREATE VIEW V_EmployeesSalaries
+AS
+SELECT FirstName, LastName, Salary FROM Employees
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+/*  
+17.	Create View Employees with Job Titles
+Create a SQL query that creates a view "V_EmployeeNameJobTitle" with a full employee name and a job title. 
+When the middle name is NULL replace it with an empty string ('').
+*/
+
+CREATE VIEW V_EmployeeNameJobTitle AS
+SELECT 
+    CONCAT(FirstName, ' ', ISNULL(MiddleName, ''), ' ', LastName) AS [Full Name],
+    JobTitle
+FROM 
+    Employees;
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+/*  
+18.	Distinct Job Titles
+Create a SQL query that finds all distinct job titles.
+
+*/
+
+SELECT DISTINCT JobTitle
+FROM Employees;
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+/*  
+19.	Find First 10 Started Projects
+Create a SQL query that finds the first 10 projects which were started, 
+select all the information about them and order the result by starting date,then by name.
+
+*/
+
+SELECT TOP (10) * FROM Projects
+WHERE StartDate IS NOT NULL
+ORDER BY StartDate, [Name]
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+/*  
+20.	Last 7 Hired Employees
+Create a SQL query that finds the last 7 hired employees, select their first, last name and hire date. 
+Order the result by hire date descending.
+
+*/
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
