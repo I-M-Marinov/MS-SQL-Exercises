@@ -358,9 +358,20 @@ Create an E/R Diagram of the SoftUni Database. There are some special relations 
 •	Employees have One-to-Many (DepartmentID)
 You might find it interesting how it looks on the diagram. 
 
-
 */
 
+USE [Geography]
+
+SELECT * FROM Mountains
+SELECT * FROM Peaks
+
+
+SELECT m.MountainRange, p.PeakName, p.Elevation
+FROM Mountains AS m
+JOIN Peaks AS p ON p.MountainId = m.Id
+WHERE m.Id = 17
+ORDER BY p.Elevation DESC
+  
 
 
 
