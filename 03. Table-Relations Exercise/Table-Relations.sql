@@ -80,9 +80,6 @@ CREATE TABLE Manufacturers(
   EstablishedOn DATE NOT NULL FORMAT('MM/dd/yyyy'),
 )
 
-SELECT EstablishedOn, FORMAT(EstablishedOn, 'MM/dd/yyyy') AS FormattedDate
-FROM Manufacturers;
-
 CREATE TABLE Models(
 ModelID INT PRIMARY KEY IDENTITY(101,1),
 [Name] VARCHAR(30),
@@ -135,5 +132,91 @@ StudentID		Name					ExamID		Name						StudentID		ExamID
 Insert the data from the example above and add primary keys and foreign keys. 
 Keep in mind that the table "StudentsExams" should have a composite primary key.
 
+*/
+
+CREATE TABLE Students(
+  StudentID INT IDENTITY PRIMARY KEY,
+  [Name] VARCHAR(30) NOT NULL,
+)
+
+CREATE TABLE Exams(
+  ExamID INT PRIMARY KEY IDENTITY(101,1),
+  [Name] VARCHAR(30) NOT NULL,
+)
+
+CREATE TABLE StudentsExams(
+StudentID INT ,
+ExamID INT,
+PRIMARY KEY (StudentID, ExamID),
+CONSTRAINT FK_StudentsExams_Students FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
+CONSTRAINT FK_StudentsExams_Exams FOREIGN KEY (ExamID) REFERENCES Exams(ExamID)
+)
+
+INSERT INTO Students ([Name])
+VALUES ('Mila'),
+	   ('Toni'),
+	   ('Ron')
+
+INSERT INTO Exams ([Name])
+VALUES ('SpringMVC'),
+	   ('Neo4j'),
+	   ('Oracle 11g')
+
+INSERT INTO StudentsExams (StudentID,ExamID)
+VALUES (1,101),
+	   (1,102),
+	   (2,101),
+	   (3,103),
+	   (2,102),
+	   (2,103)
+
+
+SELECT * FROM StudentsExams
+SELECT * FROM Students
+SELECT * FROM Exams
+
+DROP TABLE StudentsExams
+DROP TABLE Students
+DROP TABLE Exams
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/* 
+4.	Self-Referencing 
+Create one table and use appropriate data types.
+				Example:
+
+							Teachers
+
+			TeacherID			Name			ManagerID
+
+				101				John			NULL
+				102				Maya			106
+				103				Silvia			106
+				104				Ted				105
+				105				Mark			101
+				106				Greta			101
+
+Insert the data from the example above and add primary keys and foreign keys. 
+The foreign key should be between ManagerId and TeacherId.
 
 */
+
+
+CREATE TABLE Teachers(
+TeacherID INT PRIMARY KEY IDENTITY(101,1),
+[Name] VARCHAR(30) NOT NULL,
+ManagerID INT 
+CONSTRAINT FK_Teachers FOREIGN KEY (ManagerID) REFERENCES Teachers(TeacherID),
+)
+
+INSERT INTO Teachers ([Name], ManagerID)
+VALUES ('John', NULL),
+	   ('Maya', 106),
+	   ('Silvia', 106),
+	   ('Ted', 105),
+	   ('Mark', 101),
+	   ('Greta', 101)
+
+SELECT * FROM Teachers
