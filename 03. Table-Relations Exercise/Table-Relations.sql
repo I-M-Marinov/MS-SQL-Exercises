@@ -220,3 +220,150 @@ VALUES ('John', NULL),
 	   ('Greta', 101)
 
 SELECT * FROM Teachers
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/* 
+5.	Online Store Database
+Create a new database and design the following structure:
+ 
+ OrderItems -> OrderID, ItemID ( composite primary key ) referencing as FK to Orders(OrderID) and Items(ItemID)
+ Items ---> ItemId, Name, ItemTypeId
+ Orders ---> OrderID, CustomerID ( CustomerID  as FK to Customers(CustomerID)
+ ........
+
+*/
+
+CREATE TABLE Cities(
+CityID INT PRIMARY KEY IDENTITY,
+[Name] VARCHAR(30)
+)
+
+CREATE TABLE ItemTypes(
+ItemTypeID INT PRIMARY KEY IDENTITY,
+[Name] VARCHAR(30)
+)
+
+CREATE TABLE Items(
+ItemID INT PRIMARY KEY IDENTITY,
+[Name] VARCHAR(30),
+ItemTypeID INT
+CONSTRAINT FK_Items_ItemTypes FOREIGN KEY (ItemTypeID) REFERENCES ItemTypes(ItemTypeID)
+)
+
+CREATE TABLE Customers(
+CustomerID INT PRIMARY KEY IDENTITY,
+[Name] VARCHAR(30),
+Birthday DATE,
+CityID INT
+CONSTRAINT FK_Customers_Cities FOREIGN KEY (CityID) REFERENCES Cities(CityID)
+)
+
+CREATE TABLE Orders(
+OrderID INT PRIMARY KEY IDENTITY,
+CustomerID INT
+CONSTRAINT FK_Orders_Customers FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+)
+
+CREATE TABLE OrderItems(
+OrderID INT,
+ItemID INT,
+PRIMARY KEY (OrderID, ItemID),
+CONSTRAINT FK_OrderItems_Orders FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+CONSTRAINT FK_OrderItems_Items FOREIGN KEY (ItemID) REFERENCES Items(ItemID)
+)
+
+
+SELECT * FROM Cities
+SELECT * FROM ItemTypes
+SELECT * FROM Customers
+SELECT * FROM Items
+SELECT * FROM Orders
+SELECT * FROM OrderItems
+
+DROP TABLE Cities
+DROP TABLE ItemTypes
+DROP TABLE Customers
+DROP TABLE Items
+DROP TABLE Orders
+DROP TABLE OrderItems
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/* 
+6.	University Database
+Create a new database and design the following structure:
+....
+
+*/
+
+CREATE TABLE Subjects(
+SubjectID INT PRIMARY KEY IDENTITY,
+SubjectName VARCHAR(30)
+)
+
+CREATE TABLE Majors(
+MajorID INT PRIMARY KEY,
+[Name] VARCHAR(30)
+)
+
+CREATE TABLE Students(
+StudentID INT PRIMARY KEY IDENTITY, 
+StudentNumber INT, 
+StudentName VARCHAR(30) NOT NULL,
+MajorID INT
+CONSTRAINT FK_Students_Majors FOREIGN KEY (MajorID) REFERENCES Majors(MajorID)
+)
+
+
+CREATE TABLE Agenda(
+StudentID INT,
+SubjectID INT,
+PRIMARY KEY (StudentID, SubjectID),
+CONSTRAINT FK_Agenda_Students FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
+CONSTRAINT FK_Agenda_Subjects FOREIGN KEY (SubjectID) REFERENCES Subjects(SubjectID)
+)
+
+CREATE TABLE Payments(
+PaymentID INT PRIMARY KEY, 
+PaymentDate DATE,
+PaymentAmount DECIMAL(8,2),
+StudentID INT
+CONSTRAINT FK_Payments_Students FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
+)
+
+SELECT * FROM Subjects
+SELECT * FROM Majors
+SELECT * FROM Students
+SELECT * FROM Agenda
+SELECT * FROM Payments
+
+
+DROP TABLE Subjects
+DROP TABLE Majors
+DROP TABLE Students
+DROP TABLE Agenda
+DROP TABLE Payments
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/* 
+Create an E/R Diagram of the SoftUni Database. There are some special relations you should check out:
+•	Employees are self-referenced (ManagerID) 
+•	Departments have One-to-One with the Employees (ManagerID)
+•	Employees have One-to-Many (DepartmentID)
+You might find it interesting how it looks on the diagram. 
+
+
+*/
+
+
+
+
+
+
+
