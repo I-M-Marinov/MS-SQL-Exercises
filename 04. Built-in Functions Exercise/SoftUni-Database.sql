@@ -4839,5 +4839,37 @@ Create a SQL query that finds the first names of all employees whose department 
 			…
 */
 
+SELECT FirstName 
+FROM Employees
+WHERE (DepartmentID = 3 OR DepartmentID = 10) 
+AND (YEAR(HireDate) BETWEEN 1995 AND 2005);
 
+
+/*
+	4.	Find All Employees Except Engineers
+	Create a SQL query that finds the first and last names of every employee, whose job title does not contain "engineer". 
+
+	Example
+				FirstName		LastName
+				 Guy			 Gilbert
+				 Kevin			 Brown
+				 Rob			 Walters
+		
+*/
+
+SELECT FirstName, LastName 
+FROM Employees
+WHERE JobTitle NOT LIKE '%engineer%';
+
+/*
+5.	Find Towns with Name Length
+Create a SQL query that finds all town names, which are 5 or 6 symbols long. Order the result alphabetically by town name.  
+Example
+Name
+Berlin
+Duluth
+Duvall
+…
+
+*/
 
