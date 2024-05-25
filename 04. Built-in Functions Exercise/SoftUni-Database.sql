@@ -4873,3 +4873,62 @@ Duvall
 
 */
 
+SELECT [Name] FROM Towns
+WHERE LEN([Name]) = 5 OR LEN([Name]) = 6
+ORDER BY [Name];
+
+
+/* 
+6.	Find Towns Starting With
+Create a SQL query that finds all towns with names starting with 'M', 'K', 'B' or 'E'. Order the result alphabetically by town name. 
+Example
+				TownID				 Name
+				  5					Bellevue
+				  31				Berlin
+				  30				Bordeaux
+
+*/
+
+SELECT * FROM Towns
+WHERE SUBSTRING([Name], 1, 1) = 'M' OR SUBSTRING([Name], 1, 1) = 'K' OR SUBSTRING([Name], 1, 1) = 'B' OR SUBSTRING([Name], 1, 1) = 'E'
+ORDER BY [Name];
+
+-- alternate solutioon: 
+
+SELECT * FROM Towns
+WHERE LEFT([Name], 1) IN ('M', 'K', 'B', 'E')
+ORDER BY [Name];
+
+/* 
+7.	Find Towns Not Starting With
+Create a SQL query that finds all towns, which do not start with 'R', 'B' or 'D'. Order the result alphabetically by name. 
+Example
+				TownID			Name
+				  2				Calgary
+				  23			Cambridge
+				  15			Carnation
+*/
+
+SELECT * FROM Towns
+WHERE SUBSTRING([Name], 1, 1) != 'R' AND 
+	  SUBSTRING([Name], 1, 1) != 'B' AND 
+	  SUBSTRING([Name], 1, 1) != 'D'
+ORDER BY [Name];
+
+-- alternate solutioon: 
+
+SELECT * FROM Towns
+WHERE LEFT([Name], 1) NOT IN ('R', 'B', 'D')
+ORDER BY [Name];
+
+
+/*
+8.	Create View Employees Hired After 2000 Year
+Create a SQL query that creates view "V_EmployeesHiredAfter2000" with the first and the last name for all employees, hired after the year 2000. 
+Example
+				FirstName			LastName
+				 Steven				Selikoff
+				 Peter				Krebs
+				 Stuart				Munson
+*/
+
