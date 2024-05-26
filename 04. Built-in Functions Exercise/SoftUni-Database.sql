@@ -4970,3 +4970,47 @@ FROM Employees
 WHERE Salary BETWEEN 10000 AND 50000
 ORDER BY Salary DESC, EmployeeID;
 
+/*
+11.	Find All Employees with Rank 2
+Upgrade the query from the previous problem, so that it finds only the employees with a Rank 2. Order the result by Salary (descending).
+Example
+
+EmployeeID	FirstName		LastName	Salary		Rank
+	284		  Amy			Alberts		48100.00	 2
+	292		  Martin		Kulov		48000.00	 2
+	71		  Wendy			Kahn		43300.00	 2
+
+
+*/
+
+WITH RankedEmployees AS (
+    SELECT EmployeeID, FirstName, LastName, Salary,
+           DENSE_RANK() OVER (PARTITION BY Salary ORDER BY EmployeeID) AS Rank
+    FROM Employees
+    WHERE Salary BETWEEN 10000 AND 50000
+)
+SELECT EmployeeID, FirstName, LastName, Salary, Rank
+FROM RankedEmployees
+WHERE Rank = 2
+ORDER BY Salary DESC, EmployeeID;
+
+/*										GEOGRAPHY DATABASE 
+12.	Countries Holding 'A' 3 or More Times
+Find all countries which hold the letter 'A' at least 3 times in their name (case-insensitively). 
+Sort the result by ISO code and display the "Country Name" and "ISO Code". 
+
+Example
+		Country Name	ISO Code
+		Afghanistan			AFG
+		Albania				ALB
+		…					…
+
+*/
+
+USE Geography
+SELECT * FROM Countries
+
+SELECT CountryName, ISOCode
+FROM Countries
+WHERE LEN(CountryName) - LEN(REPLACE(LOWER(CountryName), 'a', '')) >= 3
+ORDER BY IsoCode;
