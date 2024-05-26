@@ -5057,12 +5057,61 @@ WHERE (YEAR([Start]) BETWEEN 2011 AND 2012)
 ORDER BY [Start], [Name];
 
 /*															DIABLO DATABASE 
-User Email Providers
-Find all users with information about their email providers. Display the username and email provider. Sort the results by email provider alphabetically, then by username. 
-Example
+			15. User Email Providers
+			Find all users with information about their email providers. Display the username and email provider. 
+			Sort the results by email provider alphabetically, then by username. 
+
+																Example
 				Username			Email Provider
 				Pesho				   abv.bg
 			   monoxidecos			astonrasuna.com
 			   bashsassafras		  balibless
 */
 
+SELECT * FROM Users
+
+SELECT 
+    Username, 
+    SUBSTRING(Email, CHARINDEX('@', Email) + 1, LEN(Email) - CHARINDEX('@', Email)) AS "Email Provider"
+FROM 
+    Users
+ORDER BY 
+    "Email Provider", 
+    Username;
+
+/*															DIABLO DATABASE 
+			16.	 Get Users with IP Address Like Pattern
+Find all users with their IP addresses, sorted by username alphabetically. 
+Display only the rows which IP address matches the pattern: "***.1^.^.***". 
+Legend: 
+* - one symbol
+^ - one or more symbols
+Example
+	Username				IP Address
+	bindbawdy				192.157.20.222
+	evolvingimportant		223.175.227.173
+	inguinalself			255.111.250.207
+*/
+
+SELECT Username, IpAddress
+FROM Users
+WHERE 
+    IpAddress LIKE '___.1%.%.___' -- wildcard 
+ORDER BY Username;
+
+/*															DIABLO DATABASE 
+			17. Show All Games with Duration and Part of the Day
+Find all games with part of the day and duration. 
+Sort them by game name alphabetically, then by duration (alphabetically, not by the timespan) and part of the day (all ascending).
+Part of the Day should be Morning (time is >= 0 and < 12), Afternoon (time is >= 12 and < 18), Evening (time is >= 18 and < 24). 
+Duration should be Extra Short (smaller or equal to 3), Short (between 4 and 6 including), Long (greater than 6) and Extra Long (without duration). 
+
+									Example
+
+		Game				Part of the Day				Duration
+		Ablajeck				Morning					Long
+		Ablajeck				Afternoon				Short
+		Abregado Rae			Afternoon				Long
+		Abrion					Morning	Extra			Short
+		Acaeria					Evening					Long
+*/
