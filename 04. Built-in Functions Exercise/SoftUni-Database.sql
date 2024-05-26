@@ -5115,3 +5115,99 @@ Duration should be Extra Short (smaller or equal to 3), Short (between 4 and 6 i
 		Abrion					Morning	Extra			Short
 		Acaeria					Evening					Long
 */
+
+SELECT * FROM Games
+
+SELECT [Name] as Game,
+    CASE 
+        WHEN DATEPART(HOUR, [Start]) >= 0 AND DATEPART(HOUR, [Start]) < 12 THEN 'Morning'
+        WHEN DATEPART(HOUR, [Start]) >= 12 AND DATEPART(HOUR, [Start]) < 18 THEN 'Afternoon'
+        WHEN DATEPART(HOUR, [Start]) >= 18 AND DATEPART(HOUR, [Start]) < 24 THEN 'Evening'
+    END AS [Part of the Day],
+    CASE 
+        WHEN Duration <= 3 THEN 'Extra Short'
+        WHEN Duration BETWEEN 4 AND 6 THEN 'Short'
+        WHEN Duration > 6 THEN 'Long'
+        ELSE 'Extra Long'
+    END AS Duration
+FROM 
+    Games
+ORDER BY [Name], Duration, [Part of the Day]; -- because it is ascending we do not need to say ( default behavior ) 
+
+/*															DIABLO ORDERS
+			18.	 Orders Table
+You are given a table Orders(Id, ProductName, OrderDate) filled with data. Consider that the payment for that order must be accomplished within 3 days after the order date. Also the delivery date is up to 1 month. Write a query to show each product's name, order date, pay and deliver due dates. 
+Original Table
+Id	ProductName	OrderDate
+1	Butter	2016-09-19 00:00:00.000
+2	Milk	2016-09-30 00:00:00.000
+3	Cheese	2016-09-04 00:00:00.000
+4	Bread	2015-12-20 00:00:00.000
+5	Tomatoes	2015-12-30 00:00:00.000
+…	…	…
+Output
+ProductName	OrderDate	Pay Due	Deliver Due
+Butter	 2016-09-19 00:00:00.000	2016-09-22 00:00:00.000	2016-10-19 00:00:00.000
+Milk	 2016-09-30 00:00:00.000	2016-10-03 00:00:00.000	2016-10-30 00:00:00.000
+Cheese	 2016-09-04 00:00:00.000	2016-09-07 00:00:00.000	2016-10-04 00:00:00.000
+Bread	 2015-12-20 00:00:00.000	2015-12-23 00:00:00.000	2016-01-20 00:00:00.000
+Tomatoes 2015-12-30 00:00:00.000	2016-01-02 00:00:00.000	2016-01-30 00:00:00.000
+…	…	…	…
+
+*/
+USE Orders
+SELECT * FROM Orders
+
+SELECT 
+    ProductName,
+	OrderDate,
+	(OrderDate + 3) AS [Pay Due],
+    DATEADD(MONTH, 1, OrderDate) AS [Deliver Due]
+FROM 
+    Orders;
+
+/*
+	19.	 People Table
+Create a table People(Id, Name, Birthdate). Write a query to find age in years, months, days and minutes for each person for the current time of executing the query.
+				Original Table
+				Id	Name	Birthdate
+				1	Victor	2000-12-07 00:00:00.000
+				2	Steven	1992-09-10 00:00:00.000
+				3	Stephen	1910-09-19 00:00:00.000
+				4	John	2010-01-06 00:00:00.000
+				…	…	…
+			Example Output
+			Name	Age in Years	Age in Months	Age in Days		Age in Minutes
+			Victor	    16				189				5754			8286787
+			Steven	    24				288				8764			12621187
+			Stephen	    106				1272			38706			55737667
+			John	    6				80				2437			3510307
+
+
+*/
+
+USE Orders
+
+CREATE TABLE People(
+Id INT PRIMARY KEY IDENTITY NOT NULL,
+[Name] VARCHAR(15) NOT NULL,
+Birthdate DATETIME NOT NULL
+)
+
+INSERT INTO People ([Name], Birthdate)
+VALUES ('Victor', '20001207'),
+	   ('Steven', '19920910'),
+	   ('Stephen', '19100919'),
+	   ('John', '20100106');
+
+SELECT * FROM People
+
+SELECT 
+    [Name],
+    DATEDIFF(YEAR, Birthdate, GETDATE()) AS [Age in Years],
+    DATEDIFF(MONTH, Birthdate, GETDATE()) AS [Age in Months],
+    DATEDIFF(DAY, Birthdate, GETDATE()) AS [Age in Days],
+    DATEDIFF(MINUTE, Birthdate, GETDATE()) AS [Age in Minutes]
+FROM People;
+
+DROP TABLE People
