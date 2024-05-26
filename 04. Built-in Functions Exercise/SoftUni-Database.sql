@@ -5014,3 +5014,55 @@ SELECT CountryName, ISOCode
 FROM Countries
 WHERE LEN(CountryName) - LEN(REPLACE(LOWER(CountryName), 'a', '')) >= 3
 ORDER BY IsoCode;
+
+/*
+13.	 Mix of Peak and River Names
+Combine all peak names with all river names, so that the last letter of each peak name is the same as the first letter of its corresponding river name. Display the peak names, river names and the obtained mix (mix should be in lowercase). Sort the results by the obtained mix.
+Example
+
+		PeakName			RiverName			Mix
+		Aconcagua			Amazon			aconcaguamazon
+		Aconcagua			Amur			aconcaguamur
+		Banski Suhodol		Lena			banski suhodolena
+*/
+
+SELECT * FROM Rivers
+SELECT * FROM Peaks
+SELECT * FROM Mountains
+
+SELECT Peaks.PeakName, Rivers.RiverName, LOWER(Peaks.PeakName + SUBSTRING(Rivers.RiverName, 2, LEN(Rivers.RiverName))) AS Mix
+FROM Peaks
+JOIN Rivers 
+ON SUBSTRING(Peaks.PeakName, LEN(Peaks.PeakName), 1) = LEFT(Rivers.RiverName, 1)
+ORDER BY Mix;
+
+
+/*															DIABLO DATABASE 
+14.	Games from 2011 and 2012 Year
+Find and display the top 50 games which start date is from 2011 and 2012 year. 
+Order them by start date, then by name of the game. The start date should be in the following format: "yyyy-MM-dd". 
+Example
+				   Name				  Start
+				Rose Royalty		2011-01-05
+				London				2011-01-13
+				Broadway			2011-01-16
+*/
+
+USE Diablo
+SELECT * FROM Games
+
+SELECT TOP (50) [Name], FORMAT([Start], 'yyyy-MM-dd') as [Start]
+FROM Games
+WHERE (YEAR([Start]) BETWEEN 2011 AND 2012)
+ORDER BY [Start], [Name];
+
+/*															DIABLO DATABASE 
+User Email Providers
+Find all users with information about their email providers. Display the username and email provider. Sort the results by email provider alphabetically, then by username. 
+Example
+				Username			Email Provider
+				Pesho				   abv.bg
+			   monoxidecos			astonrasuna.com
+			   bashsassafras		  balibless
+*/
+
