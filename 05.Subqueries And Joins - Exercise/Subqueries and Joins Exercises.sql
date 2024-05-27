@@ -37,3 +37,9 @@ Example
 				Alan			Brewer			Kenmore				8192 Seagull Court
 
 */
+
+SELECT TOP 50 FirstName,LastName, t.Name AS Town, ad.AddressText FROM Employees AS e
+JOIN Addresses as ad ON e.AddressID = ad.AddressID
+JOIN Towns as t ON ad.TownID = t.TownID
+ORDER BY e.FirstName, e.LastName
+
