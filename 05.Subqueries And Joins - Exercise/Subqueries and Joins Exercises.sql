@@ -63,3 +63,26 @@ SELECT e.EmployeeID,e.FirstName,e.LastName, d.Name as DepartmentName FROM Employ
 JOIN Departments AS d ON e.DepartmentID = d.DepartmentID
 WHERE d.Name = 'Sales'
 ORDER BY e.EmployeeID
+
+
+/*
+4.	Employee Departments
+Create a query that selects:
+•	EmployeeID
+•	FirstName 
+•	Salary
+•	DepartmentName
+Filter only employees with a salary higher than 15000. Return the first 5 rows, sorted by DepartmentID in ascending order.
+Example
+
+		EmployeeID			FirstName			Salary			DepartmentName
+			3     			Roberto				43300.00		Engineering
+			9				Gail				32700.00		Engineering
+
+*/
+
+SELECT TOP 5 e.EmployeeID, e.FirstName, e.Salary, d.Name AS DepartmentName FROM Employees AS e
+JOIN Departments AS d ON e.DepartmentID = d.DepartmentID
+WHERE e.Salary > 15000
+ORDER BY d.DepartmentID
+
