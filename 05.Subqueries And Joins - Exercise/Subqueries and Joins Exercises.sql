@@ -153,3 +153,31 @@ JOIN EmployeesProjects AS ep ON e.EmployeeID = ep.EmployeeID
 JOIN Projects AS pr ON ep.ProjectID = pr.ProjectID
 WHERE pr.StartDate > '2002-08-13' AND pr.EndDate IS NULL 
 ORDER BY e.EmployeeID
+
+
+/*
+8.	Employee 24
+Create a query that selects:
+•	EmployeeID
+•	FirstName
+•	ProjectName
+Filter all the projects of employee with Id 24. If the project has started during or after 2005 the returned value should be NULL.
+Example
+EmployeeID	FirstName	ProjectName
+24	David	NULL
+24	David	Road-650
+…	…	…
+
+*/
+
+SELECT
+ e.EmployeeID, 
+    e.FirstName, 
+    CASE 
+        WHEN pr.StartDate >= '2005-01-01' THEN NULL -- return null if any of the projects are started during or after 2005
+        ELSE pr.Name -- else return the name of the project as expected 
+    END AS ProjectName -- show the column as "ProjectName"
+	FROM Employees AS e
+JOIN EmployeesProjects AS ep ON e.EmployeeID = ep.EmployeeID
+JOIN Projects AS pr ON ep.ProjectID = pr.ProjectID
+WHERE e.EmployeeID = 24;
