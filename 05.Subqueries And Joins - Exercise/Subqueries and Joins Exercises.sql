@@ -395,3 +395,56 @@ FROM Countries AS c
 LEFT JOIN MountainsCountries AS mc ON c.CountryCode = mc.CountryCode
 LEFT JOIN Mountains AS m ON m.Id = mc.MountainId
 WHERE mc.CountryCode IS NULL;
+
+/*
+17.	Highest Peak and Longest River by Country
+For each country, find the elevation of the highest peak and the length of the longest river, sorted by the highest peak elevation (from highest to lowest), then by the longest river length (from longest to smallest), then by country name (alphabetically). Display NULL when no data is available in some of the columns. Limit only the first 5 rows.
+Example
+
+CountryName			HighestPeakElevation		LongestRiverLength
+	China					8848					6300
+	India					8848					3180
+	Nepal					8848					2948
+	Pakistan				8611					3180
+	Argentina				6962					4880
+
+*/
+
+WITH HighestPeaks AS (
+    SELECT
+        c.CountryCode,
+        c.CountryName,
+        MAX(p.Elevation) AS HighestPeakElevation
+    FROM
+        Countries AS c
+    FULL OUTER JOIN MountainsCountries AS mc ON c.CountryCode = mc.CountryCode
+	FULL OUTER JOIN Mountains AS m ON mc.MountainId = m.Id
+    FULL OUTER JOIN Peaks AS p ON m.Id = p.MountainId
+    GROUP BY
+        c.CountryCode, c.CountryName
+),
+LongestRivers AS (
+    SELECT
+        c.CountryCode,
+        MAX(r.Length) AS LongestRiverLength
+    FROM
+        Countries AS c
+    FULL OUTER JOIN CountriesRivers AS cr ON c.CountryCode = cr.CountryCode
+   FULL OUTER JOIN Rivers AS r ON cr.RiverId = r.Id
+    GROUP BY
+        c.CountryCode
+)
+SELECT TOP 5
+    c.CountryName,
+    hp.HighestPeakElevation,
+    lr.LongestRiverLength
+FROM
+    Countries AS c
+FULL OUTER JOIN HighestPeaks AS hp ON c.CountryCode = hp.CountryCode
+FULL OUTER JOIN LongestRivers AS lr ON c.CountryCode = lr.CountryCode
+ORDER BY
+    hp.HighestPeakElevation DESC,
+    lr.LongestRiverLength DESC,
+    c.CountryName;
+
+
