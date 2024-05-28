@@ -146,7 +146,6 @@ EmployeeID	FirstName	ProjectName
 
 */
 
-SELECT * FROM Projects
 
 SELECT TOP 5 e.EmployeeID, e.FirstName, pr.Name AS ProjectName FROM Employees AS e
 JOIN EmployeesProjects AS ep ON e.EmployeeID = ep.EmployeeID
@@ -203,3 +202,30 @@ JOIN Employees AS m
 ON e.ManagerID = m.EmployeeID
 WHERE m.EmployeeID IN (3,7)
 ORDER BY e.EmployeeID
+
+/*
+10.	Employees Summary
+Create a query that selects:
+•	EmployeeID
+•	EmployeeName
+•	ManagerName
+•	DepartmentName
+Show the first 50 employees with their managers and the departments they are in (show the departments of the employees). Order them by EmployeeID.
+Example
+
+		EmployeeID	EmployeeName		ManagerName			DepartmentName
+			1		Guy Gilbert			Jo Brown			Production
+			2		Kevin Brown			David Bradley		Marketing
+			3		Roberto Tamburello	Terri Duffy			Engineering
+*/
+
+SELECT TOP 50 
+e.EmployeeID,
+CONCAT_WS(' ', e.FirstName, e.LastName ) as EmployeeName,
+CONCAT_WS(' ', m.FirstName, m.LastName ) as ManagerName,
+d.Name AS DepartmentName
+FROM Employees AS e
+JOIN Employees AS m ON e.ManagerID = m.EmployeeID
+JOIN Departments as d ON e.DepartmentID = d.DepartmentID
+ORDER BY e.EmployeeID
+
