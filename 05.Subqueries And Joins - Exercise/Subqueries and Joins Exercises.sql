@@ -109,3 +109,25 @@ LEFT JOIN EmployeesProjects AS ep ON e.EmployeeID = ep.EmployeeID
 WHERE ep.EmployeeID IS NULL
 ORDER BY e.EmployeeID ASC;
 
+/*
+6.	Employees Hired After
+Create a query that selects:
+•	FirstName
+•	LastName
+•	HireDate
+•	DeptName
+Filter only employees hired after 1.1.1999 and are from either "Sales" or "Finance" department. Sort them by HireDate (ascending).
+Example
+
+			FirstName		LastName			HireDate				DeptName
+			Debora     		Poe				2001-01-19 00:00:00			Finance
+			Wendy			Kahn			2001-01-26 00:00:00			Finance
+
+*/
+
+SELECT e.FirstName,e.LastName,e.HireDate, dpt.Name AS DeptName FROM Employees AS e
+JOIN Departments AS dpt ON e.DepartmentID = dpt.DepartmentID
+WHERE e.HireDate > '1999-01-01' AND dpt.Name IN ('Sales', 'Finance')
+ORDER BY e.HireDate
+
+
