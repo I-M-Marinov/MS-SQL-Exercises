@@ -272,7 +272,7 @@ BG	Pirin	Vihren	2914
 */
 
 
-SELECT * FROM Peaks
+SELECT * FROM Mountains
 
 SELECT c.CountryCode, m.MountainRange, p.PeakName, p.Elevation FROM Countries AS c
 JOIN MountainsCountries AS mc ON c.CountryCode = mc.CountryCode
@@ -280,4 +280,24 @@ JOIN Mountains AS m ON m.Id = mc.MountainId
 JOIN Peaks AS p ON p.MountainId = m.Id
 WHERE p.Elevation > 2835 AND c.CountryCode = 'BG'
 ORDER BY p.Elevation DESC
+
+/*
+13.	Count Mountain Ranges
+Create a query that selects:
+•	CountryCode
+•	MountainRanges
+Filter the count of the mountain ranges in the United States, Russia and Bulgaria.
+Example
+
+		CountryCode		MountainRanges
+			BG				6
+			RU				1
+
+*/
+
+SELECT c.CountryCode, COUNT(m.MountainRange) AS MountainRanges FROM Countries AS c
+JOIN MountainsCountries AS mc ON c.CountryCode = mc.CountryCode
+JOIN Mountains AS m ON m.Id = mc.MountainId
+WHERE c.CountryCode IN ('BG', 'US','RU')
+GROUP BY c.CountryCode
 
