@@ -377,3 +377,21 @@ SELECT
 FROM CurrencyUsage cu
 JOIN MaxUsage mu ON cu.ContinentCode = mu.ContinentCode AND cu.CurrencyUsage = mu.MaxUsageCount
 ORDER BY cu.ContinentCode;
+
+
+/*
+16.	Countries Without Any Mountains
+Create a query that returns the count of all countries, which don’t have a mountain.
+Example
+
+Count
+231
+
+*/
+
+
+SELECT COUNT(c.CountryCode) AS [Count] 
+FROM Countries AS c
+LEFT JOIN MountainsCountries AS mc ON c.CountryCode = mc.CountryCode
+LEFT JOIN Mountains AS m ON m.Id = mc.MountainId
+WHERE mc.CountryCode IS NULL;
