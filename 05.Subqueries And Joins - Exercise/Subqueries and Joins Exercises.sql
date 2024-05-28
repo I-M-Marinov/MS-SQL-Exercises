@@ -326,3 +326,54 @@ FULL OUTER JOIN CountriesRivers AS cr ON c.CountryCode = cr.CountryCode
 FULL OUTER JOIN Rivers AS r ON r.Id = cr.RiverId
 WHERE c.ContinentCode ='AF'
 ORDER BY c.CountryName
+
+/*
+15.	*Continents and Currencies
+Create a query that selects:
+•	ContinentCode
+•	CurrencyCode
+•	CurrencyUsage
+Find all continents and their most used currency. Filter any currency, which is used in only one country. Sort your results by ContinentCode.
+Example
+
+ContinentCode	CurrencyCode	CurrencyUsage
+	AF				XOF				8
+	AS				AUD				2
+	AS				ILS				2
+	EU				EUR				26
+	NA				XCD				8
+	OC				USD				8
+
+*/
+
+SELECT * FROM Continents
+SELECT * FROM Currencies
+SELECT * FROM Countries
+
+
+
+WITH CurrencyUsage AS (
+    SELECT
+        c.ContinentCode,
+        c.CurrencyCode,
+        COUNT(*) AS CurrencyUsage
+    FROM Countries AS c
+    JOIN Currencies AS curr ON c.CurrencyCode = curr.CurrencyCode
+    JOIN Continents AS cont ON c.ContinentCode = cont.ContinentCode
+    GROUP BY c.ContinentCode, c.CurrencyCode
+    HAVING COUNT(*) > 1
+),
+MaxUsage AS (
+    SELECT
+        ContinentCode,
+        MAX(CurrencyUsage) AS MaxUsageCount
+    FROM CurrencyUsage
+    GROUP BY ContinentCode
+)
+SELECT
+    cu.ContinentCode,
+    cu.CurrencyCode,
+    cu.CurrencyUsage
+FROM CurrencyUsage cu
+JOIN MaxUsage mu ON cu.ContinentCode = mu.ContinentCode AND cu.CurrencyUsage = mu.MaxUsageCount
+ORDER BY cu.ContinentCode;
