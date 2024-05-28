@@ -131,3 +131,25 @@ WHERE e.HireDate > '1999-01-01' AND dpt.Name IN ('Sales', 'Finance')
 ORDER BY e.HireDate
 
 
+/*
+7.	Employees with Project
+Create a query that selects:
+•	EmployeeID
+•	FirstName
+•	ProjectName
+Filter only employees with a project which has started after 13.08.2002 and it is still ongoing (no end date). Return the first 5 rows sorted by EmployeeID in ascending order.
+Example
+EmployeeID	FirstName	ProjectName
+1	Guy	Racing Socks
+1	Guy	Road Bottle Cage
+…	…	…
+
+*/
+
+SELECT * FROM Projects
+
+SELECT TOP 5 e.EmployeeID, e.FirstName, pr.Name AS ProjectName FROM Employees AS e
+JOIN EmployeesProjects AS ep ON e.EmployeeID = ep.EmployeeID
+JOIN Projects AS pr ON ep.ProjectID = pr.ProjectID
+WHERE pr.StartDate > '2002-08-13' AND pr.EndDate IS NULL 
+ORDER BY e.EmployeeID
