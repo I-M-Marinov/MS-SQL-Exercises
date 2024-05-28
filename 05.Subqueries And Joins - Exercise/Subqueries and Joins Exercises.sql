@@ -301,3 +301,28 @@ JOIN Mountains AS m ON m.Id = mc.MountainId
 WHERE c.CountryCode IN ('BG', 'US','RU')
 GROUP BY c.CountryCode
 
+
+/*
+14.	Countries With or Without Rivers
+Create a query that selects:
+•	CountryName
+•	RiverName
+Find the first 5 countries with or without rivers in Africa. Sort them by CountryName in ascending order.
+Example
+			CountryName			RiverName
+			Algeria				Niger
+			Angola				Congo
+			Benin				Niger
+			Botswana			NULL
+			Burkina Faso		Niger
+
+*/
+
+SELECT * FROM Rivers
+SELECT * FROM Countries
+
+SELECT TOP 5 c.CountryName, r.RiverName FROM Countries AS c
+FULL OUTER JOIN CountriesRivers AS cr ON c.CountryCode = cr.CountryCode
+FULL OUTER JOIN Rivers AS r ON r.Id = cr.RiverId
+WHERE c.ContinentCode ='AF'
+ORDER BY c.CountryName
