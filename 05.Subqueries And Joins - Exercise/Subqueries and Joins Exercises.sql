@@ -229,3 +229,25 @@ JOIN Employees AS m ON e.ManagerID = m.EmployeeID
 JOIN Departments as d ON e.DepartmentID = d.DepartmentID
 ORDER BY e.EmployeeID
 
+/*
+11.	Min Average Salary
+Create a query that returns the value of the lowest average salary of all departments.
+Example
+
+MinAverageSalary
+10866.6666
+
+*/
+
+SELECT TOP 1
+    sub.MinAverageSalary
+FROM 
+    Departments AS d
+JOIN 
+    (
+        SELECT e.DepartmentID, AVG(e.Salary) AS MinAverageSalary
+        FROM Employees AS e
+        GROUP BY e.DepartmentID
+    ) AS sub ON d.DepartmentID = sub.DepartmentID
+ORDER BY 
+    sub.MinAverageSalary;
