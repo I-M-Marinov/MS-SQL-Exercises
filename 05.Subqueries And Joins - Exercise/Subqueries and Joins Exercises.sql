@@ -447,4 +447,20 @@ ORDER BY
     lr.LongestRiverLength DESC,
     c.CountryName;
 
+/*
+	18.	Highest Peak Name and Elevation by Country
+For each country, find the name and elevation of the highest peak, along with its mountain. When no peaks are available in some countries, display elevation 0, "(no highest peak)" as peak name and "(no mountain)" as a mountain name. When multiple peaks in some countries have the same elevation, display all of them. Sort the results by country name alphabetically, then by highest peak name alphabetically. Limit only the first 5 rows.
+Example
+Country	Highest Peak Name	Highest Peak Elevation	Mountain
+Afghanistan	(no highest peak)	0	(no mountain)
+…	…	…	…
+Argentina	Aconcagua	6962	Andes
+…	…	…	…
+Bulgaria	Musala	2925	Rila
+Burkina Faso	(no highest peak)	0	(no mountain)
+…	…	…	…
+United States	Mount McKinley	6194	Alaska Range
+
+*/
+
 
