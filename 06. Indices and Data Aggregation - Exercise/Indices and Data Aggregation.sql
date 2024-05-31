@@ -176,3 +176,21 @@ FROM WizzardDeposits
 WHERE DepositGroup = 'Troll Chest'
 GROUP BY LEFT(FirstName, 1)
 ORDER BY FirstLetter
+
+/*
+11. Average Interest 
+Mr. Bodrog is highly interested in profitability. He wants to know the average interest of all deposit groups, split by whether the deposit has expired or not. 
+But that's not all. He wants you to select deposits with start date after 01/01/1985. Order the data descending by Deposit Group and ascending by Expiration Flag.
+
+The output should consist of the following columns:
+Example
+
+			DepositGroup		IsDepositExpired		AverageInterest
+			Venomous Tongue				0					16.698947
+*/
+
+
+SELECT w.DepositGroup, w.IsDepositExpired, AVG(w.DepositInterest) AS AverageInterest FROM WizzardDeposits AS w
+WHERE w.DepositStartDate > '1985-01-01'
+GROUP BY w.DepositGroup, w.IsDepositExpired
+ORDER BY w.DepositGroup DESC, w.IsDepositExpired
