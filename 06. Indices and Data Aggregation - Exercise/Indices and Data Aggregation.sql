@@ -69,3 +69,19 @@ Example
 
 SELECT w.DepositGroup, SUM(w.DepositAmount) AS TotalSum FROM WizzardDeposits AS w
 GROUP BY w.DepositGroup
+
+/*
+6. Deposits Sum for Ollivander Family
+Select all deposit groups and their total deposit sums, but only for the wizards, who have their magic wands crafted by the Ollivander family.
+Example
+
+	DepositGroup	TotalSum
+	Blue Phoenix	52968.96
+	Human Pride	188366.86
+
+*/
+
+SELECT w.DepositGroup, SUM(w.DepositAmount) AS TotalSum FROM WizzardDeposits AS w
+WHERE w.MagicWandCreator = 'Ollivander family'
+GROUP BY w.DepositGroup
+
