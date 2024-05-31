@@ -85,3 +85,18 @@ SELECT w.DepositGroup, SUM(w.DepositAmount) AS TotalSum FROM WizzardDeposits AS 
 WHERE w.MagicWandCreator = 'Ollivander family'
 GROUP BY w.DepositGroup
 
+/*
+7. Deposits Filter
+Select all deposit groups and their total deposit sums, but only for the wizards, who have their magic wands crafted by the Ollivander family. 
+Filter total deposit amounts lower than 150000. Order by total deposit amount in descending order.
+Example
+
+		DepositGroup	TotalSum
+		Troll Chest		126585.18
+*/
+
+SELECT w.DepositGroup, SUM(w.DepositAmount) AS TotalSum FROM WizzardDeposits AS w
+WHERE w.MagicWandCreator = 'Ollivander family'
+GROUP BY w.DepositGroup
+HAVING SUM(w.DepositAmount) < 150000
+ORDER BY SUM(w.DepositAmount) DESC
