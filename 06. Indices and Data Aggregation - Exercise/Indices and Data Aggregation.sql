@@ -100,3 +100,22 @@ WHERE w.MagicWandCreator = 'Ollivander family'
 GROUP BY w.DepositGroup
 HAVING SUM(w.DepositAmount) < 150000
 ORDER BY SUM(w.DepositAmount) DESC
+
+/*
+8. Deposit Charge
+Create a query that selects:
+•	Deposit group 
+•	Magic wand creator
+•	Minimum deposit charge for each group 
+Select the data in ascending order by MagicWandCreator and DepositGroup.
+Example
+
+	DepositGroup		MagicWandCreator		MinDepositCharge
+	Blue Phoenix		Antioch Peverell		30.00
+*/
+
+SELECT w.DepositGroup, w.MagicWandCreator, MIN(w.DepositCharge) AS TotalSum FROM WizzardDeposits AS w
+GROUP BY w.DepositGroup, w.MagicWandCreator
+ORDER BY w.MagicWandCreator, w.DepositGroup
+
+
