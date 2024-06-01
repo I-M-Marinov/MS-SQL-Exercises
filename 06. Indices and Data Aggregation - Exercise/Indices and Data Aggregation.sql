@@ -194,3 +194,31 @@ SELECT w.DepositGroup, w.IsDepositExpired, AVG(w.DepositInterest) AS AverageInte
 WHERE w.DepositStartDate > '1985-01-01'
 GROUP BY w.DepositGroup, w.IsDepositExpired
 ORDER BY w.DepositGroup DESC, w.IsDepositExpired
+
+/*
+12. *Rich Wizard, Poor Wizard
+Mr. Bodrog definitely likes his werewolves more than you. This is your last chance to survive! Give him some data to play his favorite game Rich Wizard, Poor Wizard. 
+The rules are simple: 
+You compare the deposits of every wizard with the wizard after him. 
+If a wizard is the last one in the database, simply ignore it. 
+In the end you have to sum the difference between the deposits.
+
+	Host Wizard			Host Wizard Deposit	Guest Wizard	Guest Wizard Deposit	Difference
+		Harry			10 000					Tom				12 000					-2000
+		Tom				12 000					....			.......					......
+
+At the end your query should return a single value: the SUM of all differences.
+
+*/
+
+SELECT * FROM WizzardDeposits
+
+SELECT 
+    SUM(DepositAmount - NextWizardDeposit) AS SumDifference
+FROM (
+    SELECT 
+        DepositAmount, 
+        LEAD(DepositAmount) OVER (ORDER BY id) AS NextWizardDeposit
+    FROM WizzardDeposits
+) SUBQUERY
+WHERE NextWizardDeposit IS NOT NULL;
