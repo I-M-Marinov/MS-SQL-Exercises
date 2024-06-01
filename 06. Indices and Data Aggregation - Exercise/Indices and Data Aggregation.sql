@@ -222,3 +222,22 @@ FROM (
     FROM WizzardDeposits
 ) SUBQUERY
 WHERE NextWizardDeposit IS NOT NULL;
+
+/*   Queries for SoftUni Database  */
+
+/*
+13. Departments Total Salaries
+
+Create a query that shows the total sum of salaries for each department. Order them by DepartmentID.
+Your query should return:	
+•	DepartmentID
+
+Example
+
+DepartmentID	TotalSalary
+     1			241000.00
+*/
+
+SELECT e.DepartmentID, SUM(e.Salary) AS TotalSalary FROM Employees AS e
+GROUP BY e.DepartmentID
+ORDER BY  e.DepartmentID;
