@@ -311,3 +311,21 @@ Count
 SELECT COUNT(Salary) AS [Count]
 FROM Employees
 WHERE ManagerID IS NULL 
+
+
+/*
+18. *3rd Highest Salary
+Find the third highest salary in each department if there is such. 
+Example
+
+DepartmentID	ThirdHighestSalary
+	1				36100.00
+*/
+
+SELECT DepartmentID, MAX(Salary) AS ThirdHighestSalary
+FROM Employees AS e1
+WHERE 2 = (SELECT COUNT(DISTINCT e2.Salary)
+           FROM Employees AS e2
+           WHERE e2.DepartmentID = e1.DepartmentID
+             AND e2.Salary > e1.Salary)
+GROUP BY DepartmentID;
