@@ -296,5 +296,18 @@ DepartmentID	MaxSalary
 
 SELECT DepartmentID, MAX(Salary) AS MaxSalary
 FROM Employees
-GROUP BY DepartmentID;
-HAVING MaxSalary BETWEEN 30000 and 70000;
+GROUP BY DepartmentID
+HAVING MAX(Salary) NOT BETWEEN 30000 and 70000;
+
+/*
+17. Employees Count Salaries
+Count the salaries of all employees, who don’t have a manager.
+Example
+
+Count
+  4
+*/
+
+SELECT COUNT(Salary) AS [Count]
+FROM Employees
+WHERE ManagerID IS NULL 
