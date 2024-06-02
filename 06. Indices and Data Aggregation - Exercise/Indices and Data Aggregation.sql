@@ -259,3 +259,26 @@ SELECT DepartmentID, MIN(Salary) AS MinimumSalary
 FROM Employees
 WHERE DepartmentID IN (2, 5, 7) AND HireDate > '2000-01-01'
 GROUP BY DepartmentID;
+
+/*
+15. Employees Average Salaries
+Select all employees who earn more than 30000 into a new table. Then delete all employees who have ManagerID = 42 (in the new table). 
+Then increase the salaries of all employees with DepartmentID = 1 by 5000. Finally, select the average salaries in each department.
+
+Example
+		DepartmentID	AverageSalary
+				1			45166.6666
+*/
+
+SELECT * INTO MiddleClass
+FROM Employees
+WHERE Salary > 30000;
+
+DELETE FROM MiddleClass WHERE ManagerID = 42
+UPDATE MiddleClass 
+SET Salary = Salary + 5000
+WHERE DepartmentID = 1;
+
+SELECT DepartmentID, AVG(Salary) AS AverageSalary
+FROM MiddleClass
+GROUP BY DepartmentID;
