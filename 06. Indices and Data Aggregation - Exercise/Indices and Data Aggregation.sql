@@ -329,3 +329,26 @@ WHERE 2 = (SELECT COUNT(DISTINCT e2.Salary)
            WHERE e2.DepartmentID = e1.DepartmentID
              AND e2.Salary > e1.Salary)
 GROUP BY DepartmentID;
+
+/*
+19. **Salary Challenge
+Create a query that returns:
+•	FirstName
+•	LastName
+•	DepartmentID
+
+Select all employees who have salary higher than the average salary of their respective departments. Select only the first 10 rows. Order them by DepartmentID.
+Example
+
+		FirstName		LastName		DepartmentID
+		Roberto		    Tamburello		     1
+*/
+
+SELECT TOP(10) e1.FirstName, e1.LastName, e1.DepartmentID
+FROM Employees AS e1
+WHERE e1.Salary > (
+    SELECT AVG(e2.Salary)
+    FROM Employees AS e2
+    WHERE e2.DepartmentID = e1.DepartmentID
+)
+ORDER BY e1.DepartmentID;
