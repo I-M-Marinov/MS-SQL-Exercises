@@ -282,3 +282,19 @@ WHERE DepartmentID = 1;
 SELECT DepartmentID, AVG(Salary) AS AverageSalary
 FROM MiddleClass
 GROUP BY DepartmentID;
+
+
+/*
+
+16. Employees Maximum Salaries
+Find the max salary for each department. Filter those, which have max salaries NOT in the range 30000 – 70000.
+Example
+
+DepartmentID	MaxSalary
+	2			29800.00
+*/
+
+SELECT DepartmentID, MAX(Salary) AS MaxSalary
+FROM Employees
+GROUP BY DepartmentID;
+HAVING MaxSalary BETWEEN 30000 and 70000;
