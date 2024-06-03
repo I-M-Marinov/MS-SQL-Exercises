@@ -88,8 +88,8 @@ Here it is a list of employees, living in Sofia.
 		 George		 Denchev
 */
 
-CREATE PROCEDURE usp_GetEmployeesFromTown
-    @StringInput NVARCHAR(50) 
+CREATE OR ALTER PROCEDURE usp_GetEmployeesFromTown
+    @stringInput NVARCHAR(50) 
 AS
 BEGIN
     SELECT FirstName, LastName
@@ -100,3 +100,40 @@ BEGIN
 END;
 
 EXEC usp_GetEmployeesFromTown @StringInput = 'Sofia';
+
+/*
+5.	Salary Level Function
+Create a function udf_GetSalaryLevel(@salary DECIMAL(18,4)) that receives salary of an employee and returns the level of the salary.
+•	If salary is < 30000, return "Low"
+•	If salary is between 30000 and 50000 (inclusive), return "Average"
+•	If salary is > 50000, return "High"
+Example
+		Salary			Salary Level
+		13500.00			Low
+		43300.00			Average
+		125500.00			High
+*/
+
+CREATE FUNCTION dbo.ufn_GetSalaryLevel (@salary DECIMAL(18,4))  -- SoftUni Judge does not like the convention which is dbo.udf_GetSalaryLevel
+RETURNS NVARCHAR(10)
+AS 
+BEGIN
+	DECLARE @result NVARCHAR(10)
+	IF (@salary < 30000)
+	BEGIN
+		SET @result = 'Low'
+	END
+	ELSE IF (@salary BETWEEN 30000 AND 50000)
+	BEGIN
+		SET @result = 'Average'
+	END
+	ELSE
+	BEGIN
+		SET @result = 'High'
+	END
+	RETURN @result
+END
+
+SELECT Salary, dbo.ufn_GetSalaryLevel(Salary) AS [Salary Level] FROM Employees
+ORDER BY Salary
+
