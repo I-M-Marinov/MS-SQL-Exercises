@@ -47,3 +47,31 @@ BEGIN
 END;
 
 EXEC usp_GetEmployeesSalaryAboveNumber @SalaryInput = 123.4567;
+
+/*
+3.	Town Names Starting With
+Create a stored procedure usp_GetTownsStartingWith that accepts a string as parameter and returns all town names starting with that string. 
+
+Example
+
+Here is the list of all towns starting with "b".
+
+		Town
+		Bellevue
+		Bothell
+		Bordeaux
+		Berlin
+*/
+
+CREATE PROCEDURE usp_GetTownsStartingWith
+@StringInput VARCHAR(10)
+AS
+BEGIN
+    SELECT [Name] AS Town
+    FROM Towns
+    WHERE [Name] LIKE 'StringInput%';
+END;
+
+DROP PROC usp_GetTownsStartingWith
+
+EXEC usp_GetTownsStartingWith @StringInput = 'b';
