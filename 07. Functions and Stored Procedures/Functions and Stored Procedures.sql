@@ -64,14 +64,39 @@ Here is the list of all towns starting with "b".
 */
 
 CREATE PROCEDURE usp_GetTownsStartingWith
-@StringInput VARCHAR(10)
+    @StringInput NVARCHAR(50) 
 AS
 BEGIN
     SELECT [Name] AS Town
     FROM Towns
-    WHERE [Name] LIKE 'StringInput%';
+    WHERE [Name] LIKE @StringInput + '%';
 END;
 
 DROP PROC usp_GetTownsStartingWith
 
-EXEC usp_GetTownsStartingWith @StringInput = 'b';
+EXEC usp_GetTownsStartingWith @StringInput = 'C';
+
+/*
+4.	Employees from Town
+Create a stored procedure usp_GetEmployeesFromTown that accepts town name as parameter and returns the first and last name of those employees, who live in the given town. 
+Example
+Here it is a list of employees, living in Sofia.
+
+		First Name	Last Name
+		 Svetlin	 Nakov
+		 Martin		 Kulov
+		 George		 Denchev
+*/
+
+CREATE PROCEDURE usp_GetEmployeesFromTown
+    @StringInput NVARCHAR(50) 
+AS
+BEGIN
+    SELECT FirstName, LastName
+    FROM Employees AS e
+	JOIN Addresses AS addr ON e.AddressID = addr.AddressID	
+	JOIN Towns AS t ON addr.TownID = t.TownID 
+    WHERE t.[Name] LIKE @StringInput;
+END;
+
+EXEC usp_GetEmployeesFromTown @StringInput = 'Sofia';
