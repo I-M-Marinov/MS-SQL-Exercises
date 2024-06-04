@@ -1,3 +1,4 @@
+
 										/*			Queries for SoftUni Database			*/
 
 /*
@@ -157,5 +158,68 @@ CREATE PROCEDURE usp_EmployeesBySalaryLevel(@levelOfSalary NVARCHAR(10))
 AS
 BEGIN
 		SELECT FirstName AS [First Name], LastName AS [Last Name] FROM Employees AS e
-		WHERE @levelOfSalary = ufn_GetSalaryLevel(e.Salary);
+		WHERE @levelOfSalary = dbo.ufn_GetSalaryLevel(e.Salary);
+END;
+
+EXEC usp_EmployeesBySalaryLevel @levelOfSalary = 'Low';
+
+
+/*
+7.	Define Function
+Define a function ufn_IsWordComprised(@setOfLetters, @word) that returns true or false, depending on that if the word is comprised of the given set of letters. 
+Example
+
+		SetOfLetters		Word		Result
+		 oistmiahf			Sofia			1
+		 oistmiahf			halves			0
+			bobr			Rob				1
+			pppp			Guy				0
+*/
+
+CREATE OR ALTER FUNCTION dbo.ufn_IsWordComprised(@setOfLetters VARCHAR(20), @word VARCHAR(30))
+RETURNS BIT
+AS
+BEGIN
+    DECLARE @result BIT = 1
+    DECLARE @i INT = 1
+    
+    SET @setOfLetters = LOWER(@setOfLetters)
+    SET @word = LOWER(@word)
+
+    -- Loop through each character in @word
+    WHILE @i <= LEN(@word) AND @result = 1
+    BEGIN
+        DECLARE @char CHAR(1)
+        SET @char = SUBSTRING(@word, @i, 1)
+
+        IF CHARINDEX(@char, @setOfLetters) > 0
+        BEGIN
+            SET @setOfLetters = STUFF(@setOfLetters, CHARINDEX(@char, @setOfLetters), 1, '')
+        END
+        ELSE
+        BEGIN
+            SET @result = 0
+        END
+
+        SET @i = @i + 1
+    END
+
+  --  IF LEN(@setOfLetters) > 0
+  --  BEGIN
+  --     SET @result = 0
+  --  END
+
+    RETURN @result
 END
+
+SELECT 'oistmiahf' AS SetOfLetters, 'Sofia' AS Word, dbo.ufn_IsWordComprised('oistmiahf', 'Sofia') AS Result,
+	   'oistmiahf' AS SetOfLetters, 'halves' AS Word, dbo.ufn_IsWordComprised('oistmiahf', 'halves') AS Result,
+	   'bobr' AS SetOfLetters, 'Rob' AS Word, dbo.ufn_IsWordComprised('bobr', 'Rob') AS Result,
+	   'oalak' AS SetOfLetters, 'Koalaa' AS Word, dbo.ufn_IsWordComprised('bobr', 'Rob') AS Result,
+	   'pppp' AS SetOfLetters, 'Guy' AS Word, dbo.ufn_IsWordComprised('pppp', 'Guy') AS Result;
+
+SELECT  dbo.ufn_IsWordComprised('oistmiahf', 'Sofia') AS Result
+SELECT  dbo.ufn_IsWordComprised('oistmiahf', 'halves') AS Result
+SELECT  dbo.ufn_IsWordComprised('bobr', 'Rob') AS Result
+SELECT  dbo.ufn_IsWordComprised('pppp', 'Guy') AS Result
+SELECT  dbo.ufn_IsWordComprised('tbober', 'Robert') AS Result
