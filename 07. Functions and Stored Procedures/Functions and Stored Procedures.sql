@@ -180,37 +180,21 @@ CREATE OR ALTER FUNCTION dbo.ufn_IsWordComprised(@setOfLetters VARCHAR(20), @wor
 RETURNS BIT
 AS
 BEGIN
-    DECLARE @result BIT = 1
+	DECLARE @WordLenght INT = LEN(@word)
     DECLARE @i INT = 1
-    
-    SET @setOfLetters = LOWER(@setOfLetters)
-    SET @word = LOWER(@word)
+	DECLARE @result BIT = 1  
 
-    -- Loop through each character in @word
-    WHILE @i <= LEN(@word) AND @result = 1
-    BEGIN
-        DECLARE @char CHAR(1)
-        SET @char = SUBSTRING(@word, @i, 1)
+	WHILE(@i <= @WordLenght)
+		BEGIN
+			IF(CHARINDEX(SUBSTRING(@word, @i, 1), @setOfLetters) = 0)
+			BEGIN
+				RETURN 0
+			END
+			SET @i += 1
+		END 
+	RETURN 1
+END;
 
-        IF CHARINDEX(@char, @setOfLetters) > 0
-        BEGIN
-            SET @setOfLetters = STUFF(@setOfLetters, CHARINDEX(@char, @setOfLetters), 1, '')
-        END
-        ELSE
-        BEGIN
-            SET @result = 0
-        END
-
-        SET @i = @i + 1
-    END
-
-  --  IF LEN(@setOfLetters) > 0
-  --  BEGIN
-  --     SET @result = 0
-  --  END
-
-    RETURN @result
-END
 
 SELECT 'oistmiahf' AS SetOfLetters, 'Sofia' AS Word, dbo.ufn_IsWordComprised('oistmiahf', 'Sofia') AS Result,
 	   'oistmiahf' AS SetOfLetters, 'halves' AS Word, dbo.ufn_IsWordComprised('oistmiahf', 'halves') AS Result,
@@ -223,3 +207,16 @@ SELECT  dbo.ufn_IsWordComprised('oistmiahf', 'halves') AS Result
 SELECT  dbo.ufn_IsWordComprised('bobr', 'Rob') AS Result
 SELECT  dbo.ufn_IsWordComprised('pppp', 'Guy') AS Result
 SELECT  dbo.ufn_IsWordComprised('tbober', 'Robert') AS Result
+
+/*
+8.	Delete Employees and Departments
+Create a procedure with the name usp_DeleteEmployeesFromDepartment (@departmentId INT) which deletes all Employees from a given department.
+Delete these departments from the Departments table too. Finally, SELECT the number of employees from the given department. 
+If the delete statements are correct the select query should return 0.
+After completing that exercise restore your database to revert all changes.
+
+Hint:
+You may set ManagerID column in Departments table to nullable (using query "ALTER TABLE …").
+*/
+
+
