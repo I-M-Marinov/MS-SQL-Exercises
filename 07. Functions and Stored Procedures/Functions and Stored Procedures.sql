@@ -220,3 +220,37 @@ You may set ManagerID column in Departments table to nullable (using query "ALTE
 */
 
 
+CREATE PROCEDURE usp_DeleteEmployeesFromDepartment (@departmentId INT)
+AS
+BEGIN
+	DECLARE @deletedEmployees TABLE (Id INT)
+
+	INSERT INTO @deletedEmployees 
+	SELECT EmployeeID
+	FROM Employees
+	WHERE DepartmentID = @departmentId
+
+	ALTER TABLE Departments
+	ALTER COLUMN ManagerID INT 
+
+	UPDATE Departments
+	SET ManagerID = NULL
+	WHERE ManagerID IN ( SELECT Id FROM @deletedEmployees )
+
+	UPDATE Employees
+	SET ManagerID = NULL
+	WHERE ManagerID IN ( SELECT Id FROM @deletedEmployees )
+
+	DELETE FROM EmployeesProjects
+	WHERE EmployeeID IN ( SELECT Id FROM @deletedEmployees )
+
+	DELETE FROM Employees
+	WHERE DepartmentID = @departmentId
+
+	DELETE FROM Departments
+	WHERE DepartmentID = @departmentId
+
+	SELECT COUNT(*) FROM Employees
+	WHERE DepartmentID = @departmentId
+
+END;
