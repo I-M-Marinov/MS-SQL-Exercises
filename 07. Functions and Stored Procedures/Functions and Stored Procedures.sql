@@ -373,3 +373,45 @@ AS
 
 
 EXEC usp_CalculateFutureValueForAccount 11, 0.1;
+
+											/*              Queries for Diablo Database             */
+
+/*
+13.	*Scalar Function: Cash in User Games Odd Rows
+Create a function ufn_CashInUsersGames that sums the cash of the odd rows. 
+Rows must be ordered by cash in descending order. 
+The function should take a game name as a parameter and return the result as a table. 
+Submit only your function in.
+
+Execute the function over the following game names, ordered exactly like: "Love in a mist".
+Output
+
+								SumCash
+								8585.00
+Hint
+Use ROW_NUMBER to get the rankings of all rows based on order criteria.
+*/
+
+CREATE FUNCTION dbo.ufn_CashInUsersGames (@gameName VARCHAR(30))
+RETURNS TABLE 
+AS
+RETURN
+(
+    SELECT SUM(Cash) AS SumCash
+    FROM (
+        SELECT Cash, 
+        ROW_NUMBER() OVER (ORDER BY Cash DESC) AS RowNumber -- Get the row number and order by CASH DESC 
+        FROM UsersGames AS ug
+        JOIN Games AS g ON g.Id = ug.GameId 
+        WHERE g.[Name] = @gameName -- match the game with the parameter name 
+    ) AS Subquery
+		WHERE RowNumber % 2 = 1 -- check if the row number is odd 
+);
+
+SELECT * FROM UsersGames
+WHERE GameId = 49
+ORDER BY Cash DESC
+
+SELECT * FROM Games
+
+SELECT * FROM dbo.ufn_CashInUsersGames('Love in a mist');
