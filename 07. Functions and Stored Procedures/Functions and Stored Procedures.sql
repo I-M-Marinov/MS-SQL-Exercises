@@ -313,7 +313,7 @@ EXEC usp_GetHoldersWithBalanceHigherThan 35000.23
 Your task is to create a function ufn_CalculateFutureValue that accepts as parameters – sum (decimal), yearly interest rate (float), and the number of years (int). 
 It should calculate and return the future value of the initial sum rounded up to the fourth digit after the decimal delimiter.Use the following formula:
 
-FV = I×((1+R)^T)
+FV = I×((1+R)^T)  ( ^T = POWER )
 
 •	I – Initial sum
 •	R – Yearly interest rate
@@ -332,7 +332,7 @@ CREATE OR ALTER FUNCTION ufn_CalculateFutureValue (
     @yearlyInterestRate FLOAT, 
     @numberOfYears INT
 )
-RETURNS DECIMAL(18,4)
+RETURNS DECIMAL(10,4)
 AS
 BEGIN
     DECLARE @result DECIMAL(18,4); 
@@ -346,3 +346,30 @@ DECLARE @futureValue DECIMAL(18,4); -- declare a variable
 SET @futureValue = dbo.ufn_CalculateFutureValue(1000, 0.1, 5); -- use the function to store the result in the varible 
 SELECT @futureValue AS FutureValue; -- Visualize the variable by selecting its value
 
+/*
+12.	Calculating Interest
+Your task is to create a stored procedure usp_CalculateFutureValueForAccount that uses the function from the 
+previous problem to give an interest to a person's account for 5 years, along with information about 
+their account id, first name, last name and current balance as it is shown in the example below. 
+It should take the AccountId and the interest rate as parameters. Again, you are provided with the dbo.ufn_CalculateFutureValue function, 
+which was part of the previous task.
+
+Example
+
+Account Id	First Name	Last Name	Current Balance	 Balance in 5 years
+     1			Susan	   Cane			123.12			  198.2860
+*/
+
+CREATE OR ALTER PROCEDURE dbo.usp_CalculateFutureValueForAccount(@accountId INT, @interestRate FLOAT)
+AS
+    SELECT 
+        a.Id AS [Account Id], 
+        FirstName, LastName,
+        Balance AS [Current Balance],
+        dbo.ufn_CalculateFutureValue(Balance, @interestRate, 5) AS [Balance in 5 years]
+    FROM AccountHolders AS ah
+    JOIN Accounts AS a ON  a.AccountHolderId = ah.Id 
+    WHERE a.Id = @accountId;
+
+
+EXEC usp_CalculateFutureValueForAccount 11, 0.1;
