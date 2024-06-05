@@ -273,3 +273,38 @@ Example
 */
 
 
+CREATE PROCEDURE usp_GetHoldersFullName 
+AS
+BEGIN
+	SELECT FirstName + ' ' + LastName AS [Full Name]
+    FROM AccountHolders
+END;
+
+EXEC usp_GetHoldersFullName 
+
+/*
+10.	People with Balance Higher Than
+Your task is to create a stored procedure usp_GetHoldersWithBalanceHigherThan that accepts 
+a number as a parameter and returns all the people, who have more money in total in all their accounts than the supplied number. 
+Order them by their first name, then by their last name.
+Example
+
+			First Name		Last Name
+			  Monika	     Miteva
+			  Petar	         Kirilov
+*/
+
+CREATE OR ALTER PROCEDURE usp_GetHoldersWithBalanceHigherThan 
+    @numberInput DECIMAL(18,2)
+AS
+BEGIN
+    SELECT FirstName AS [First Name], LastName AS [Last Name]
+    FROM AccountHolders AS a
+	JOIN Accounts AS acc ON a.Id = acc.AccountHolderId
+	GROUP BY a.FirstName, a.LastName
+    HAVING SUM(acc.Balance) > @numberInput
+	ORDER BY a.FirstName, a.LastName
+END;
+
+EXEC usp_GetHoldersWithBalanceHigherThan 35000.23
+
