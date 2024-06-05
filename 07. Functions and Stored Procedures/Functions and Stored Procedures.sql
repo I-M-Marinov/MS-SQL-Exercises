@@ -1,4 +1,4 @@
-
+﻿
 										/*			Queries for SoftUni Database			*/
 
 /*
@@ -105,9 +105,9 @@ EXEC usp_GetEmployeesFromTown @StringInput = 'Sofia';
 /*
 5.	Salary Level Function
 Create a function udf_GetSalaryLevel(@salary DECIMAL(18,4)) that receives salary of an employee and returns the level of the salary.
-�	If salary is < 30000, return "Low"
-�	If salary is between 30000 and 50000 (inclusive), return "Average"
-�	If salary is > 50000, return "High"
+•	If salary is < 30000, return "Low"
+•	If salary is between 30000 and 50000 (inclusive), return "Average"
+•	If salary is > 50000, return "High"
 Example
 		Salary			Salary Level
 		13500.00			Low
@@ -144,7 +144,7 @@ ORDER BY Salary
 Create a stored procedure usp_EmployeesBySalaryLevel that receives as parameter level of salary (low, average, or high) and print the names of all employees, 
 who have the given level of salary. 
 
-You should use the function - "dbo.ufn_GetSalaryLevel(@Salary)", which was part of the previous task, inside your "CREATE PROCEDURE �" query.
+You should use the function - "dbo.ufn_GetSalaryLevel(@Salary)", which was part of the previous task, inside your "CREATE PROCEDURE …" query.
 Example
 Here is the list of all employees with a high salary.
 
@@ -216,7 +216,7 @@ If the delete statements are correct the select query should return 0.
 After completing that exercise restore your database to revert all changes.
 
 Hint:
-You may set ManagerID column in Departments table to nullable (using query "ALTER TABLE �").
+You may set ManagerID column in Departments table to nullable (using query "ALTER TABLE …").
 */
 
 
@@ -255,7 +255,7 @@ BEGIN
 
 END;
 
-				/*                   Part II � Queries for Bank Database                     */
+				/*                   Part II – Queries for Bank Database                     */
 
 
 /*
@@ -307,4 +307,42 @@ BEGIN
 END;
 
 EXEC usp_GetHoldersWithBalanceHigherThan 35000.23
+
+/*
+11.	Future Value Function
+Your task is to create a function ufn_CalculateFutureValue that accepts as parameters – sum (decimal), yearly interest rate (float), and the number of years (int). 
+It should calculate and return the future value of the initial sum rounded up to the fourth digit after the decimal delimiter.Use the following formula:
+
+FV = I×((1+R)^T)
+
+•	I – Initial sum
+•	R – Yearly interest rate
+•	T – Number of years
+
+Input	Output
+Initial sum: 1000
+Yearly Interest rate: 10%
+years: 5
+ufn_CalculateFutureValue(1000, 0.1, 5)	1610.5100
+
+*/
+
+CREATE OR ALTER FUNCTION ufn_CalculateFutureValue (
+    @sum DECIMAL(10,4), 
+    @yearlyInterestRate FLOAT, 
+    @numberOfYears INT
+)
+RETURNS DECIMAL(18,4)
+AS
+BEGIN
+    DECLARE @result DECIMAL(18,4); 
+
+    SET @result = @sum * POWER((1 + @yearlyInterestRate), @numberOfYears); -- FV = I×((1+R)^T) 
+
+    RETURN ROUND(@result, 4); -- Round to the fourth digit after the decimal delimiter
+END;
+
+DECLARE @futureValue DECIMAL(18,4); -- declare a variable 
+SET @futureValue = dbo.ufn_CalculateFutureValue(1000, 0.1, 5); -- use the function to store the result in the varible 
+SELECT @futureValue AS FutureValue; -- Visualize the variable by selecting its value
 
