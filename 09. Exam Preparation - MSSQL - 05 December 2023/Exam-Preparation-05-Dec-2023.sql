@@ -209,3 +209,34 @@ Required columns:
 SELECT DateOfDeparture, Price AS TicketPrice FROM Tickets
 ORDER BY Price, DateOfDeparture DESC
 
+
+/*
+6.	Passengers with their Tickets
+
+Select all the tickets purchased, along with the names of the passengers who purchased them.  
+For the tickets you will need information for the price, date of departure, related train’s id. 
+The report should be organized in a way that lists the tickets starting from the highest price to the lowest. 
+In case of identical ticket prices, further order the entries alphabetically by the passenger's name.
+
+Required columns:
+•	PassengerName
+•	TicketPrice
+•	DateOfDeparture
+•	TrainID
+
+Example
+			PassengerName			TicketPrice 	DateOfDeparture			TrainID
+			Mary Campbell			275.00			2023-09-24				29
+			Wayne Richardson		275.00			2023-10-29				29
+			Bruce Howard			180.00			2023-11-14				10
+			Matthew Allen			180.00			2023-09-05				10
+*/
+
+SELECT p.[Name] AS PassengerName,
+	   t.Price AS TicketPrice,
+	   t.DateOfDeparture,
+	   t.TrainId
+		FROM Tickets AS t
+JOIN Passengers AS p ON t.PassengerId = p.Id
+ORDER BY t.Price DESC, p.[Name]
+
