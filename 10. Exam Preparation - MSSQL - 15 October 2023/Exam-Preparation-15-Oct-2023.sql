@@ -293,4 +293,40 @@ JOIN Rooms AS r ON r.Id = b.RoomId
 WHERE t.[Name] NOT LIKE '%EZ%'
 ORDER BY r.Price DESC
 
+/*
+10.	Hotels Revenue
+In this task, you will write an SQL query to calculate the total price of all 
+bookings for each hotel based on the room price and the number of nights guests have stayed. 
+The result should list the hotel names and their corresponding revenue.
 
+•	Foreach Booking you should join data for the Hotel and the Room, using the Id references;
+•	NightsCount – you will need the ArrivalDate and DepartureDate for a DATEDIFF function;
+•	Calculate the TotalRevenue by summing the price of each booking, 
+using Price of the Room that is referenced to the specific Booking and multiply it by the NightsCount. 
+•	Group all the bookings by HotelName using the reference to the Hotel. 
+•	Order the results by TotalRevenue in descending order.
+
+Required columns:
+•	HotelName
+•	TotalRevenue
+
+Example
+				HotelName			HotelRevenue
+				Bonvecchiati			10521.50
+				Kivotos					6530.00
+				Cavo Tagoo				3666.75
+*/
+
+SELECT * FROM Bookings
+SELECT * FROM Hotels
+SELECT * FROM Rooms
+SELECT * FROM HotelsRooms
+
+SELECT 
+h.[Name] AS HotelName,
+SUM(r.Price * DATEDIFF(DAY, b.ArrivalDate, b.DepartureDate)) AS TotalRevenue 
+FROM Bookings AS b
+JOIN Hotels AS h ON h.Id = b.HotelId
+JOIN Rooms AS r ON r.Id = b.RoomId
+GROUP BY h.[Name]
+ORDER BY TotalRevenue DESC
