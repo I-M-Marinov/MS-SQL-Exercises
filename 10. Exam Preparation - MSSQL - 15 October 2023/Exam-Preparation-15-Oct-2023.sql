@@ -173,3 +173,35 @@ SELECT FORMAT(ArrivalDate, 'yyyy-MM-dd') AS ArrivalDate,
 		FROM Bookings AS b
 		JOIN Rooms AS r ON r.Id = b.RoomId
 ORDER BY r.Price DESC, b.ArrivalDate
+
+
+/*
+6.	Hotels by Count of Bookings
+Select all hotels with "VIP Apartment" available. 
+Order results by the count of bookings (count of all bookings for the specific hotel, not only for VIP apartment) made for every hotel (descending).
+Required columns:
+•	Id
+•	Name
+
+Example
+
+			Id				Name
+			5			Saint Ouen Marche Aux Puces
+			11			Silken Al-Andalaus Palace
+			20			Kivotos
+			3			Antica Panada
+
+*/
+
+SELECT h.Id,
+	   h.[Name] AS [Name]
+	   FROM Hotels AS h
+	   JOIN Bookings AS b ON b.HotelId = h.Id
+	   JOIN Rooms AS r ON r.Id = b.RoomId
+	   JOIN HotelsRooms AS hr ON hr.HotelId = h.Id
+    WHERE hr.RoomId = 8 -- ID 8 is a VIP Apartment
+	GROUP BY h.Id, h.[Name]
+	ORDER BY COUNT(b.HotelId) DESC
+
+
+
