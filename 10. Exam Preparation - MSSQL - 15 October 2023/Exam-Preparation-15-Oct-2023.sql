@@ -204,4 +204,24 @@ SELECT h.Id,
 	ORDER BY COUNT(b.HotelId) DESC
 
 
+/*
+7.	Tourists without Bookings
+Select all tourists that haven’t booked a hotel yet. Order them by name (ascending).
+Required columns:
+•	Id
+•	Name
+•	PhoneNumber
 
+Example
+			Id	Name				PhoneNumber
+			19	Ahmet Yilmaz		777-777-7707
+			14	Friedrich Weber		434-444-4414
+*/
+
+SELECT t.Id,
+	   t.[Name],
+	   t.PhoneNumber
+FROM Tourists AS t
+LEFT JOIN Bookings AS b ON b.TouristId = t.Id
+WHERE b.TouristId IS NULL
+ORDER BY t.[Name]
