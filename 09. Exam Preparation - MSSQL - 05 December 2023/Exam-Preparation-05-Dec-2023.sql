@@ -240,3 +240,30 @@ SELECT p.[Name] AS PassengerName,
 JOIN Passengers AS p ON t.PassengerId = p.Id
 ORDER BY t.Price DESC, p.[Name]
 
+/*
+7.	Railway Stations without Passing Trains
+
+Select all railway stations that do not have any trains scheduled to stop or pass through them. 
+Each station must be associated with the town it is located in. 
+The town's name should be included in your result set to understand the geographical distribution of these inactive stations. 
+The results should be ordered by the name of the town in ascending order, then by the name of the railway station in ascending order.
+Required columns:
+•	Town
+•	RailwayStation
+						Example
+
+			  Town			RailwayStation
+			Amsterdam			Amstel
+			Amsterdam			Sloterdijk
+			Athens				Larissa Station
+			Barcelona			Passeig de Garcia
+*/
+
+SELECT t.[Name] AS Town,
+	   rs.[Name] AS RailwayStation
+	   FROM RailwayStations AS rs
+    LEFT JOIN TrainsRailwayStations trs ON rs.Id = trs.RailwayStationId
+    JOIN Towns t ON rs.TownId = t.Id
+WHERE trs.TrainId IS NULL
+ORDER BY t.[Name], rs.[Name];
+
