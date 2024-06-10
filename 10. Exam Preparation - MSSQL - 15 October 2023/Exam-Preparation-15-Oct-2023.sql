@@ -260,3 +260,37 @@ JOIN Countries AS c ON c.Id = d.CountryId
 WHERE h.Id % 2 = 1
   AND b.ArrivalDate < '2023-12-31'
 ORDER BY c.[Name], b.ArrivalDate;
+
+/*
+9.	Tourists booked in Hotels
+Select all of the tourists that have a name, not ending in "EZ", and display the names of the hotels, 
+that they have booked a room in. Order by the price of the room (descending).
+Required columns:
+•	HotelName
+•	RoomPrice
+
+Example
+
+			HotelName								RoomPrice
+			Kivotos									600.00
+			Silken Al-Andalaus Palace				280.50
+			Liebesbier Urban Art & Smart Hotel		280.50
+			Anklamer Hof							250.00
+			Silken Al-Andalaus Palace				250.00
+			Silken Al-Andalaus Palace				250.00
+*/
+
+SELECT * FROM Destinations
+SELECT * FROM Hotels
+
+SELECT
+h.[Name] AS HotelName,
+r.Price AS RoomPrice
+FROM Tourists AS t
+JOIN Bookings AS b ON b.TouristId = t.Id
+JOIN Hotels AS h ON h.Id = b.HotelId
+JOIN Rooms AS r ON r.Id = b.RoomId
+WHERE t.[Name] NOT LIKE '%EZ%'
+ORDER BY r.Price DESC
+
+
