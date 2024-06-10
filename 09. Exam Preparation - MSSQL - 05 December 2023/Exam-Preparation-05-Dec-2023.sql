@@ -150,3 +150,14 @@ VALUES (90.00, '2023-12-01', '2023-12-01', 36, 1),
 	   (255.00, '2023-09-01', '2023-09-02', 39, 21),
 	   (95.00, '2023-09-02', '2023-09-03', 40, 22)
 
+/*
+3.	Update
+Due to technical reasons, every ticket with a DateOfDeparture after October 31st will be postponed with one week.  
+That means that both DateOfDeparture and DateOfArrival should be changed for 7 days later.
+
+*/
+
+UPDATE Tickets
+SET DateOfDeparture = DATEADD(DAY, 7, DateOfDeparture),
+    DateOfArrival = DATEADD(DAY, 7, DateOfArrival)
+WHERE DateOfDeparture > '2023-10-31';
