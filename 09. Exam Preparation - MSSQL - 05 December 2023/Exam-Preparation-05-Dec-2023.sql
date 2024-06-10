@@ -364,3 +364,30 @@ JOIN MaintenanceRecords AS mr ON mr.TrainId = tr.Id
 JOIN Towns AS twns ON twns.Id = tr.DepartureTownId
 WHERE mr.Details LIKE '%inspection%'
 ORDER BY tr.Id;
+
+/*
+							Section 4. Programmability (20 pts)
+11.	Towns with Trains
+Create a user-defined function, named udf_TownsWithTrains(@name) that receives a town’s name.
+The function should return the total number of trains that departures or arrives at that town.
+												Example
+									Query
+				SELECT dbo.udf_TownsWithTrains('Paris')
+
+									Output
+									   7
+*/
+
+CREATE FUNCTION udf_TownsWithTrains(@name VARCHAR(30))
+RETURNS INT
+AS
+BEGIN
+	DECLARE @trainCount INT;
+    SELECT @trainCount = COUNT(*) 
+    FROM Trains AS tr
+    JOIN Towns AS t ON tr.ArrivalTownId = t.Id OR tr.DepartureTownId = t.Id
+    WHERE t.[Name] = @name;
+	RETURN @trainCount
+END;
+
+SELECT dbo.udf_TownsWithTrains('Paris');
