@@ -161,3 +161,22 @@ UPDATE Tickets
 SET DateOfDeparture = DATEADD(DAY, 7, DateOfDeparture),
     DateOfArrival = DATEADD(DAY, 7, DateOfArrival)
 WHERE DateOfDeparture > '2023-10-31';
+
+
+/*
+4.	Delete
+In table Trains, delete the train, that departures from Berlin. Keep in mind that there could be foreign key constraint conflicts.
+*/
+
+DELETE FROM Tickets
+WHERE TrainId IN (SELECT Id FROM Trains WHERE DepartureTownId IN (SELECT Id FROM Towns WHERE Name = 'Berlin'));
+
+DELETE FROM MaintenanceRecords
+WHERE TrainId IN (SELECT Id FROM Trains WHERE DepartureTownId IN (SELECT Id FROM Towns WHERE Name = 'Berlin'));
+
+DELETE FROM TrainsRailwayStations
+WHERE TrainId IN (SELECT Id FROM Trains WHERE DepartureTownId IN (SELECT Id FROM Towns WHERE [Name] = 'Berlin'));
+
+DELETE FROM Trains
+WHERE DepartureTownId IN (SELECT Id FROM Towns WHERE Name = 'Berlin');
+
