@@ -1,3 +1,18 @@
+/*
+																Section 1. DDL (30 pts)
+You have been given the E/R Diagram of the TouristAgency database.
+
+Create a database called TouristAgency. You need to create 7 tables:
+-	Countries - contains information about the countries, in which the destinations and hotels are located, each tourist will also has a country;
+-	Destinations - contains information about the holiday destinations(areas, resorts, etc.);
+-	Rooms - contains information about the rooms (type of room, count of beds);
+-	Hotels - contains information about each hotel;
+-	Tourists - containts information about each tourist, that has booked a room in a hotel;
+-	Bookings - contains information about each booking;
+-	HotelsRooms  - mapping table between hotels and rooms;
+
+*/
+
 CREATE DATABASE TouristAgency 
 GO
 USE TouristAgency
@@ -59,7 +74,34 @@ CONSTRAINT FK_HotelsRoomss_Hotels FOREIGN KEY (HotelId) REFERENCES Hotels(Id),
 CONSTRAINT FK_HotelsRooms_Rooms FOREIGN KEY (RoomId) REFERENCES Rooms(Id)
 )
 
+/*
+Section 2. DML (10 pts)
+Before you start, you have to import "Dataset.sql ". If you have created the structure correctly, the data should be successfully inserted.
+In this section, you have to do some data manipulations:
+2.	Insert
+Let's insert some sample data into the database. Write a query to add the following records into the corresponding tables. All IDs (Primary Keys) should be auto-generated.
+Tourists
 
 
+		Name				PhoneNumber				Email						CountryId
+		John Rivers			653-551-1555		john.rivers@example.com				6
+		Adeline Aglaé		122-654-8726		adeline.aglae@example.com			2
+		Sergio Ramirez		233-465-2876		s.ramirez@example.com				3
+		Johan Müller		322-876-9826		j.muller@example.com				7
+		Eden Smith			551-874-2234		eden.smith@example.com				6
+*/
+
+INSERT INTO Tourists ([Name],PhoneNumber,Email,CountryId)
+VALUES ('John Rivers', '653-551-1555', 'john.rivers@example.com', 6),
+	   ('Adeline Aglaé', '122-654-8726', 'adeline.aglae@example.com', 2),
+	   ('Sergio Ramirez', '233-465-2876', 's.ramirez@example.com', 3),
+	   ('Johan Müller', '322-876-9826', 'j.muller@example.com', 7),
+	   ('Eden Smith', '551-874-2234', 'eden.smith@example.com', 6)
 
 
+INSERT INTO Bookings(ArrivalDate,DepartureDate,AdultsCount,ChildrenCount,TouristId,HotelId,RoomId)
+VALUES ('2024-03-01', '2024-03-11', 1, 0, 21, 3, 5),
+	   ('2023-12-28', '2024-01-06', 2, 1, 22, 13, 3),
+	   ('2023-11-15', '2023-11-20', 1, 2, 23, 19, 7),
+	   ('2023-12-05', '2023-12-09', 4, 0, 24, 6, 4),
+	   ('2024-05-01', '2024-05-07', 6, 0, 25, 14, 6)
