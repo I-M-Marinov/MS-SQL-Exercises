@@ -323,11 +323,6 @@ Required columns:
 			London					4
 */
 
-SELECT * FROM Passengers
-SELECT * FROM Tickets
-SELECT * FROM Trains
-SELECT * FROM Towns
-
 SELECT  twns.Name AS TownName,
 		COUNT(p.Id) AS PassengersCount
 FROM Tickets AS tcks
@@ -337,3 +332,35 @@ JOIN Towns AS twns ON twns.Id = tr.ArrivalTownId
 WHERE tcks.Price > 76.99
 GROUP BY tr.ArrivalTownId, twns.Name
 ORDER BY twns.Name
+
+/*
+10.	Maintenance Inspection with Town
+Your task is to generate a table report for train maintenance related to inspections. 
+This report should include the train ID, the name of the town where the train departs from and the maintenance record details, 
+that include the word "inspection". Order the records by train ID.
+
+Required columns:
+•	TrainID
+•	DepartureTown
+•	Details
+									Example
+
+		TrainID	DepartureTown	Details
+			1		London		Brake system inspection and overhaul
+			2		London		Brake system inspection and overhaul
+			4		Paris		Wheel and axle inspection
+*/
+
+SELECT * FROM MaintenanceRecords
+SELECT * FROM Trains
+SELECT * FROM Towns
+
+SELECT 
+tr.Id AS TrainID,
+twns.[Name] AS DepartureTown,
+mr.Details AS Details
+FROM Trains AS tr
+JOIN MaintenanceRecords AS mr ON mr.TrainId = tr.Id
+JOIN Towns AS twns ON twns.Id = tr.DepartureTownId
+WHERE mr.Details LIKE '%inspection%'
+ORDER BY tr.Id;
