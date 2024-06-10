@@ -225,3 +225,38 @@ FROM Tourists AS t
 LEFT JOIN Bookings AS b ON b.TouristId = t.Id
 WHERE b.TouristId IS NULL
 ORDER BY t.[Name]
+
+/*
+8.	First 10 Bookings
+Select the first 10 bookings that will arrive before 2023-12-31. 
+You will need to select the bookings in hotels with odd-numbered IDs. 
+Sort the results in ascending order, first by CountryName, and then by ArrivalDate.
+
+Required columns:
+•	HotelName
+•	DestinationName
+•	CountryName
+Example
+
+			        HotelName					DestinationName		CountryName
+			Royal Promenade des Anglais			   Nice				   France
+			Saint Ouen Marche Aux Puces			   Paris			   France
+			Saint Ouen Marche Aux Puces			   Paris			   France
+*/
+
+
+SELECT * FROM Destinations
+SELECT * FROM Hotels
+
+
+SELECT TOP 10 
+    h.[Name] AS HotelName,
+    d.[Name] AS DestinationName,
+    c.[Name] AS CountryName
+FROM Bookings AS b
+JOIN Hotels AS h ON h.Id = b.HotelId
+JOIN Destinations as d ON d.Id = h.DestinationId
+JOIN Countries AS c ON c.Id = d.CountryId
+WHERE h.Id % 2 = 1
+  AND b.ArrivalDate < '2023-12-31'
+ORDER BY c.[Name], b.ArrivalDate;
