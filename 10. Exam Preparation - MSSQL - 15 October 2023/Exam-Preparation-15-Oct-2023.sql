@@ -47,7 +47,7 @@ CREATE TABLE Tourists (
 Id INT PRIMARY KEY IDENTITY,
 [Name] NVARCHAR(80) NOT NULL,
 PhoneNumber VARCHAR(20) NOT NULL,
-Email VARCHAR(80) NOT NULL,
+Email VARCHAR(80),
 CountryId INT NOT NULL,
 CONSTRAINT FK_Tourists_Countries FOREIGN KEY (CountryId) REFERENCES Countries(Id)
 )
@@ -105,3 +105,24 @@ VALUES ('2024-03-01', '2024-03-11', 1, 0, 21, 3, 5),
 	   ('2023-11-15', '2023-11-20', 1, 2, 23, 19, 7),
 	   ('2023-12-05', '2023-12-09', 4, 0, 24, 6, 4),
 	   ('2024-05-01', '2024-05-07', 6, 0, 25, 14, 6)
+
+
+/*
+3.	Update
+We've decided to change the departure date of the bookings that are scheduled to arrive in December 2023. 
+The updated departure date for these bookings should be set to one day later than their original departure date.
+We need to update the email addresses of tourists, whose names contain "MA". 
+The new value of their email addresses should be set to NULL.
+
+*/
+
+SELECT * FROM Bookings
+SELECT * FROM Tourists
+
+UPDATE Bookings
+SET DepartureDate = DATEADD(DAY, 1, DepartureDate)
+WHERE DepartureDate > '2023-12-01';
+
+UPDATE Tourists
+SET Email = NULL
+WHERE Email LIKE '%MA%'
