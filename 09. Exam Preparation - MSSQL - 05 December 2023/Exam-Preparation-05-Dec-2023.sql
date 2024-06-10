@@ -290,8 +290,7 @@ Example
 
 */
 
-SELECT * FROM Tickets
-SELECT * FROM Towns
+
 
 SELECT TOP 3 tr.Id AS TrainId,
 	  tr.HourOfDeparture,
@@ -303,3 +302,38 @@ JOIN Towns as twn ON twn.Id = tr.ArrivalTownId
 WHERE tr.HourOfDeparture BETWEEN '08:00' AND '08:59' AND tck.Price > 50.00
 ORDER BY  tck.Price;
 
+/*
+9.	Count of Passengers Paid More Than Average With Arrival Towns
+
+The average price of all tickets is €76.99. 
+Select all passengers who have paid more than the average price of all tickets. 
+Your query should generate a table grouped by the name of arrival town, showing the count of passengers arriving in each town. 
+Order the results by town name.
+
+Required columns:
+•	TownName
+•	PassengersCount
+								Example
+			TownName		PassengersCount
+			Barcelona				1
+			Brussels				1
+			Budapest				2
+			Gdansk					1
+			Lisbon					3
+			London					4
+*/
+
+SELECT * FROM Passengers
+SELECT * FROM Tickets
+SELECT * FROM Trains
+SELECT * FROM Towns
+
+SELECT  twns.Name AS TownName,
+		COUNT(p.Id) AS PassengersCount
+FROM Tickets AS tcks
+JOIN Trains AS tr ON tr.Id = tcks.TrainId
+JOIN Passengers AS p ON p.Id = tcks.PassengerId
+JOIN Towns AS twns ON twns.Id = tr.ArrivalTownId
+WHERE tcks.Price > 76.99
+GROUP BY tr.ArrivalTownId, twns.Name
+ORDER BY twns.Name
