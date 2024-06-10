@@ -1,14 +1,14 @@
-
+ï»¿
 /*
 Section 1. DDL (30 pts)
 Create a database called RailwaysDb. You need to create 7 tables:
-•	Passengers – contains information about the names of the passengers;
-•	Towns – contains information about the names of the towns;
-•	RailwayStations – holds data about railway stations, such as their names and associated town IDs, indicating the towns where these stations are located.;
-•	Trains – details about trains, including departure and arrival times and their corresponding town IDs;
-•	TrainsRailwayStations - Manages the many-to-many relationship between trains and railway stations, indicating which trains stop at which stations;
-•	MaintenanceRecords – records maintenance activities for trains, including dates and detailed descriptions of maintenance work;
-•	Tickets – contains information about tickets, including price, departure and arrival date, and associated train and passenger IDs;
+â€¢	Passengers â€“ contains information about the names of the passengers;
+â€¢	Towns â€“ contains information about the names of the towns;
+â€¢	RailwayStations â€“ holds data about railway stations, such as their names and associated town IDs, indicating the towns where these stations are located.;
+â€¢	Trains â€“ details about trains, including departure and arrival times and their corresponding town IDs;
+â€¢	TrainsRailwayStations - Manages the many-to-many relationship between trains and railway stations, indicating which trains stop at which stations;
+â€¢	MaintenanceRecords â€“ records maintenance activities for trains, including dates and detailed descriptions of maintenance work;
+â€¢	Tickets â€“ contains information about tickets, including price, departure and arrival date, and associated train and passenger IDs;
 
 */
 
@@ -17,8 +17,8 @@ GO
 USE RailwaysDb
 GO
 
-SELECT * FROM sys.dm_exec_sessions WHERE database_id = DB_ID('RailwaysDb')
-
+SELECT * FROM sys.dm_exec_sessions WHERE database_id = DB_ID('RailwaysDb') -- Check active connections 
+ -- KILL session_id TO KILL THE active connections BEFORE YOU DROP THE DATABASE 
 
 DROP DATABASE RailwaysDb;
 
@@ -193,8 +193,8 @@ You need to start with a fresh dataset, so recreate your DB and import the sampl
 5.	Tickets by Price and Date of Departure
 Select all tickets, ordered by price  (ascending), then by departure date (descending).
 Required columns:
-•	DateOfDeparture
-•	TicketPrice
+â€¢	DateOfDeparture
+â€¢	TicketPrice
 
 							Example
 			DateOfDeparture			TicketPrice
@@ -214,15 +214,15 @@ ORDER BY Price, DateOfDeparture DESC
 6.	Passengers with their Tickets
 
 Select all the tickets purchased, along with the names of the passengers who purchased them.  
-For the tickets you will need information for the price, date of departure, related train’s id. 
+For the tickets you will need information for the price, date of departure, related trainâ€™s id. 
 The report should be organized in a way that lists the tickets starting from the highest price to the lowest. 
 In case of identical ticket prices, further order the entries alphabetically by the passenger's name.
 
 Required columns:
-•	PassengerName
-•	TicketPrice
-•	DateOfDeparture
-•	TrainID
+â€¢	PassengerName
+â€¢	TicketPrice
+â€¢	DateOfDeparture
+â€¢	TrainID
 
 Example
 			PassengerName			TicketPrice 	DateOfDeparture			TrainID
@@ -248,8 +248,8 @@ Each station must be associated with the town it is located in.
 The town's name should be included in your result set to understand the geographical distribution of these inactive stations. 
 The results should be ordered by the name of the town in ascending order, then by the name of the railway station in ascending order.
 Required columns:
-•	Town
-•	RailwayStation
+â€¢	Town
+â€¢	RailwayStation
 						Example
 
 			  Town			RailwayStation
@@ -266,4 +266,40 @@ SELECT t.[Name] AS Town,
     JOIN Towns t ON rs.TownId = t.Id
 WHERE trs.TrainId IS NULL
 ORDER BY t.[Name], rs.[Name];
+
+
+/*
+8.	First 3 Trains Between 8:00 and 8:59
+
+Select the top 3 trains departing between 8:00 and 08:59 with ticket prices above â‚¬50.00 in the RailwaysDb. 
+Your query should join trains with arrival town names, ordering the results by ticket price in ascending order. 
+The output should include TrainId, HourOfDeparture, TicketPrice, and Destination. 
+Keep in mind that you cannot compare VARCHAR data, so you will have to approach differently. 
+
+Required columns:
+â€¢	TrainId
+â€¢	HourOfDeparture
+â€¢	TicketPrice
+â€¢	Destination
+â€ƒ
+Example
+				TrainId	HourOfDeparture	TicketPrice	Destination
+					1		08:00			55.00		Paris
+					17		08:00			60.00		Zurich
+					17		08:00			85.00		Zurich
+
+*/
+
+SELECT * FROM Tickets
+SELECT * FROM Towns
+
+SELECT TOP 3 tr.Id AS TrainId,
+	  tr.HourOfDeparture,
+	  tck.Price AS TicketPrice,
+	  twn.[Name] AS Destination
+FROM Trains AS tr
+JOIN Tickets AS tck ON tr.Id = tck.TrainId
+JOIN Towns as twn ON twn.Id = tr.ArrivalTownId
+WHERE tr.HourOfDeparture BETWEEN '08:00' AND '08:59' AND tck.Price > 50.00
+ORDER BY  tck.Price;
 
