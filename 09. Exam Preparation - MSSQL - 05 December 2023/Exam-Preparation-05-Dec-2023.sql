@@ -17,6 +17,11 @@ GO
 USE RailwaysDb
 GO
 
+SELECT * FROM sys.dm_exec_sessions WHERE database_id = DB_ID('RailwaysDb')
+
+
+DROP DATABASE RailwaysDb;
+
 CREATE TABLE Passengers (
 Id INT PRIMARY KEY IDENTITY,
 [Name] NVARCHAR(80) NOT NULL
@@ -179,4 +184,28 @@ WHERE TrainId IN (SELECT Id FROM Trains WHERE DepartureTownId IN (SELECT Id FROM
 
 DELETE FROM Trains
 WHERE DepartureTownId IN (SELECT Id FROM Towns WHERE Name = 'Berlin');
+
+/*
+Section 3. Querying (40 pts)
+You need to start with a fresh dataset, so recreate your DB and import the sample data again ("Dataset.sql").
+
+
+5.	Tickets by Price and Date of Departure
+Select all tickets, ordered by price  (ascending), then by departure date (descending).
+Required columns:
+•	DateOfDeparture
+•	TicketPrice
+
+							Example
+			DateOfDeparture			TicketPrice
+			  2023-11-06				45.00
+			  2023-10-20				45.00
+			  2023-10-08				45.00
+			  2023-09-11				45.00
+			  2023-09-02				45.00
+			  2023-11-07				50.00
+*/
+
+SELECT DateOfDeparture, Price AS TicketPrice FROM Tickets
+ORDER BY Price, DateOfDeparture DESC
 
