@@ -13,6 +13,8 @@ Create a database called TouristAgency. You need to create 7 tables:
 
 */
 
+DROP DATABASE TouristAgency
+
 CREATE DATABASE TouristAgency 
 GO
 USE TouristAgency
@@ -143,3 +145,31 @@ DELETE FROM Tourists
 WHERE Name LIKE '%Smith%';
 
 
+/*
+Section 3. Querying (40 pts)
+You need to start with a fresh dataset, so recreate your DB and import the sample data again ("Dataset.sql").
+
+5.	Bookings by Price of Room and Arrival Date
+Select all bookings, ordered by price  of room (descending), then by arrival date (ascending). 
+The arrival date should be formatted in the 'yyyy-MM-dd' format in the query results.
+Required columns:
+•	ArrivalDate
+•	AdultsCount
+•	ChildrenCount
+
+								Example:
+
+			ArrivalDate		AdultsCount	 ChildrenCount
+
+			2023-10-05			3				1
+			2023-11-19			4				2
+			2023-12-10			5				1
+			2023-10-01			2				0
+*/
+
+SELECT FORMAT(ArrivalDate, 'yyyy-MM-dd') AS ArrivalDate,
+	   AdultsCount,
+	   ChildrenCount
+		FROM Bookings AS b
+		JOIN Rooms AS r ON r.Id = b.RoomId
+ORDER BY r.Price DESC, b.ArrivalDate
