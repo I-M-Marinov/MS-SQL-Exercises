@@ -126,3 +126,20 @@ WHERE DepartureDate > '2023-12-01';
 UPDATE Tourists
 SET Email = NULL
 WHERE Email LIKE '%MA%'
+
+
+/*
+
+4.	Delete
+In table Tourists, delete every tourist, whose Name contains family name "Smith". 
+Keep in mind that there could be foreign key constraint conflicts.
+
+*/
+
+DELETE FROM Bookings
+WHERE TouristId IN (SELECT Id FROM Tourists WHERE Name LIKE '%Smith%');
+
+DELETE FROM Tourists
+WHERE Name LIKE '%Smith%';
+
+
