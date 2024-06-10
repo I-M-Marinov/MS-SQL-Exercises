@@ -390,4 +390,48 @@ BEGIN
 	RETURN @trainCount
 END;
 
-SELECT dbo.udf_TownsWithTrains('Paris');
+SELECT dbo.udf_TownsWithTrains('Paris'); -- OUTPUT ----> 7 
+
+/*
+12.	Search Passenger Travelling to Specific Town
+
+Create a stored procedure, named usp_SearchByTown(@townName) that receives a town name. 
+The procedure must print full information about all passengers that are travelling to the town with the given townName. 
+Order them by DateOfDeparture (descending) and PassengerName (ascending).
+
+Required columns:
+•	PassengerName
+•	DateOfDeparture
+•	HourOfDeparture
+
+Example
+						Query
+			EXEC usp_SearchByTown 'Berlin'
+						Output
+			PassengerName		DateOfDeparture	 HourOfDeparture
+			Beverly Ross		2023-10-30			12:00
+			Kenneth Parker		2023-09-25			12:00
+
+*/
+
+SELECT * FROM Passengers
+SELECT * FROM Trains
+SELECT * FROM Towns
+SELECT * FROM Tickets
+
+CREATE PROCEDURE usp_SearchByTown(@townName VARCHAR(30))
+AS
+BEGIN
+	SELECT p.[Name] AS PassengerName, 
+		   ti.DateOfDeparture,
+		   tr.HourOfDeparture
+	FROM Tickets AS ti
+	JOIN Trains AS tr ON tr.Id = ti.TrainId
+	JOIN Passengers AS p ON p.Id = ti.PassengerId
+	JOIN Towns AS twn ON twn.Id = tr.ArrivalTownId
+	WHERE twn.[Name] = @townName
+	ORDER BY  ti.DateOfDeparture DESC, p.[Name]
+END 
+
+EXEC usp_SearchByTown 'London'
+EXEC usp_SearchByTown 'Berlin'
