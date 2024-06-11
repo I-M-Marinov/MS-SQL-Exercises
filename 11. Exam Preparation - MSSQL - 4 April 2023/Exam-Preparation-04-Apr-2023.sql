@@ -148,3 +148,19 @@ SET AddressId = 3
 WHERE [Name] LIKE '%CO%'
 
 
+/*
+4.	Delete
+In table Clients, delete every client, whose VAT number starts with "IT". 
+Keep in mind that there could be foreign key constraint conflicts.
+
+*/
+
+
+DELETE FROM Invoices
+WHERE ClientId IN (SELECT Id FROM Clients  WHERE NumberVAT LIKE 'IT%');
+
+DELETE FROM ProductsClients
+WHERE ClientId IN (SELECT Id FROM Clients  WHERE NumberVAT LIKE 'IT%');
+
+DELETE FROM Clients WHERE NumberVAT LIKE 'IT%'
+
