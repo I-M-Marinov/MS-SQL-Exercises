@@ -129,3 +129,22 @@ VALUES (1219992181, '2023-03-01', '2023-04-30', 180.96, 'BGN', 3),
 	   (1950101013, '2023-02-17', '2023-04-18', 615.15, 'USD', 19)
 
 
+/*
+3.	Update
+
+We've decided to change the due date of the invoices, issued in November 2022. 
+Update the due date and change it to 2023-04-01.
+Then, you have to change the addresses of the clients, which contain "CO" in their names. 
+The new value of the addresses should be Industriestr, 79, 2353, Guntramsdorf, Austria.
+
+*/
+
+UPDATE Invoices
+SET DueDate = '2023-04-01'
+WHERE IssueDate BETWEEN '2022-11-01' AND '2022-11-30'
+
+UPDATE Clients 
+SET AddressId = 3
+WHERE [Name] LIKE '%CO%'
+
+
