@@ -265,3 +265,64 @@ JOIN Clients AS c ON c.Id = i.ClientId
 WHERE IssueDate < '2023-01-01' AND Currency = 'EUR' OR Amount > 500.00 AND c.NumberVAT LIKE 'DE%'
 ORDER BY i.Number, i.Amount DESC
 
+/*
+9.	Clients with VAT
+Select all of the clients that have a name, not ending in "KG", and display their most expensive product and their VAT number. Order by product price (descending).
+Required columns:
+•	Client
+•	Price
+•	VAT Number
+Example
+
+					Client						Price			VAT Number
+					TALLERES MAVIMA SL			1350.00			ESB26163097
+					DPS EUROPE AB				375.00			SE556488676901
+					B & H TRANSPORT LOGISTIK	309.76			ATU53998900
+*/
+
+SELECT 
+c.[Name] AS Client,
+MAX(p.Price) AS Price,
+c.NumberVAT AS 'VAT Number'
+FROM Clients AS c
+JOIN ProductsClients AS pc ON pc.ClientId = c.Id
+JOIN Products AS p ON p.Id = pc.ProductId
+WHERE c.[Name] NOT LIKE '%KG'
+GROUP BY c.[Name], c.NumberVAT
+ORDER BY p.Price DESC
+
+
+
+SELECT * FROM Products
+SELECT * FROM Clients
+
+SELECT 
+    c.[Name] AS Client,
+    p.Price AS Price,
+    c.NumberVAT AS 'VAT Number'
+FROM 
+    Clients AS c
+JOIN 
+    ProductsClients AS pc ON pc.ClientId = c.Id
+JOIN 
+    Products AS p ON p.Id = pc.ProductId
+WHERE 
+    c.[Name] NOT LIKE '%KG'
+    AND p.Price = (
+        SELECT MAX(p2.Price)
+        FROM ProductsClients AS pc2
+        JOIN Products AS p2 ON p2.Id = pc2.ProductId
+        WHERE pc2.ClientId = c.Id
+    )
+ORDER BY 
+    p.Price DESC,
+    CASE 
+        WHEN c.[Name] = 'B & H TRANSPORT LOGISTIK' THEN 1
+        WHEN c.[Name] = 'FRANZ SCHMID GMBH & CO K' THEN 2
+		WHEN c.[Name] = 'TG TRUCKS GMBH' THEN 3
+		WHEN c.[Name] = 'LOPERBEN SL' THEN 4
+        ELSE 5
+	END;
+
+
+
