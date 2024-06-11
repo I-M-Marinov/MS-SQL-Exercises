@@ -330,3 +330,34 @@ WHERE pc.ClientId IS NOT NULL AND v.NumberVAT LIKE '%FR%'
 GROUP BY c.[Name]
 ORDER BY 'Average Price', c.[Name] DESC
 
+/*
+												Section 4. Programmability (20 pts)
+
+11.	Product with Clients
+Create a user-defined function, named udf_ProductWithClients(@name) that receives a product's name.
+The function should return the total number of clients that the product has been sold to.
+Example
+									Query
+			SELECT dbo.udf_ProductWithClients('DAF FILTER HU12103X')
+
+									Output
+									  3
+*/
+
+
+CREATE FUNCTION dbo.udf_ProductWithClients(@name VARCHAR(40))
+RETURNS INT
+AS
+BEGIN
+	DECLARE @numberOfCustomers INT;
+    SELECT @numberOfCustomers = COUNT(*) 
+    FROM Clients AS c
+    LEFT JOIN ProductsClients AS pc ON pc.ClientId = c.Id
+	JOIN Products AS p ON p.Id = pc.ProductId
+    WHERE p.[Name] = @name;
+	RETURN @numberOfCustomers
+END;
+
+SELECT dbo.udf_ProductWithClients('DAF FILTER HU12103X') AS [Output] -- Output: 3 
+
+
