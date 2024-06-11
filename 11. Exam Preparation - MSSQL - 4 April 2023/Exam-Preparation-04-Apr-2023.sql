@@ -233,14 +233,35 @@ Example
 SELECT 
     c.Id,
     c.[Name] AS Client,
-    CONCAT(addr.StreetName, '', addr.StreetNumber, ',', addr.City, ',', addr.PostCode, ',', co.[Name]) AS [Address]
+    CONCAT(addr.StreetName, ' ', addr.StreetNumber, ', ', addr.City, ', ', addr.PostCode, ', ', co.[Name]) AS [Address]
 	FROM Clients AS c
 JOIN Addresses AS addr ON addr.Id = c.AddressId
 JOIN Countries AS co ON co.Id = addr.CountryId
-LEFT JOIN Products AS p ON p.VendorId = c.Id
-WHERE p.VendorId IS NULL
+LEFT JOIN ProductsClients AS pc ON pc.ClientId = c.Id
+WHERE pc.ClientId IS NULL
 ORDER BY c.[Name]
 
-SELECT * FROM Clients
-SELECT * FROM Products
-SELECT * FROM Addresses
+/*
+8.	First 7 Invoices
+Select the first 7 invoices that were issued before 2023-01-01 and have an EUR currency or the amount of an invoice is greater than 500.00 and the VAT number of the corresponding client starts with "DE". Order the result by invoice number (ascending), then by amount (descending).
+Required columns:
+•	Number
+•	Amount
+•	Client
+Example
+
+			Number				Amount				Client
+			219066487			891.76				B & H TRANSPORT LOGISTIK
+			320983369			704.48				BTS GMBH & CO KG
+			365934879			615.15				FAHRZEUGBEDARF KOTZ & CO
+*/
+
+SELECT TOP 7 
+i.Number,
+i.Amount,
+c.[Name] AS Client
+FROM Invoices AS i
+JOIN Clients AS c ON c.Id = i.ClientId
+WHERE IssueDate < '2023-01-01' AND Currency = 'EUR' OR Amount > 500.00 AND c.NumberVAT LIKE 'DE%'
+ORDER BY i.Number, i.Amount DESC
+
