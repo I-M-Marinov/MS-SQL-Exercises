@@ -216,3 +216,31 @@ JOIN Categories AS c ON c.Id = p.CategoryId
 WHERE c.Id = 3 OR c.Id = 5
 ORDER BY p.Price DESC
 
+/*
+7.	Clients without Products
+Select all clients without products. Order them by name (ascending).
+Required columns:
+•	Id
+•	Client
+•	Address
+Example
+
+			Id				       Client									Address
+			8			JUAN Y ENRIQUE SANCHEZ GA		Carretera de Madrid 240, Albacete, 20080, Spain
+			12			ROMO BELLIDO SOCIEDAD LIM		Carretera 330, Carinena, 50400, Spain
+*/
+
+SELECT 
+    c.Id,
+    c.[Name] AS Client,
+    CONCAT(addr.StreetName, '', addr.StreetNumber, ',', addr.City, ',', addr.PostCode, ',', co.[Name]) AS [Address]
+	FROM Clients AS c
+JOIN Addresses AS addr ON addr.Id = c.AddressId
+JOIN Countries AS co ON co.Id = addr.CountryId
+LEFT JOIN Products AS p ON p.VendorId = c.Id
+WHERE p.VendorId IS NULL
+ORDER BY c.[Name]
+
+SELECT * FROM Clients
+SELECT * FROM Products
+SELECT * FROM Addresses
