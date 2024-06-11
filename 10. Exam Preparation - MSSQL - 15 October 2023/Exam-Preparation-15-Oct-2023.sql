@@ -377,15 +377,20 @@ Output
 CREATE PROCEDURE usp_SearchByCountry(@country VARCHAR(30))
 AS
 BEGIN
-	SELECT b.[Name] AS [Name], 
-		   ti.DateOfDeparture,
-		   tr.HourOfDeparture
+	SELECT tou.[Name] AS [Name], 
+		   tou.PhoneNumber,
+		   tou.Email,
+		   COUNT(b.TouristId) AS CountOfBookings
 	FROM Bookings AS b
 	JOIN Tourists AS tou ON tou.Id = b.TouristId
 	JOIN Countries AS c ON c.Id = tou.CountryId
 	WHERE c.[Name] = @country
-
+	GROUP BY tou.[Name], tou.PhoneNumber, tou.Email
+	ORDER BY tou.[Name], COUNT(b.TouristId) DESC
 END 
 
 SELECT * FROM Tourists
 SELECT * FROM Countries
+SELECT * FROM Bookings
+
+EXEC usp_SearchByCountry 'Greece'
