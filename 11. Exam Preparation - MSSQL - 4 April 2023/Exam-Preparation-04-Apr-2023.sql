@@ -360,4 +360,43 @@ END;
 
 SELECT dbo.udf_ProductWithClients('DAF FILTER HU12103X') AS [Output] -- Output: 3 
 
+/*
+12.	Search for Vendors from a Specific Country
+Create a stored procedure, named usp_SearchByCountry(@country) that receives a country name. 
+The procedure must print full information about all vendors that have an address in the given country: Name, NumberVAT, Street Name and Number (concatenated),
+PostCode and City (concatenated). Order them by Name (ascending) and City (ascending).
+Example
 
+													Query
+
+										EXEC usp_SearchByCountry 'France'
+
+													Output
+
+			Vendor					    VAT			  Street Info			 City Info
+
+			LE RELAIS DES PRIMEURS	FR64431553163	Rue de la Gare 17		Taule 29670
+			SARL HEBERGECO			FR75532664075	Route de Orleans 37		Evreux 27000
+*/
+
+CREATE PROCEDURE usp_SearchByCountry(@country VARCHAR(15))
+AS
+BEGIN
+	SELECT v.[Name] AS Vendor, 
+		   v.NumberVAT AS VAT,
+		   CONCAT(addr.StreetName, ' ', addr.StreetNumber) AS 'Street Info',
+		   CONCAT(addr.City, ' ', addr.PostCode) AS 'Street Info'
+	FROM Vendors AS v
+	JOIN Addresses AS addr ON addr.Id = v.AddressId
+	JOIN Countries AS co ON co.Id = addr.CountryId
+	WHERE co.[Name] = @country
+	GROUP BY v.[Name], v.NumberVAT, addr.StreetName, addr.StreetNumber, addr.City, addr.PostCode
+	ORDER BY v.[Name], addr.City
+END 
+
+SELECT * FROM Vendors 
+SELECT * FROM Addresses 
+SELECT * FROM Countries
+
+
+EXEC usp_SearchByCountry 'France'
