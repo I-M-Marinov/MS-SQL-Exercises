@@ -361,3 +361,31 @@ END;
 SELECT dbo.udf_RoomsWithTourists('Double Room') AS [Output] ----> Output: 17
 
 
+/*
+12.	Search for Tourists from a Specific Country
+Create a stored procedure, named usp_SearchByCountry(@country) that receives a country name. The procedure must print full information about all tourists that have an booked a room and have origin from the given country: Name, PhoneNumber, Email and CountOfBookings (the count of all bookings made). Order them by Name (ascending) and CountOfBookings (decending).
+Example
+Query
+EXEC usp_SearchByCountry 'Greece'
+Output
+
+		Name					PhoneNumber					Email					CountOfBookings
+		Maria Papadopoulou		333-303-3333	maria.papadopoulou@example.com				3
+		Nikos Papadopoulos		303-323-3333	nikos.papadopoulos@example.com				3
+*/
+
+CREATE PROCEDURE usp_SearchByCountry(@country VARCHAR(30))
+AS
+BEGIN
+	SELECT b.[Name] AS [Name], 
+		   ti.DateOfDeparture,
+		   tr.HourOfDeparture
+	FROM Bookings AS b
+	JOIN Tourists AS tou ON tou.Id = b.TouristId
+	JOIN Countries AS c ON c.Id = tou.CountryId
+	WHERE c.[Name] = @country
+
+END 
+
+SELECT * FROM Tourists
+SELECT * FROM Countries
