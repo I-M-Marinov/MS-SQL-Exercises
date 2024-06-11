@@ -188,3 +188,31 @@ SELECT * FROM sys.dm_exec_sessions WHERE database_id = DB_ID('Accounting') -- Ch
 SELECT Number, Currency FROM Invoices
 ORDER BY Amount DESC, DueDate
 
+/*
+6.	Products by Category
+Select all products with "ADR" or "Others" categories. 
+Order results by Price (descending).
+Required columns:
+•	Id
+•	Name
+•	Price
+•	CategoryName
+
+Example
+		Id	            Name					Price			 CategoryName
+		69		Steel armor for trailer			1350.00				Others
+		15		Air bag for trailer				130.06				Others
+		17		Break pads for trailer			89.60				Others
+		10		Groupage board-Load limiter		79.33				  ADR
+*/
+
+SELECT 
+		p.Id,
+		p.[Name],
+		p.Price,
+		c.[Name]
+FROM Products AS p
+JOIN Categories AS c ON c.Id = p.CategoryId
+WHERE c.Id = 3 OR c.Id = 5
+ORDER BY p.Price DESC
+
