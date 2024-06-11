@@ -164,3 +164,27 @@ WHERE ClientId IN (SELECT Id FROM Clients  WHERE NumberVAT LIKE 'IT%');
 
 DELETE FROM Clients WHERE NumberVAT LIKE 'IT%'
 
+/*
+Section 3. Querying (40 pts)
+You need to start with a fresh dataset, so recreate your DB and import the sample data again ("Dataset.sql").
+
+5.	Invoices by Amount and Date
+Select all invoices, ordered by amount (descending), then by due date (ascending). 
+Required columns:
+•	Number
+•	Currency
+
+Example
+			  Number		  Currency
+			213573806			BGN
+			219066487			EUR
+			320983369			USD
+			349121203			BGN
+*/
+
+SELECT * FROM sys.dm_exec_sessions WHERE database_id = DB_ID('Accounting') -- Check active connections 
+
+
+SELECT Number, Currency FROM Invoices
+ORDER BY Amount DESC, DueDate
+
