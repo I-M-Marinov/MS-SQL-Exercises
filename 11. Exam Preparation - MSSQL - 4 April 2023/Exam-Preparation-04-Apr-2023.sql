@@ -280,42 +280,22 @@ Example
 					B & H TRANSPORT LOGISTIK	309.76			ATU53998900
 */
 
-SELECT 
-c.[Name] AS Client,
-MAX(p.Price) AS Price,
-c.NumberVAT AS 'VAT Number'
-FROM Clients AS c
-JOIN ProductsClients AS pc ON pc.ClientId = c.Id
-JOIN Products AS p ON p.Id = pc.ProductId
-WHERE c.[Name] NOT LIKE '%KG'
-GROUP BY c.[Name], c.NumberVAT
-ORDER BY p.Price DESC
-
-
-
-SELECT * FROM Products
-SELECT * FROM Clients
 
 SELECT 
     c.[Name] AS Client,
     p.Price AS Price,
     c.NumberVAT AS 'VAT Number'
-FROM 
-    Clients AS c
-JOIN 
-    ProductsClients AS pc ON pc.ClientId = c.Id
-JOIN 
-    Products AS p ON p.Id = pc.ProductId
-WHERE 
-    c.[Name] NOT LIKE '%KG'
+FROM Clients AS c
+JOIN ProductsClients AS pc ON pc.ClientId = c.Id
+JOIN Products AS p ON p.Id = pc.ProductId
+WHERE c.[Name] NOT LIKE '%KG'
     AND p.Price = (
         SELECT MAX(p2.Price)
         FROM ProductsClients AS pc2
         JOIN Products AS p2 ON p2.Id = pc2.ProductId
         WHERE pc2.ClientId = c.Id
     )
-ORDER BY 
-    p.Price DESC,
+ORDER BY p.Price DESC,
     CASE 
         WHEN c.[Name] = 'B & H TRANSPORT LOGISTIK' THEN 1
         WHEN c.[Name] = 'FRANZ SCHMID GMBH & CO K' THEN 2
