@@ -318,8 +318,8 @@ Example
 */
 
 SELECT * FROM Bookings
-SELECT * FROM Hotels
 SELECT * FROM Rooms
+SELECT * FROM Hotels
 SELECT * FROM HotelsRooms
 
 SELECT 
@@ -330,3 +330,34 @@ JOIN Hotels AS h ON h.Id = b.HotelId
 JOIN Rooms AS r ON r.Id = b.RoomId
 GROUP BY h.[Name]
 ORDER BY TotalRevenue DESC
+
+/*
+													Section 4. Programmability (20 pts)
+
+11.	Rooms with Tourists
+Create a user-defined function, named udf_RoomsWithTourists(@name) that receives a room's type.
+The function should return the total number of tourists that the specific room type has been booked for (adults + children).
+Hint: A Double Room could be booked for: 2 adults + 0 children, 1 adult + 1 children, 1 adult + 0 children.
+Example
+
+									Query
+				SELECT dbo.udf_RoomsWithTourists('Double Room')
+									Output
+									  17
+*/
+
+CREATE FUNCTION udf_RoomsWithTourists(@name VARCHAR(30))
+RETURNS INT
+AS
+BEGIN
+	DECLARE @numberOfTourists INT;
+    SELECT @numberOfTourists = SUM(b.AdultsCount + b.ChildrenCount) 
+    FROM Bookings AS b
+    JOIN Rooms AS r ON b.RoomId = r.Id 
+    WHERE r.[Type] = @name;
+	RETURN @numberOfTourists
+END;
+
+SELECT dbo.udf_RoomsWithTourists('Double Room') AS [Output] ----> Output: 17
+
+
