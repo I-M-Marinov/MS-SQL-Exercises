@@ -304,5 +304,29 @@ ORDER BY p.Price DESC,
         ELSE 5
 	END;
 
+/*
+10.	Clients by Price
+Select all clients, which have bought products. 
+Select their name and average price (rounded down to the nearest integer). 
+Show only the results for clients, whose products are distributed by vendors with "FR" in their VAT number. 
+Order the results by average price (ascending), then by client name (descending).
 
+Example
+
+			Client						Average	Price
+			FRANZ SCHMID GMBH & CO K		9
+			BTS GMBH & CO KG				14
+			JOSEF PAUL GMBH & COKG			15
+*/
+
+SELECT 
+c.[Name] AS Client,
+CAST(AVG(p.Price) AS INT) AS 'Average Price' ----- MUST CAST THE AVERAGE AS INT, NOT THE OTHER WAY AROUND !!!!!!
+FROM Clients AS c
+LEFT JOIN ProductsClients AS pc ON pc.ClientId = c.Id
+JOIN Products AS p ON p.Id = pc.ProductId
+JOIN Vendors AS v ON v.Id = p.VendorId
+WHERE pc.ClientId IS NOT NULL AND v.NumberVAT LIKE '%FR%'
+GROUP BY c.[Name]
+ORDER BY 'Average Price', c.[Name] DESC
 
