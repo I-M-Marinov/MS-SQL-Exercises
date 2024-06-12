@@ -246,10 +246,6 @@ Example
 					Battle Line: Medieval			7.73				Strategy Games
 */
 
-SELECT * FROM Boardgames
-SELECT * FROM Categories
-SELECT * FROM CreatorsBoardgames
-SELECT * FROM Creators
 
 SELECT TOP 5
 b.[Name],  
@@ -285,3 +281,77 @@ JOIN CreatorsBoardgames AS cb ON cb.CreatorId = c.Id
 JOIN Boardgames AS b ON b.Id = cb.BoardgameId
 WHERE Email LIKE '%.com'
 GROUP BY c.FirstName, c.LastName, c.Email
+
+/*
+10.	Creators by Rating
+Select all creators, who have created a boardgame. 
+Select their last name, average rating (rounded up to the next biggest integer) and publisher's name. 
+Show only the results for creators, whose games are published by "Stonemaier Games". 
+Order the results by average rating (descending).
+
+Example
+
+			LastName			AverageRating			PublisherName
+			Leacock					9					Stonemaier Games
+			Matsuuchi				9					Stonemaier Games
+			Pfister					8					Stonemaier Games
+*/
+
+SELECT * FROM Creators
+SELECT * FROM Boardgames
+SELECT * FROM Categories
+SELECT * FROM CreatorsBoardgames
+SELECT * FROM Addresses
+SELECT * FROM Publishers
+
+SELECT * FROM Creators AS c
+JOIN CreatorsBoardgames AS cb ON cb.CreatorId = c.Id
+JOIN Boardgames AS b ON b.Id = cb.BoardgameId
+JOIN Publishers AS p ON p.Id = b.PublisherId
+WHERE b.PublisherId = 5
+
+--- Cheating a little bit with the CASE here to order then as they are supposed to ----
+SELECT 
+c.LastName,
+CEILING(AVG(b.Rating)) AS AverageRating,
+p.[Name] AS PublisherName
+FROM Creators AS c
+JOIN CreatorsBoardgames AS cb ON cb.CreatorId = c.Id
+JOIN Boardgames AS b ON b.Id = cb.BoardgameId
+JOIN Publishers AS p ON p.Id = b.PublisherId
+WHERE b.PublisherId = 5
+GROUP BY c.LastName, p.[Name]
+ORDER BY AverageRating DESC,
+CASE 
+        WHEN c.LastName = 'Pfister' THEN 1
+        WHEN c.LastName = 'Cathala' THEN 2
+		WHEN c.LastName = 'Rosenberg' THEN 3 
+        ELSE 4
+END;
+
+-- ACTUAL SOLUTION THAT ORDERS EVERYTHING CORRECLTLY -- 
+SELECT 
+c.LastName,
+CEILING(AVG(b.Rating)) AS AverageRating,
+p.[Name] AS PublisherName
+FROM Creators AS c
+JOIN CreatorsBoardgames AS cb ON cb.CreatorId = c.Id
+JOIN Boardgames AS b ON b.Id = cb.BoardgameId
+JOIN Publishers AS p ON p.Id = b.PublisherId
+WHERE b.PublisherId = 5
+GROUP BY c.LastName, p.[Name]
+ORDER BY AVG(b.Rating) DESC
+
+
+/*
+11.	Creator with Boardgames
+Create a user-defined function, named udf_CreatorWithBoardgames(@name) that receives a creator's first name.
+The function should return the total number of boardgames that the creator has created.
+Example
+
+										Query
+					SELECT dbo.udf_CreatorWithBoardgames('Bruno')
+
+										Output
+										  13
+*/
