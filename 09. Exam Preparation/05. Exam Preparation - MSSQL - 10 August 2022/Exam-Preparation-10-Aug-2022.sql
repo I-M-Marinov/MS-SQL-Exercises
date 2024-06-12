@@ -304,14 +304,6 @@ Example
 			Dimitrova			Bulgaria			42		+359898645326
 */
 
-SELECT * FROM Tourists
-SELECT * FROM Categories
-SELECT * FROM BonusPrizes
-SELECT * FROM Sites
-SELECT * FROM SitesTourists
-SELECT * FROM Locations
-SELECT * FROM TouristsBonusPrizes
-
 SELECT 
 SUBSTRING(t.[Name], CHARINDEX(' ', t.[Name]) + 1, LEN(t.[Name])) AS LastName,
 t.Nationality,
@@ -324,4 +316,56 @@ JOIN Categories AS c ON c.Id = s.CategoryId
 WHERE c.Id = 8 
 GROUP BY SUBSTRING(t.[Name], CHARINDEX(' ', t.[Name]) + 1, LEN(t.[Name])), t.Nationality, t.Age, t.PhoneNumber
 ORDER BY LastName
+
+/*
+															Section 4. Programmability (20 pts)
+11.	Tourists Count on a Tourist Site
+Create a user-defined function named udf_GetTouristsCountOnATouristSite (@Site) which receives a tourist site and returns the count of tourists, who have visited it.
+Examples
+
+
+														Query
+				SELECT dbo.udf_GetTouristsCountOnATouristSite ('Regional History Museum – Vratsa')
+
+														Output
+														  6
+
+														Query
+							SELECT dbo.udf_GetTouristsCountOnATouristSite ('Samuil’s Fortress')
+
+														Output
+														  8
+
+														Query
+							SELECT dbo.udf_GetTouristsCountOnATouristSite ('Gorge of Erma River')
+
+														Output
+														  7
+*/
+
+SELECT * FROM Tourists
+SELECT * FROM Categories
+SELECT * FROM BonusPrizes
+SELECT * FROM Sites
+SELECT * FROM SitesTourists
+SELECT * FROM Locations
+SELECT * FROM TouristsBonusPrizes
+
+
+CREATE FUNCTION dbo.udf_GetTouristsCountOnATouristSite(@site VARCHAR(50))
+RETURNS INT
+AS
+BEGIN
+	DECLARE @countOfTourists INT;
+    SELECT @countOfTourists = COUNT(t.[Name])
+    FROM Sites AS s
+	LEFT JOIN SitesTourists AS st ON st.SiteId = s.Id
+	LEFT JOIN Tourists AS t ON t.Id = st.TouristId
+    WHERE s.[Name] = @site;
+	RETURN @countOfTourists
+END;
+
+SELECT dbo.udf_GetTouristsCountOnATouristSite ('Regional History Museum – Vratsa') AS [Output] --- Output : 6 
+SELECT dbo.udf_GetTouristsCountOnATouristSite ('Samuil’s Fortress') AS [Output] --- Output : 8
+SELECT dbo.udf_GetTouristsCountOnATouristSite ('Gorge of Erma River') AS [Output] --- Output : 7
 
