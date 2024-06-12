@@ -206,3 +206,30 @@ SELECT b.Id, b.[Name], YearPublished, c.[Name] AS CategoryName  FROM Boardgames 
 JOIN Categories AS c ON c.Id = b.CategoryId
 WHERE CategoryId = 6 OR CategoryId = 8 -- "Strategy Games" or "Wargames" 
 ORDER BY YearPublished DESC
+
+/*
+7.	Creators without Boardgames
+Select all creators without boardgames. Order them by name (ascending).
+Required columns:
+•	Id
+•	CreatorName (creators's first and last name, concatenated with space)
+•	Email
+Example
+			Id				CreatorName					Email
+			5			Corey Konieczka			corey@konieczka.com
+			7			Jamey Stegmaier			jamey@stegmaier.com
+*/
+
+SELECT * FROM Boardgames
+SELECT * FROM Categories
+SELECT * FROM CreatorsBoardgames
+SELECT * FROM Creators
+
+SELECT 
+c.Id,
+CONCAT_WS(' ', c.FirstName, c.LastName) AS CreatorName,
+Email
+FROM Creators AS c
+LEFT JOIN CreatorsBoardgames AS cb ON cb.CreatorId = c.Id
+WHERE CreatorId IS NULL 
+
