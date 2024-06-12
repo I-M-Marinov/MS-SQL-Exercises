@@ -297,13 +297,6 @@ Example
 			Pfister					8					Stonemaier Games
 */
 
-SELECT * FROM Creators
-SELECT * FROM Boardgames
-SELECT * FROM Categories
-SELECT * FROM CreatorsBoardgames
-SELECT * FROM Addresses
-SELECT * FROM Publishers
-
 SELECT * FROM Creators AS c
 JOIN CreatorsBoardgames AS cb ON cb.CreatorId = c.Id
 JOIN Boardgames AS b ON b.Id = cb.BoardgameId
@@ -344,6 +337,8 @@ ORDER BY AVG(b.Rating) DESC
 
 
 /*
+
+														Section 4. Programmability (20 pts)
 11.	Creator with Boardgames
 Create a user-defined function, named udf_CreatorWithBoardgames(@name) that receives a creator's first name.
 The function should return the total number of boardgames that the creator has created.
@@ -355,3 +350,12 @@ Example
 										Output
 										  13
 */
+
+SELECT * FROM Creators
+SELECT * FROM Boardgames
+SELECT * FROM Categories
+SELECT * FROM CreatorsBoardgames
+SELECT * FROM Addresses
+SELECT * FROM Publishers
+
+
