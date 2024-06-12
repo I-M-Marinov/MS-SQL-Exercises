@@ -117,3 +117,18 @@ VALUES ('Ustra fortress', 90, 7, 'X'),
 		('St. Petka of Bulgaria – Rupite', 92, 6, '1994')
 
 
+/*
+3.	Update
+For some of the tourist sites there are no clear records when they were established, 
+so you need to update the column 'Establishment' for those records by putting the text '(not defined)'.
+*/
+
+SELECT * FROM Tourists
+SELECT * FROM Categories
+SELECT * FROM BonusPrizes
+SELECT * FROM Sites
+SELECT * FROM Locations
+
+UPDATE Sites
+SET Establishment = '(not defined)'
+WHERE Establishment IS NULL 
