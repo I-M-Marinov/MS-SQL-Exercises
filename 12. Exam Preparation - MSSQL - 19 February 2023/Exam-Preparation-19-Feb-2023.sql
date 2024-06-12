@@ -351,11 +351,57 @@ Example
 										  13
 */
 
-SELECT * FROM Creators
-SELECT * FROM Boardgames
-SELECT * FROM Categories
-SELECT * FROM CreatorsBoardgames
-SELECT * FROM Addresses
-SELECT * FROM Publishers
 
 
+
+CREATE FUNCTION udf_CreatorWithBoardgames(@name VARCHAR(10))
+RETURNS INT
+AS
+BEGIN
+	DECLARE @numberOfBoardgames INT;
+    SELECT @numberOfBoardgames = COUNT(b.[Name]) 
+    FROM Creators AS c
+	JOIN CreatorsBoardgames AS cb ON cb.CreatorId = c.Id
+	JOIN Boardgames AS b ON b.Id = cb.BoardgameId
+	JOIN Publishers AS p ON p.Id = b.PublisherId
+    WHERE c.FirstName = @name;
+	RETURN @numberOfBoardgames
+END;
+
+SELECT dbo.udf_CreatorWithBoardgames('Bruno') AS [Output] -- Output: 13
+
+
+/*
+12.	Search for Boardgame with Specific Category
+Create a stored procedure, named usp_SearchByCategory(@category) that receives category. The procedure must print full information about all boardgames with the given category: Name, YearPublished, Rating, CategoryName, PublisherName, MinPlayers and MaxPlayers. Add " people" at the end of the min and max count of people. Order them by PublisherName (ascending) and YearPublished (descending).
+Example
+														Query
+										EXEC usp_SearchByCategory 'Wargames'
+														Output
+							Name						YearPublished		Rating		CategoryName	PublisherName		MinPlayers		MaxPlayers
+							Verdun 1916: Steel Inferno		2020			8.60		Wargames		Gamewright			4 people		5 people
+							Brief Border Wars				2020			7.54		Wargames		Lookout Games		3 people		3 people
+*/
+
+
+CREATE PROCEDURE usp_SearchByCategory(@category VARCHAR(15))
+AS
+BEGIN
+	SELECT 
+	b.[Name] AS [Name],
+	b.YearPublished,
+	b.Rating,
+	c.[Name] AS CategoryName,
+	p.[Name] AS PublisherName,
+	CONCAT_WS(' ', pr.PlayersMin, 'people') AS MinPlayers,
+	CONCAT_WS(' ', pr.PlayersMax, 'people') AS MaxPlayers
+	FROM Categories AS c
+	JOIN Boardgames AS b ON b.CategoryId = c.Id
+	JOIN Publishers AS p ON p.Id = b.PublisherId
+	JOIN PlayersRanges AS pr ON pr.Id = b.PlayersRangeId
+	WHERE c.[Name] = @category
+	ORDER BY p.[Name], b.YearPublished DESC
+	
+END 
+
+EXEC usp_SearchByCategory 'Wargames'
