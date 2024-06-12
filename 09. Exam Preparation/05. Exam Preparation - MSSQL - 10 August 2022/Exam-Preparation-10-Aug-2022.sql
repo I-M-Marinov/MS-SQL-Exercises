@@ -183,13 +183,6 @@ Example
 		Salt Museum – Pomorie							Pomorie						2002				Spare time in the city
 */
 
-SELECT * FROM Tourists
-SELECT * FROM Categories
-SELECT * FROM BonusPrizes
-SELECT * FROM Sites
-SELECT * FROM Locations
-SELECT * FROM TouristsBonusPrizes
-
 SELECT 
 s.[Name] AS [Site],
 l.[Name] AS [Location], 
@@ -199,3 +192,38 @@ FROM Sites AS s
 JOIN Locations AS l ON l.Id = s.LocationId
 JOIN Categories AS c ON c.Id = s.CategoryId
 ORDER BY c.[Name] DESC,l.[Name], s.[Name]
+
+/*
+7.	Count of Sites in Sofia Province
+Extract all locations which are in Sofia province. 
+Find the count of sites in every location. Select the name of the province, name of the municipality, 
+name of the location and count of the tourist sites in it. Order the result by count of tourist sites (descending) and then by name of the location (ascending).
+Example
+
+			Province	Municipality			Location			CountOfSites
+			Sofia			Sofia				Sofia					11
+			Sofia			Etropole			Etropole				3
+			Sofia			Botevgrad			Botevgrad				1
+			Sofia			Koprivshtitsa		Koprivshtitsa			1
+			Sofia			Svoge				Osenovlag village		1
+			Sofia			Samokov				Samokov					1
+
+*/
+
+SELECT * FROM Tourists
+SELECT * FROM Categories
+SELECT * FROM BonusPrizes
+SELECT * FROM Sites
+SELECT * FROM Locations
+SELECT * FROM TouristsBonusPrizes
+
+SELECT 
+l.Province,
+l.Municipality,
+l.[Name] AS [Location],
+COUNT(s.LocationId) AS CountOfSites
+FROM Locations AS l
+JOIN Sites AS s ON s.LocationId = l.Id
+WHERE l.Province = 'Sofia'
+GROUP BY l.Province, l.Municipality, l.[Name]
+ORDER BY COUNT(s.LocationId) DESC, l.[Name]
