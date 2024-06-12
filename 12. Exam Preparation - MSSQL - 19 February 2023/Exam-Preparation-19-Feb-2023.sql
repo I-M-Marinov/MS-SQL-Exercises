@@ -198,3 +198,11 @@ Example
 				1		Beyond the Sun			2021			Strategy Games
 				4		Blue Skies				2021			Strategy Games
 */
+
+SELECT * FROM Boardgames
+SELECT * FROM Categories
+
+SELECT b.Id, b.[Name], YearPublished, c.[Name] AS CategoryName  FROM Boardgames AS b
+JOIN Categories AS c ON c.Id = b.CategoryId
+WHERE CategoryId = 6 OR CategoryId = 8 -- "Strategy Games" or "Wargames" 
+ORDER BY YearPublished DESC
