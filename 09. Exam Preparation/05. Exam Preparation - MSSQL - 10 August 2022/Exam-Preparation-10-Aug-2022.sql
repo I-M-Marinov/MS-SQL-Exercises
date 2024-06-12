@@ -128,7 +128,19 @@ SELECT * FROM Categories
 SELECT * FROM BonusPrizes
 SELECT * FROM Sites
 SELECT * FROM Locations
+SELECT * FROM TouristsBonusPrizes
 
 UPDATE Sites
 SET Establishment = '(not defined)'
 WHERE Establishment IS NULL 
+
+/*
+4.	Delete
+For this year's raffle it was decided to remove the Sleeping bag from the bonus prizes.
+*/
+
+
+DELETE FROM TouristsBonusPrizes WHERE BonusPrizeId IN (SELECT Id FROM BonusPrizes WHERE [Name] = 'Sleeping bag');
+
+DELETE FROM BonusPrizes WHERE [Name] = 'Sleeping bag';
+
