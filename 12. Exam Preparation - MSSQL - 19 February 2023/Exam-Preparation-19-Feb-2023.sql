@@ -103,3 +103,27 @@ INSERT INTO Publishers([Name],AddressId,Website,Phone)
 VALUES ('Agman Games', 5, 'www.agmangames.com', '+16546135542'),
        ('Amethyst Games', 7, 'www.amethystgames.com', '+15558889992'),
        ('BattleBooks', 13, 'www.battlebooks.com', '+12345678907')
+
+
+/*
+3.	Update
+We've decided to increase the maximum count of players for the boardgames with 1. 
+Update the table PlayersRanges and increase the maximum players of the boardgames, which have a range of players [2,2].
+Also, you have to change the name of the boardgames that were issued after 2020 inclusive. You have to add "V2" to the end of their names.
+*/
+
+UPDATE PlayersRanges
+SET PlayersMax +=1
+WHERE PlayersMin = 2 AND PlayersMax = 2 
+
+UPDATE Boardgames
+SET [Name] = CONCAT([Name],'V2')
+WHERE YearPublished >= 2020
+
+/*
+4.	Delete
+In table Addresses, delete every country, which has a Town, starting with the letter 'L'. 
+Keep in mind that there could be foreign key constraint conflicts.
+
+*/
+
