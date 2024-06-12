@@ -158,3 +158,43 @@ WHERE AddressId IN (
 DELETE FROM Addresses WHERE Town LIKE 'L%';
 
 
+/*
+												Section 3. Querying (40 pts)
+You need to start with a fresh dataset, so recreate your DB and import the sample data again ("Dataset.sql").
+
+
+5.	Boardgames by Year of Publication
+Select all boardgames, ordered by year of publication (ascending), then by name (descending). 
+Required columns:
+•	Name
+•	Rating
+										Example
+				        Name						Rating
+				Battle Line: Medieval				7.73
+				The Castles of Tuscany				7.39
+				Santa Monica						7.54
+				KeyForge: Mass Mutation				8.27
+*/
+
+SELECT * FROM sys.dm_exec_sessions WHERE database_id = DB_ID('Boardgames') -- Check active connections 
+
+
+SELECT [Name], Rating FROM Boardgames
+ORDER BY YearPublished, [Name] DESC
+
+/*
+6.	Boardgames by Category
+Select all boardgames with "Strategy Games" or "Wargames" categories. Order results by YearPublished (descending).
+Required columns:
+•	Id
+•	Name
+•	YearPublished
+•	CategoryName
+Example
+
+				Id		Name				YearPublished		CategoryName
+				6		Polis					2022				Wargames
+				7		Pan Am					2022			Strategy Games
+				1		Beyond the Sun			2021			Strategy Games
+				4		Blue Skies				2021			Strategy Games
+*/
