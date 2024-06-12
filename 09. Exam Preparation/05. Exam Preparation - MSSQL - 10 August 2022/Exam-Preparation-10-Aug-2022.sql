@@ -1,16 +1,16 @@
-/*
+ï»¿/*
 Section 1. DDL (30 pts)
 You have been given the following E/R Diagram.
  
 
 Create a database called NationalTouristSitesOfBulgaria. You need to create 7 tables:
-•	Categories – contains information about the different categories of the tourist sites;
-•	Locations – contains information about the locations of the tourist sites;
-•	Sites – contains information about the tourist sites;
-•	Tourists – contains information about the tourists, who are visiting the tourist sites;
-•	SitesTourists – a many to many mapping table between the sites and the tourists;
-•	BonusPrizes – contains information about the bonus prizes, which are given to an annual raffle;
-•	TouristsBonusPrizes – a many to many mapping table between the tourists and the bonus prizes.
+â€¢	Categories â€“ contains information about the different categories of the tourist sites;
+â€¢	Locations â€“ contains information about the locations of the tourist sites;
+â€¢	Sites â€“ contains information about the tourist sites;
+â€¢	Tourists â€“ contains information about the tourists, who are visiting the tourist sites;
+â€¢	SitesTourists â€“ a many to many mapping table between the sites and the tourists;
+â€¢	BonusPrizes â€“ contains information about the bonus prizes, which are given to an annual raffle;
+â€¢	TouristsBonusPrizes â€“ a many to many mapping table between the tourists and the bonus prizes.
 
 */
 
@@ -98,7 +98,7 @@ All Ids should be auto-generated.
 							Karlanovo Pyramids					65					7					NULL
 							The Tomb of Tsar Sevt				63					8					V BC
 							Sinite Kamani Natural Park			17					1					NULL
-							St. Petka of Bulgaria – Rupite		92					6					1994
+							St. Petka of Bulgaria â€“ Rupite		92					6					1994
 
 */
 
@@ -114,7 +114,7 @@ VALUES ('Ustra fortress', 90, 7, 'X'),
 		('Karlanovo Pyramids', 65, 7, NULL),
 		('The Tomb of Tsar Sevt', 63, 8, 'V BC'),
 		('Sinite Kamani Natural Park', 17, 1, NULL),
-		('St. Petka of Bulgaria – Rupite', 92, 6, '1994')
+		('St. Petka of Bulgaria â€“ Rupite', 92, 6, '1994')
 
 
 /*
@@ -145,7 +145,7 @@ SELECT * FROM sys.dm_exec_sessions WHERE database_id = DB_ID('NationalTouristSit
 
 /*
 5.	Tourists
-Extract information about all the Tourists – name, age, phone number and nationality. 
+Extract information about all the Tourists â€“ name, age, phone number and nationality. 
 Order the result by nationality (ascending), then by age (descending), and then by tourist name (ascending).
 Example
 
@@ -175,12 +175,12 @@ then by name of the location (ascending) and then by name of the site itself (as
 Example
 
 					Site								Location				Establishment				Category
-		Clock Tower – Botevgrad							Botevgrad					1866				Spare time in the city
+		Clock Tower â€“ Botevgrad							Botevgrad					1866				Spare time in the city
 		Clock Tower of Etropole							Etropole					1710				Spare time in the city
-		House of Humour and Satire Museum – Gabrovo		Gabrovo						1972				Spare time in the city
-		Museum of Education – Gabrovo					Gabrovo						1974				Spare time in the city
-		Antique Theater – Plovdiv						Plovdiv						II					Spare time in the city
-		Salt Museum – Pomorie							Pomorie						2002				Spare time in the city
+		House of Humour and Satire Museum â€“ Gabrovo		Gabrovo						1972				Spare time in the city
+		Museum of Education â€“ Gabrovo					Gabrovo						1974				Spare time in the city
+		Antique Theater â€“ Plovdiv						Plovdiv						II					Spare time in the city
+		Salt Museum â€“ Pomorie							Pomorie						2002				Spare time in the city
 */
 
 SELECT 
@@ -232,9 +232,9 @@ Example
 			Site										Location			Municipality			Province		Establishment
 	Asen's Fortress										Asenovgrad			Asenovgrad				Plovdiv				V BC
 	National archaeological reserve Kabile				Yambol				Yambol					Yambol				II BC
-	Perperikon – Medieval Archaeological Complex		Rhodope Mountain	NULL					NULL				V BC
+	Perperikon â€“ Medieval Archaeological Complex		Rhodope Mountain	NULL					NULL				V BC
 	Shumen Fortress Historical-Archaeological Preserve	Shumen				Shumen					Shumen				I BC
-	Starosel – Thracian Temple Complex					Starosel village	Hisarya					Plovdiv				V BC
+	Starosel â€“ Thracian Temple Complex					Starosel village	Hisarya					Plovdiv				V BC
 	Thracian Tomb of Kazanlak							Kazanlak			Karlovo					Plovdiv				IV BC
 
 */
@@ -325,13 +325,13 @@ Examples
 
 
 														Query
-				SELECT dbo.udf_GetTouristsCountOnATouristSite ('Regional History Museum – Vratsa')
+				SELECT dbo.udf_GetTouristsCountOnATouristSite ('Regional History Museum â€“ Vratsa')
 
 														Output
 														  6
 
 														Query
-							SELECT dbo.udf_GetTouristsCountOnATouristSite ('Samuil’s Fortress')
+							SELECT dbo.udf_GetTouristsCountOnATouristSite ('Samuilâ€™s Fortress')
 
 														Output
 														  8
@@ -365,7 +365,50 @@ BEGIN
 	RETURN @countOfTourists
 END;
 
-SELECT dbo.udf_GetTouristsCountOnATouristSite ('Regional History Museum – Vratsa') AS [Output] --- Output : 6 
-SELECT dbo.udf_GetTouristsCountOnATouristSite ('Samuil’s Fortress') AS [Output] --- Output : 8
-SELECT dbo.udf_GetTouristsCountOnATouristSite ('Gorge of Erma River') AS [Output] --- Output : 7
+SELECT dbo.udf_GetTouristsCountOnATouristSite ('Regional History Museum â€“ Vratsa') AS [Output]
+SELECT dbo.udf_GetTouristsCountOnATouristSite ('Samuilâ€™s Fortress') AS [Output]
+SELECT dbo.udf_GetTouristsCountOnATouristSite ('Gorge of Erma River') AS [Output]
 
+/*
+12.	Annual Reward Lottery
+A reward scheme has been developed to encourage collection of as many stamps as possible. 
+Depending on the number of stamps collected, participants may receive bronze, silver or gold badges. 
+Create a stored procedure, named usp_AnnualRewardLottery(@TouristName). 
+Update the reward of the given tourist according to the count of the sites he have visited:
+
+**	>= 100 receives 'Gold badge'
+**	>= 50 receives 'Silver badge'
+**	>= 25 receives 'Bronze badge'
+Extract the name of the tourist and the reward he has.
+
+Example
+											Query
+							EXEC usp_AnnualRewardLottery 'Gerhild Lutgard'
+											Result
+							Name						Reward
+							Gerhild Lutgard				Gold badge
+
+*/
+
+CREATE PROCEDURE usp_AnnualRewardLottery(@TouristName NVARCHAR(20))
+AS
+BEGIN
+		SELECT 
+			t.[Name],
+			CASE 
+					WHEN COUNT(st.TouristId) >= 100 THEN 'Gold badge'
+					WHEN COUNT(st.TouristId) >= 50 THEN 'Silver badge'
+					WHEN COUNT(st.TouristId) >= 25 THEN 'Bronze badge'
+					ELSE t.Reward 
+				END AS Reward
+			FROM Tourists AS t
+			LEFT JOIN SitesTourists AS st ON st.TouristId = t.Id
+			WHERE t.[Name] = @TouristName
+			GROUP BY t.[Name], t.Reward
+
+END
+
+EXEC usp_AnnualRewardLottery 'Gerhild Lutgard' -- Gold badge
+EXEC usp_AnnualRewardLottery 'Teodor Petrov' -- Silver badge
+EXEC usp_AnnualRewardLottery 'Zac Walsh' -- Bronze badge
+EXEC usp_AnnualRewardLottery 'Brus Brown' -- NULL
