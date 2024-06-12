@@ -272,13 +272,6 @@ Example
 			Danny Kane				39			+32487454880		Belgium	Water		filter jug
 */
 
-SELECT * FROM Tourists
-SELECT * FROM Categories
-SELECT * FROM BonusPrizes
-SELECT * FROM Sites
-SELECT * FROM Locations
-SELECT * FROM TouristsBonusPrizes
-
 SELECT 
 t.[Name],
 t.Age,
@@ -289,3 +282,46 @@ FROM Tourists AS t
 LEFT JOIN TouristsBonusPrizes AS tb ON tb.TouristId = t.Id
 LEFT JOIN BonusPrizes AS bp ON bp.Id = tb.BonusPrizeId
 ORDER BY t.[Name]
+
+/*
+10.	Tourists visiting History and Archaeology sites
+
+Extract all tourists, who have visited sites from category 'History and archaeology'. 
+Select their last name, nationality, age and phone number. 
+Order the result by their last name (ascending).
+
+NOTE: The name of the tourists will always be in the following format: 'FirstName LastName'.
+
+Example
+
+
+			LastName			Nationality			Age		PhoneNumber
+			Bauer				Germany				49		+496913265224
+			Becker				Germany				36		+491711234567
+			Bianchi				Italy				51		+393125965845
+			Brown				UK					42		+447459881347
+			Conti				Italy				36		+393336258996
+			Dimitrova			Bulgaria			42		+359898645326
+*/
+
+SELECT * FROM Tourists
+SELECT * FROM Categories
+SELECT * FROM BonusPrizes
+SELECT * FROM Sites
+SELECT * FROM SitesTourists
+SELECT * FROM Locations
+SELECT * FROM TouristsBonusPrizes
+
+SELECT 
+SUBSTRING(t.[Name], CHARINDEX(' ', t.[Name]) + 1, LEN(t.[Name])) AS LastName,
+t.Nationality,
+t.Age,
+t.PhoneNumber
+FROM Tourists AS t
+JOIN SitesTourists AS st ON st.TouristId = t.Id
+JOIN Sites AS s ON s.Id = st.SiteId
+JOIN Categories AS c ON c.Id = s.CategoryId
+WHERE c.Id = 8 
+GROUP BY SUBSTRING(t.[Name], CHARINDEX(' ', t.[Name]) + 1, LEN(t.[Name])), t.Nationality, t.Age, t.PhoneNumber
+ORDER BY LastName
+
