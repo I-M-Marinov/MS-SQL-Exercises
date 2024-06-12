@@ -210,13 +210,6 @@ Example
 
 */
 
-SELECT * FROM Tourists
-SELECT * FROM Categories
-SELECT * FROM BonusPrizes
-SELECT * FROM Sites
-SELECT * FROM Locations
-SELECT * FROM TouristsBonusPrizes
-
 SELECT 
 l.Province,
 l.Municipality,
@@ -227,3 +220,40 @@ JOIN Sites AS s ON s.LocationId = l.Id
 WHERE l.Province = 'Sofia'
 GROUP BY l.Province, l.Municipality, l.[Name]
 ORDER BY COUNT(s.LocationId) DESC, l.[Name]
+
+/*
+8.	Tourist Sites established BC
+Extract information about the tourist sites, which have a location name that does NOT start with the letters 'B', 'M' or 'D' 
+and which are established Before Christ (BC). Select the site name, location name, municipality, province and establishment. 
+Order the result by name of the site (ascending).
+NOTE: If the establishment century is Before Christ (BC), it will always be in the following format: 'RomanNumeral BC'.
+Example
+
+			Site										Location			Municipality			Province		Establishment
+	Asen's Fortress										Asenovgrad			Asenovgrad				Plovdiv				V BC
+	National archaeological reserve Kabile				Yambol				Yambol					Yambol				II BC
+	Perperikon – Medieval Archaeological Complex		Rhodope Mountain	NULL					NULL				V BC
+	Shumen Fortress Historical-Archaeological Preserve	Shumen				Shumen					Shumen				I BC
+	Starosel – Thracian Temple Complex					Starosel village	Hisarya					Plovdiv				V BC
+	Thracian Tomb of Kazanlak							Kazanlak			Karlovo					Plovdiv				IV BC
+
+*/
+
+SELECT * FROM Tourists
+SELECT * FROM Categories
+SELECT * FROM BonusPrizes
+SELECT * FROM Sites
+SELECT * FROM Locations
+SELECT * FROM TouristsBonusPrizes
+
+SELECT 
+s.[Name] AS [Site],
+l.[Name] AS [Location],
+l.Municipality,
+l.Province,
+s.Establishment
+FROM Sites AS s
+JOIN Locations AS l ON l.Id = s.LocationId
+WHERE (s.[Name] NOT LIKE 'B%' AND  s.[Name] NOT LIKE 'M%' AND  s.[Name] NOT LIKE 'D%') 
+		AND s.Establishment LIKE '%BC'
+ORDER BY s.[Name] 
