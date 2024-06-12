@@ -123,13 +123,6 @@ For some of the tourist sites there are no clear records when they were establis
 so you need to update the column 'Establishment' for those records by putting the text '(not defined)'.
 */
 
-SELECT * FROM Tourists
-SELECT * FROM Categories
-SELECT * FROM BonusPrizes
-SELECT * FROM Sites
-SELECT * FROM Locations
-SELECT * FROM TouristsBonusPrizes
-
 UPDATE Sites
 SET Establishment = '(not defined)'
 WHERE Establishment IS NULL 
@@ -144,3 +137,65 @@ DELETE FROM TouristsBonusPrizes WHERE BonusPrizeId IN (SELECT Id FROM BonusPrize
 
 DELETE FROM BonusPrizes WHERE [Name] = 'Sleeping bag';
 
+/*    Section 3. Querying (40 pts)
+You need to start with a fresh dataset, so recreate your DB and import the sample data again (01. DDL_Dataset.sql). 
+DO NOT CHANGE OR INCLUDE DATA FROM DELETE, INSERT AND UPDATE TASKS!!! */
+
+SELECT * FROM sys.dm_exec_sessions WHERE database_id = DB_ID('NationalTouristSitesOfBulgaria')
+
+/*
+5.	Tourists
+Extract information about all the Tourists – name, age, phone number and nationality. 
+Order the result by nationality (ascending), then by age (descending), and then by tourist name (ascending).
+Example
+
+					Name				Age		PhoneNumber	    Nationality
+				Danny Kane				39		+32487454880	Belgium
+				Krasen Krasenov			62		+359897653265	Bulgaria
+				Pavel Mateev			51		+359879632123	Bulgaria
+				Kameliya Dimitrova		42		+359898645326	Bulgaria
+				Dobroslav Mihalev		39		+359889632200	Bulgaria
+				Mariya Petrova			37		+359887564235	Bulgaria
+*/
+
+SELECT 
+[Name],
+Age,
+PhoneNumber,
+Nationality
+FROM Tourists
+ORDER BY Nationality, Age DESC, [Name] 
+
+/*
+6.	Sites with Their Location and Category
+Select all sites and find their location and category. Select the name of the tourist site, name of the location,  
+establishment year/ century and name of the category. Order the result by name of the category (descending), 
+then by name of the location (ascending) and then by name of the site itself (ascending).
+
+Example
+
+					Site								Location				Establishment				Category
+		Clock Tower – Botevgrad							Botevgrad					1866				Spare time in the city
+		Clock Tower of Etropole							Etropole					1710				Spare time in the city
+		House of Humour and Satire Museum – Gabrovo		Gabrovo						1972				Spare time in the city
+		Museum of Education – Gabrovo					Gabrovo						1974				Spare time in the city
+		Antique Theater – Plovdiv						Plovdiv						II					Spare time in the city
+		Salt Museum – Pomorie							Pomorie						2002				Spare time in the city
+*/
+
+SELECT * FROM Tourists
+SELECT * FROM Categories
+SELECT * FROM BonusPrizes
+SELECT * FROM Sites
+SELECT * FROM Locations
+SELECT * FROM TouristsBonusPrizes
+
+SELECT 
+s.[Name] AS [Site],
+l.[Name] AS [Location], 
+s.Establishment,
+c.[Name]
+FROM Sites AS s
+JOIN Locations AS l ON l.Id = s.LocationId
+JOIN Categories AS c ON c.Id = s.CategoryId
+ORDER BY c.[Name] DESC,l.[Name], s.[Name]
