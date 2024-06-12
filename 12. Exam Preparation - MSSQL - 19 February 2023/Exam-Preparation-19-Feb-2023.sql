@@ -220,11 +220,6 @@ Example
 			7			Jamey Stegmaier			jamey@stegmaier.com
 */
 
-SELECT * FROM Boardgames
-SELECT * FROM Categories
-SELECT * FROM CreatorsBoardgames
-SELECT * FROM Creators
-
 SELECT 
 c.Id,
 CONCAT_WS(' ', c.FirstName, c.LastName) AS CreatorName,
@@ -232,4 +227,52 @@ Email
 FROM Creators AS c
 LEFT JOIN CreatorsBoardgames AS cb ON cb.CreatorId = c.Id
 WHERE CreatorId IS NULL 
+
+/*
+8.	First 5 Boardgames
+Select the first 5 boardgames that have rating, bigger than 7.00 and containing the letter 'a' in the boardgame name 
+or the rating of a boardgame is bigger than 7.50 and the range of the min and max count of players is [2;5]. 
+Order the result by boardgames name (ascending), then by rating (descending).
+Required columns:
+•	Name
+•	Rating
+•	CategoryName
+Example
+					Name							Rating				CategoryName
+					Abandon All Artichokes			7.12				Family Games
+					Alma Mater						7.68				Strategy Games
+					Ankh: Gods of Egypt				7.20				Strategy Games
+					Azul: Summer Pavilion			7.83				Abstract Games
+					Battle Line: Medieval			7.73				Strategy Games
+*/
+
+SELECT * FROM Boardgames
+SELECT * FROM Categories
+SELECT * FROM CreatorsBoardgames
+SELECT * FROM Creators
+
+SELECT TOP 5
+b.[Name],  
+b.Rating,
+c.[Name] AS CategoryName
+FROM Boardgames AS b
+JOIN PlayersRanges AS pr ON pr.Id = b.PlayersRangeId
+JOIN Categories AS c ON c.Id = b.CategoryId
+WHERE b.Rating > 7.00 AND b.[Name] LIKE '%a%' OR b.Rating > 7.50 AND pr.PlayersMin = 2 AND pr.PlayersMax = 5 
+ORDER BY b.[Name],  b.Rating DESC 
+
+
+/*
+9.	Creators with Emails
+Select all of the creators that have emails, ending in ".com", and display their most highly rated boardgame. Order by creator full name (ascending).
+Required columns:
+•	FullName
+•	Email
+•	Rating
+Example
+				   FullName					Email					Rating
+				Alexander Pfister	alexander@pfister.com			8.58
+				Bruno Cathala		bruno@cathala.com				8.58
+				Emerson Matsuuchi	emerson@matsuuchi.com			8.60
+*/
 
