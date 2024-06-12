@@ -239,13 +239,6 @@ Example
 
 */
 
-SELECT * FROM Tourists
-SELECT * FROM Categories
-SELECT * FROM BonusPrizes
-SELECT * FROM Sites
-SELECT * FROM Locations
-SELECT * FROM TouristsBonusPrizes
-
 SELECT 
 s.[Name] AS [Site],
 l.[Name] AS [Location],
@@ -257,3 +250,42 @@ JOIN Locations AS l ON l.Id = s.LocationId
 WHERE (s.[Name] NOT LIKE 'B%' AND  s.[Name] NOT LIKE 'M%' AND  s.[Name] NOT LIKE 'D%') 
 		AND s.Establishment LIKE '%BC'
 ORDER BY s.[Name] 
+
+/*
+9.	Tourists with their Bonus Prizes
+
+Extract information about the tourists, along with their bonus prizes. 
+If there is no data for the bonus prize put '(no bonus prize)'. 
+Select tourist's name, age, phone number, nationality and bonus prize. 
+Order the result by the name of the tourist (ascending).
+
+NOTE: There will never be a tourist with more than one prize.
+Example
+
+
+			Name					Age			PhoneNumber			Nationality			Reward
+			Alonzo Conti			36			+393336258996		Italy			(no bonus prize)
+			Brus Brown				42			+447459881347		UK				(no bonus prize)
+			Claudia Reuss			54			+4930774615846		Germany				Sleeping bag
+			Cosimo Ajello			51			+393521112654		Italy			(no bonus prize)
+			Cyrek Gryzbowski		64			+48503435735		Poland			(no bonus prize)
+			Danny Kane				39			+32487454880		Belgium	Water		filter jug
+*/
+
+SELECT * FROM Tourists
+SELECT * FROM Categories
+SELECT * FROM BonusPrizes
+SELECT * FROM Sites
+SELECT * FROM Locations
+SELECT * FROM TouristsBonusPrizes
+
+SELECT 
+t.[Name],
+t.Age,
+t.PhoneNumber,
+t.Nationality,
+COALESCE(bp.[Name], '(no bonus prize)') AS Reward 
+FROM Tourists AS t
+LEFT JOIN TouristsBonusPrizes AS tb ON tb.TouristId = t.Id
+LEFT JOIN BonusPrizes AS bp ON bp.Id = tb.BonusPrizeId
+ORDER BY t.[Name]
