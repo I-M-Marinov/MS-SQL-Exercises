@@ -123,8 +123,6 @@ who don't have an owner. Update the records by putting to those animals the corr
 
 */
 
-
-
 UPDATE Animals
 SET OwnerId = 4
 WHERE OwnerId IS NULL
@@ -137,10 +135,6 @@ Your job is to delete this department from the database.
 NOTE: Keep in mind that there could be foreign key constraint conflicts!
 */
 
-SELECT * FROM Animals
-SELECT * FROM Owners
-SELECT * FROM Volunteers
-SELECT * FROM VolunteersDepartments
 
 DELETE FROM Volunteers WHERE DepartmentId = 2;
 DELETE FROM VolunteersDepartments WHERE DepartmentName = 'Education program assistant';
@@ -199,3 +193,33 @@ FROM Animals AS a
 JOIN AnimalTypes AS [at] ON at.Id = a.AnimalTypeId
 ORDER BY a.[Name]
 
+/*
+7.	Owners and Their Animals
+Extract the animals for each owner. Find the top 5 owners, who have the biggest count of animals. 
+Select the owner's name and the count of the animals he owns. 
+Order the result by the count of animals owned (descending) and then by the owner's name.
+
+Example
+
+			Owner				CountOfAnimals
+			Kaloqn Stoqnov				4
+			Kiril Peshev				4
+			Kamelia Yancheva			3
+			Martin Genchev				3
+			Metodi Dimitrov				3
+
+*/
+
+SELECT * FROM Animals
+SELECT * FROM Owners
+SELECT * FROM Volunteers
+SELECT * FROM VolunteersDepartments
+
+
+SELECT TOP 5
+o.[Name] AS [Owner],
+COUNT(a.OwnerId) AS CountOfAnimals
+FROM Owners AS o
+JOIN Animals AS a ON a.OwnerId = o.Id
+GROUP BY o.[Name]
+ORDER BY COUNT(a.OwnerId) DESC, o.[Name]
