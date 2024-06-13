@@ -266,6 +266,30 @@ Example
 
 */
 
+SELECT
+v.[Name],
+v.PhoneNumber,
+SUBSTRING(v.[Address], CHARINDEX(', ', v.[Address]) + 1, LEN(v.[Address])) AS [Address]
+FROM Volunteers AS v
+WHERE v.[Address] LIKE '%Sofia%' AND v.DepartmentId = 2
+ORDER BY v.[Name]
+
+/*
+10.	Animals for Adoption
+Extract all animals, who does not have an owner and are younger than 5 years (5 years from '01/01/2022'), except for the Birds. 
+Select their name, year of birth and animal type. Order the result by animal's name.
+Example
+
+				Name					BirthYear			AnimalType
+				Banded Archer Fish	      2022				Fish
+				Chameleon			      2018				Reptiles
+				Desert Hairy Scorpion     2020				Invertebrates
+				Goliath Frog		      2020				Amphibians
+				Koi					      2021				Fish
+				Poison Frog			      2020				Amphibians
+
+*/
+
 
 SELECT * FROM Animals
 SELECT * FROM AnimalsCages
@@ -274,10 +298,15 @@ SELECT * FROM Owners
 SELECT * FROM Volunteers
 SELECT * FROM VolunteersDepartments
 
-SELECT
-v.[Name],
-v.PhoneNumber,
-SUBSTRING(v.[Address], CHARINDEX(', ', v.[Address]) + 1, LEN(v.[Address])) AS [Address]
-FROM Volunteers AS v
-WHERE v.[Address] LIKE '%Sofia%' AND v.DepartmentId = 2
-ORDER BY v.[Name]
+
+SELECT 
+a.[Name],
+YEAR(a.BirthDate) AS BirthYear,
+[at].AnimalType
+FROM Animals AS a
+JOIN AnimalTypes AS [at] ON [at].Id = a.AnimalTypeId
+WHERE a.OwnerId IS NULL 
+AND DATEDIFF(YEAR, a.Birthdate, '2022-01-01') < 5 
+AND [at].AnimalType <> 'Birds'
+ORDER BY a.[Name]
+
