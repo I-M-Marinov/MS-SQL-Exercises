@@ -236,12 +236,6 @@ Example
 			Kamelia Yancheva-Lion				0876213799				7
 */
 
-SELECT * FROM Animals
-SELECT * FROM AnimalsCages
-SELECT * FROM AnimalTypes
-SELECT * FROM Owners
-SELECT * FROM Volunteers
-SELECT * FROM VolunteersDepartments
 
 SELECT 
 CONCAT(o.[Name],'-',a.[Name]) AS OwnersAnimals,
@@ -255,3 +249,35 @@ JOIN AnimalTypes AS at ON at.Id = a.AnimalTypeId
 WHERE at.AnimalType = 'Mammals'
 GROUP BY o.[Name], a.[Name], o.PhoneNumber, c.Id
 ORDER BY o.[Name], a.[Name] DESC
+
+
+/*
+9.	Volunteers in Sofia
+Extract information about the volunteers, involved in 'Education program assistant' department, who live in Sofia. 
+Select their name, phone number and their address in Sofia (skip city's name). 
+Order the result by the name of the volunteers (ascending).
+Example
+
+			Name					PhoneNumber			Address
+			Dilyana Stoeva			0889412025			15 Lyulyak str.
+			Kiril Kostadinov		0896541233			213 Tsarigradsko shose str.
+			Yanko Totev				0896369258			54 Hristo Botev str.
+			Zdravko Asenov			0889652365			6 Neven str.
+
+*/
+
+
+SELECT * FROM Animals
+SELECT * FROM AnimalsCages
+SELECT * FROM AnimalTypes
+SELECT * FROM Owners
+SELECT * FROM Volunteers
+SELECT * FROM VolunteersDepartments
+
+SELECT
+v.[Name],
+v.PhoneNumber,
+SUBSTRING(v.[Address], CHARINDEX(', ', v.[Address]) + 1, LEN(v.[Address])) AS [Address]
+FROM Volunteers AS v
+WHERE v.[Address] LIKE '%Sofia%' AND v.DepartmentId = 2
+ORDER BY v.[Name]
