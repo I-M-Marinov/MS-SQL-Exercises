@@ -144,3 +144,35 @@ SELECT * FROM VolunteersDepartments
 
 DELETE FROM Volunteers WHERE DepartmentId = 2;
 DELETE FROM VolunteersDepartments WHERE DepartmentName = 'Education program assistant';
+
+
+/*
+																	Section 3. Querying (40 pts)
+You need to start with a fresh dataset, so recreate your DB and import the sample data again (01. DDL_Dataset.sql). 
+DO NOT CHANGE OR INCLUDE DATA FROM DELETE, INSERT AND UDATE TASKS!!!
+
+5.	Volunteers
+Extract information about all the Volunteers – name, phone number, address, id of the animal, 
+they are responsible to and id of the department they are involved into. 
+Order the result by name of the volunteer (ascending), then by the id of the animal (ascending) and then by the id of the department (ascending).
+
+Example
+
+				Name					PhoneNumber		Address							AnimalId		DepartmentId
+				Anton Antonov			0877456123		Varna, 2 Dobrotitsa str.			11				3
+				Boyan Boyanov			0896321546		Plovdiv, 15 Arda str.				14				1
+				Darina Petrova			0889654236		Sofia, 39 Bratya Buxton str.		31				3
+				Dilyana Stoeva			0889412025		Sofia, 15 Lyulyak str.				NULL			2
+				Dimitrichka Stateva	    0888632123		Sofia, 26 Vasil Levski str.			7				8
+				Gabriel Radkov			0889745102		Sliven, 6 Krim str.					18				5
+*/
+
+
+SELECT 
+[Name],
+PhoneNumber,
+[Address],
+AnimalId,
+DepartmentId
+FROM Volunteers 
+ORDER BY [Name], AnimalId, DepartmentId
