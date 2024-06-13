@@ -124,3 +124,23 @@ who don't have an owner. Update the records by putting to those animals the corr
 */
 
 
+
+UPDATE Animals
+SET OwnerId = 4
+WHERE OwnerId IS NULL
+
+/*
+4.	Delete
+The Zoo decided to close one of the Volunteers Departments - Education program assistant.
+Your job is to delete this department from the database. 
+
+NOTE: Keep in mind that there could be foreign key constraint conflicts!
+*/
+
+SELECT * FROM Animals
+SELECT * FROM Owners
+SELECT * FROM Volunteers
+SELECT * FROM VolunteersDepartments
+
+DELETE FROM Volunteers WHERE DepartmentId = 2;
+DELETE FROM VolunteersDepartments WHERE DepartmentName = 'Education program assistant';
