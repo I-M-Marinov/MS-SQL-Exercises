@@ -290,15 +290,6 @@ Example
 
 */
 
-
-SELECT * FROM Animals
-SELECT * FROM AnimalsCages
-SELECT * FROM AnimalTypes
-SELECT * FROM Owners
-SELECT * FROM Volunteers
-SELECT * FROM VolunteersDepartments
-
-
 SELECT 
 a.[Name],
 YEAR(a.BirthDate) AS BirthYear,
@@ -310,3 +301,42 @@ AND DATEDIFF(YEAR, a.Birthdate, '2022-01-01') < 5
 AND [at].AnimalType <> 'Birds'
 ORDER BY a.[Name]
 
+/*
+																Section 4. Programmability (20 pts)
+11.	All Volunteers in a Department
+Create a user-defined function named udf_GetVolunteersCountFromADepartment (@VolunteersDepartment) 
+that receives a department and returns the count of volunteers, who are involved in this department.
+
+Examples
+																		Query
+
+									SELECT dbo.udf_GetVolunteersCountFromADepartment ('Education program assistant')
+
+																		Output
+
+																		  6
+*/
+
+
+SELECT * FROM Animals
+SELECT * FROM AnimalsCages
+SELECT * FROM AnimalTypes
+SELECT * FROM Owners
+SELECT * FROM Volunteers
+SELECT * FROM VolunteersDepartments
+
+CREATE FUNCTION udf_GetVolunteersCountFromADepartment(@VolunteersDepartment VARCHAR(50))
+RETURNS INT
+AS
+BEGIN
+	DECLARE @countOfParticipants INT;
+    SELECT @countOfParticipants = COUNT(v.DepartmentId)
+    FROM Volunteers AS v
+	JOIN VolunteersDepartments AS vd ON vd.Id = v.DepartmentId
+    WHERE vd.DepartmentName = @VolunteersDepartment;
+	RETURN @countOfParticipants
+END;
+
+SELECT dbo.udf_GetVolunteersCountFromADepartment ('Education program assistant') AS [Output] -- Output: 6
+SELECT dbo.udf_GetVolunteersCountFromADepartment ('Guest engagement') AS [Output] -- Output: 4
+SELECT dbo.udf_GetVolunteersCountFromADepartment ('Zoo events') AS [Output] -- Output: 5
