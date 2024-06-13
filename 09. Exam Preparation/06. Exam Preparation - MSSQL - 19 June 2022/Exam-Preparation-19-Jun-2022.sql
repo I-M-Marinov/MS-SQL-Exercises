@@ -210,11 +210,6 @@ Example
 
 */
 
-SELECT * FROM Animals
-SELECT * FROM Owners
-SELECT * FROM Volunteers
-SELECT * FROM VolunteersDepartments
-
 
 SELECT TOP 5
 o.[Name] AS [Owner],
@@ -223,3 +218,40 @@ FROM Owners AS o
 JOIN Animals AS a ON a.OwnerId = o.Id
 GROUP BY o.[Name]
 ORDER BY COUNT(a.OwnerId) DESC, o.[Name]
+
+/*
+8.	Owners, Animals and Cages
+Extract information about the owners of mammals, the name of their animal and in which cage these animals are. 
+Select owner's name and animal's name (in format 'owner-animal'), owner's phone number and the id of the cage. 
+Order the result by the name of the owner (ascending) and then by the name of the animal (descending).
+
+Example
+
+			OwnersAnimals						PhoneNumber			  CageId
+			Anelia Mihova-Koala					0897856147				16
+			Borislava Kamenova-Fennec Fox		0877477112				21
+			Gergana Mancheva-Brown bear			0897412123				26
+			Kaloqn Stoqnov-Leopard				0878325642				32
+			Kaloqn Stoqnov-Elephant				0878325642				37
+			Kamelia Yancheva-Lion				0876213799				7
+*/
+
+SELECT * FROM Animals
+SELECT * FROM AnimalsCages
+SELECT * FROM AnimalTypes
+SELECT * FROM Owners
+SELECT * FROM Volunteers
+SELECT * FROM VolunteersDepartments
+
+SELECT 
+CONCAT(o.[Name],'-',a.[Name]) AS OwnersAnimals,
+o.PhoneNumber,
+c.Id AS CageId
+FROM Owners AS o
+JOIN Animals AS a ON a.OwnerId = o.Id
+JOIN AnimalsCages AS ac ON ac.AnimalId = a.Id
+JOIN Cages AS c ON c.Id = ac.CageId
+JOIN AnimalTypes AS at ON at.Id = a.AnimalTypeId
+WHERE at.AnimalType = 'Mammals'
+GROUP BY o.[Name], a.[Name], o.PhoneNumber, c.Id
+ORDER BY o.[Name], a.[Name] DESC
