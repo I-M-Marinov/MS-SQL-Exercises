@@ -176,3 +176,26 @@ AnimalId,
 DepartmentId
 FROM Volunteers 
 ORDER BY [Name], AnimalId, DepartmentId
+
+/*
+6.	Animals data
+Select all animals and their type. Extract name, animal type and birth date (in format 'dd.MM.yyyy'). Order the result by animal's name (ascending).
+Example
+
+					Name							AnimalType				BirthDate
+					African Penguin					Birds					17.07.2017
+					African Spurred Tortoise		Reptiles				26.09.2009
+					American Kestrel				Birds					27.04.2019
+					Anaconda						Reptiles				13.07.2016
+					Axolotl							Amphibians				21.01.2019
+					Bald Eagle						Birds					29.06.2014
+*/
+
+SELECT
+a.[Name],
+[at].AnimalType,
+FORMAT(a.Birthdate,'dd.MM.yyyy') AS Birthdate
+FROM Animals AS a
+JOIN AnimalTypes AS [at] ON at.Id = a.AnimalTypeId
+ORDER BY a.[Name]
+
