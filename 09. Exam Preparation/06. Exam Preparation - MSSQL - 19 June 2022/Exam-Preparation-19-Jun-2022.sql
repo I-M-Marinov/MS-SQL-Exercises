@@ -317,14 +317,6 @@ Examples
 																		  6
 */
 
-
-SELECT * FROM Animals
-SELECT * FROM AnimalsCages
-SELECT * FROM AnimalTypes
-SELECT * FROM Owners
-SELECT * FROM Volunteers
-SELECT * FROM VolunteersDepartments
-
 CREATE FUNCTION udf_GetVolunteersCountFromADepartment(@VolunteersDepartment VARCHAR(50))
 RETURNS INT
 AS
@@ -340,3 +332,33 @@ END;
 SELECT dbo.udf_GetVolunteersCountFromADepartment ('Education program assistant') AS [Output] -- Output: 6
 SELECT dbo.udf_GetVolunteersCountFromADepartment ('Guest engagement') AS [Output] -- Output: 4
 SELECT dbo.udf_GetVolunteersCountFromADepartment ('Zoo events') AS [Output] -- Output: 5
+
+/*
+12.	Animals with Owner or Not
+Create a stored procedure, named usp_AnimalsWithOwnersOrNot(@AnimalName). 
+Extract the name of the owner of the given animal.  If there is no owner, put 'For adoption'.
+Example
+
+									Query
+			EXEC usp_AnimalsWithOwnersOrNot 'Pumpkinseed Sunfish'
+									Result
+			       Name						OwnersName
+			Pumpkinseed Sunfish			Kamelia Yancheva
+
+*/
+
+CREATE PROCEDURE usp_AnimalsWithOwnersOrNot(@AnimalName VARCHAR(30))
+AS
+BEGIN
+		SELECT 
+			a.[Name] AS [Name],
+			COALESCE(o.[Name], 'For adoption') AS OwnersName 
+			FROM Animals AS a
+			LEFT JOIN Owners AS o ON o.Id = a.OwnerId
+			WHERE a.[Name] = @AnimalName
+END;
+
+EXEC usp_AnimalsWithOwnersOrNot 'Pumpkinseed Sunfish' -- Pumpkinseed Sunfish	// Kamelia Yancheva 
+EXEC usp_AnimalsWithOwnersOrNot 'Hippo' -- Hippo	// For adoption
+EXEC usp_AnimalsWithOwnersOrNot 'Brown bear' -- Brown bear	// Gergana Mancheva
+
