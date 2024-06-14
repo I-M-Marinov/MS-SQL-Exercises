@@ -98,6 +98,24 @@ Write a query to insert data into the Passengers table, based on the Pilots tabl
 
 */
 
+INSERT INTO Passengers (FullName, Email)
+SELECT 
+    CONCAT(FirstName, ' ', LastName) AS FullName,
+    CONCAT(FirstName, LastName, '@gmail.com') AS Email
+FROM Pilots AS p
+WHERE p.Id BETWEEN 5 AND 15;
+
+/*
+3.	Update
+Update all Aircraft, which:
+•	Have a condition of 'C' or 'B' 
+•	Have FlightHours Null or up to 100 (inclusive)
+•	Have Year after 2013 (inclusive)
+ By setting their condition to 'A'.
+*/
+
+
+
 SELECT * FROM Aircraft
 SELECT * FROM AircraftTypes
 SELECT * FROM Airports
@@ -106,11 +124,10 @@ SELECT * FROM Passengers
 SELECT * FROM Pilots
 SELECT * FROM PilotsAircraft
 
-
-INSERT INTO Passengers (FullName, Email)
-SELECT 
-    CONCAT(FirstName, ' ', LastName) AS FullName,
-    CONCAT(FirstName, LastName, '@gmail.com') AS Email
-FROM Pilots AS p
-WHERE p.Id BETWEEN 5 AND 15;
-
+UPDATE Aircraft
+SET Condition = 'A'
+ WHERE Condition = 'C' AND FlightHours IS NULL AND [Year] >= 2013
+ OR FlightHours <= 100 AND [Year] >= 2013
+ OR Condition = 'B' AND FlightHours IS NULL AND [Year] >= 2013
+ OR FlightHours <= 100 AND [Year] >= 2013
+ 
