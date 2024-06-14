@@ -289,6 +289,40 @@ Example
 			Parker McGeorge				4				3896.57
 */
 
+SELECT
+p.FullName,
+COUNT(fd.PassengerId) AS CountOfAircraft,
+SUM(fd.TicketPrice) AS TotalPayed
+FROM Passengers AS p
+LEFT JOIN FlightDestinations AS fd ON fd.PassengerId = p.Id
+GROUP BY p.FullName
+HAVING COUNT(fd.PassengerId) > 1 AND p.FullName LIKE '_a%' -- "_" single character  + the letter "a" ( 2nd place in the word ) 
+ORDER BY p.FullName
+
+/*
+10.	Full Info for Flight Destinations
+Extract information about all flight destinations which Start between hours: 6:00 and 20:00 (both inclusive) and have ticket prices higher than 2500. Select the airport's name, time of the day,  price of the ticket, passenger's full name, aircraft manufacturer, and aircraft model. Order the result by aircraft model ascending.
+Required columns:
+•	AirportName 
+•	DayTime
+•	TicketPrice
+•	FullName (passenger)
+•	Manufacturer
+•	Model
+Example
+
+
+AirportName																DayTime				TicketPrice			FullName			Manufacturer				Model
+N'Djamena International Airport								2020-09-12 18:14:55.000			3096.19			Owen Strivens				Boeing					737
+Hosea Kutako International Airport							2020-08-02 15:43:34.000			3010.46			Courtnay Devoy				Boeing					787
+Winnipeg James Armstrong Richardson International Airport	2020-11-28 17:58:40.000			3390.81			Jeralee Tue					Airbus					A330
+Monastir Habib Bourguiba International Airport				2020-08-23 14:33:46.000			4807.43			Danny Simoneau				Northrop Grumman		B-21 Raider
+Modibo Keita International Airport							2021-02-04 14:38:44.000			2930.91			Abbey Pedrinson				Rolls-Royce Holdings	EJ200
+King Mswati III International Airport						2020-06-13 10:53:40.000			3190.57			Juane Gorrynsen				Lockheed Martin			F-117 Nighthawk
+
+
+*/
+
 
 SELECT * FROM Aircraft
 SELECT * FROM AircraftTypes
@@ -299,12 +333,18 @@ SELECT * FROM Pilots
 SELECT * FROM PilotsAircraft
 
 
-SELECT
+SELECT 
+a.AirportName,
+fd.[Start] AS DayTime,
+fd.TicketPrice,
 p.FullName,
-COUNT(fd.PassengerId) AS CountOfAircraft,
-SUM(fd.TicketPrice) AS TotalPayed
-FROM Passengers AS p
-LEFT JOIN FlightDestinations AS fd ON fd.PassengerId = p.Id
-GROUP BY p.FullName
-HAVING COUNT(fd.PassengerId) > 1 AND p.FullName LIKE '_a%' -- "_" single character  + the letter "a" ( 2nd place in the word ) 
-ORDER BY p.FullName
+air.Manufacturer,
+air.Model
+FROM FlightDestinations AS fd
+JOIN Airports AS a ON a.Id = fd.AirportId
+JOIN Passengers AS p ON p.Id = fd.PassengerId
+JOIN Aircraft AS air ON air.Id = fd.AircraftId
+WHERE DATEPART(HOUR,fd.[Start]) >= 6 
+AND DATEPART(HOUR,fd.[Start]) <= 20
+AND fd.TicketPrice > 2500
+ORDER BY air.Model ASC 
