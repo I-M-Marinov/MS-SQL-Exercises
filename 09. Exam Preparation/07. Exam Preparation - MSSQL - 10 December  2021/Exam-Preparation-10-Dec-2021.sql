@@ -255,15 +255,6 @@ Example
 
 */
 
-
-SELECT * FROM Aircraft
-SELECT * FROM AircraftTypes
-SELECT * FROM Airports
-SELECT * FROM FlightDestinations
-SELECT * FROM Passengers
-SELECT * FROM Pilots
-SELECT * FROM PilotsAircraft
-
 SELECT 
 a.Id AS AircraftId,
 a.Manufacturer,
@@ -275,3 +266,45 @@ JOIN FlightDestinations AS fd ON fd.AircraftId = a.Id
 GROUP BY a.Id, a.Manufacturer, a.FlightHours
 HAVING COUNT (fd.AircraftId) >= 2
 ORDER BY COUNT (fd.AircraftId) DESC, a.Id ASC
+
+/*
+9.	Regular Passengers
+
+Extract all passengers, who have flown in more than one aircraft and have an 'a' as the second letter of their full name. 
+Select the full name, the count of aircraft that he/she traveled, and the total sum which was paid.
+Order the result by passenger's FullName.
+
+Required columns:
+•	FullName
+•	CountOfAircraft
+•	TotalPayed
+Example
+
+			FullName				CountOfAircraft		TotalPayed
+			Danny Simoneau				2				7587.68
+			Haven Seaton				2				5390.92
+			Jacquelynn Plackstone		2				4398.36
+			Kaylee Coushe				4				4286.71
+			Lanita Crockatt				2				4704.12
+			Parker McGeorge				4				3896.57
+*/
+
+
+SELECT * FROM Aircraft
+SELECT * FROM AircraftTypes
+SELECT * FROM Airports
+SELECT * FROM FlightDestinations
+SELECT * FROM Passengers
+SELECT * FROM Pilots
+SELECT * FROM PilotsAircraft
+
+
+SELECT
+p.FullName,
+COUNT(fd.PassengerId) AS CountOfAircraft,
+SUM(fd.TicketPrice) AS TotalPayed
+FROM Passengers AS p
+LEFT JOIN FlightDestinations AS fd ON fd.PassengerId = p.Id
+GROUP BY p.FullName
+HAVING COUNT(fd.PassengerId) > 1 AND p.FullName LIKE '_a%' -- "_" single character  + the letter "a" ( 2nd place in the word ) 
+ORDER BY p.FullName
