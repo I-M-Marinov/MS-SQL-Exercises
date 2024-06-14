@@ -350,16 +350,6 @@ Examples
 												   1
 */
 
-
-SELECT * FROM Aircraft
-SELECT * FROM AircraftTypes
-SELECT * FROM Airports
-SELECT * FROM FlightDestinations
-SELECT * FROM Passengers
-SELECT * FROM Pilots
-SELECT * FROM PilotsAircraft
-
-
 CREATE FUNCTION dbo.udf_FlightDestinationsByEmail(@email VARCHAR(50))
 RETURNS INT
 AS
@@ -375,3 +365,65 @@ END;
 SELECT dbo.udf_FlightDestinationsByEmail ('PierretteDunmuir@gmail.com') -- 1 
 SELECT dbo.udf_FlightDestinationsByEmail('Montacute@gmail.com')	-- 3
 SELECT dbo.udf_FlightDestinationsByEmail('MerisShale@gmail.com') -- 0
+
+/*
+12.	Full Info for Airports
+Create a stored procedure, named usp_SearchByAirportName, which accepts the following parameters:
+-	airportName(with max length 70)
+Extract information about the airport locations with the given airport name. 
+The needed data is the name of the airport, full name of the passenger, level of the ticket price 
+(depends on flight destination's ticket price: 'Low'– lower than 400 (inclusive), 'Medium' – between 401 and 1500 (inclusive), and 'High' – more than 1501),
+manufacturer and condition of the aircraft, and the name of the aircraft type.
+Order the result by Manufacturer, then by passenger's full name.
+
+Required columns:
+-	AirportName
+-	FullName (passenger)
+-	LevelOfTickerPrice 
+-	Manifacturer
+-	Condition
+-	TypeName (aircraft type)
+Example
+
+							Query
+EXEC usp_SearchByAirportName 'Sir Seretse Khama International Airport'
+
+Result
+
+AirportName										FullName				LevelOfTickerPrice	Manufacturer		Condition			TypeName
+Sir Seretse Khama International Airport			Alyson Jankowski			Low				Airbus					B			Private Single Engine
+Sir Seretse Khama International Airport			Bev Wrigglesworth			Medium			Airbus					B			Private Single Engine
+Sir Seretse Khama International Airport			Kelcy Viccary				High			Airbus					B			Mid-Size Passenger Jets
+Sir Seretse Khama International Airport			Courtnay Devoy				Low				GEAviation				B			Heavy Business Jets
+Sir Seretse Khama International Airport			Joyann Garrettson			Low				Lockheed Martin			A			Twin Turboprops
+Sir Seretse Khama International Airport			Zeke Rowston				High			Lockheed Martin			A			Private Single Engine
+
+*/
+
+CREATE PROCEDURE usp_SearchByAirportName(@airportName NVARCHAR(70))
+AS
+BEGIN
+		SELECT 
+			a.AirportName,
+			p.FullName,
+			CASE 
+					WHEN fd.TicketPrice <= 400 THEN 'Low'
+					WHEN fd.TicketPrice BETWEEN 401 AND 1500 THEN 'Medium' 
+					WHEN fd.TicketPrice >= 1501 THEN 'High' 
+
+			END AS LevelOfTicketPrice,
+			air.Manufacturer,
+			air.Condition,
+			[at].TypeName
+			FROM Airports AS a
+			JOIN FlightDestinations AS fd ON fd.AirportId = a.Id
+			JOIN Aircraft AS air ON air.Id = fd.AircraftId
+			JOIN Passengers AS p ON p.Id = fd.PassengerId
+			JOIN AircraftTypes as [at] ON [at].Id = air.TypeId
+			WHERE a.AirportName = @airportName
+			GROUP BY a.AirportName, p.FullName, fd.TicketPrice, air.Manufacturer, air.Condition, [at].TypeName
+			ORDER BY air.Manufacturer, p.FullName
+
+END
+
+EXEC usp_SearchByAirportName 'Sir Seretse Khama International Airport'
