@@ -152,13 +152,6 @@ Example
 		Northrop Grumman			X-47A Pegasus		906				B
 */
 
-SELECT * FROM Aircraft
-SELECT * FROM AircraftTypes
-SELECT * FROM Airports
-SELECT * FROM FlightDestinations
-SELECT * FROM Passengers
-SELECT * FROM Pilots
-SELECT * FROM PilotsAircraft
 
 SELECT
 Manufacturer,
@@ -167,4 +160,44 @@ FlightHours,
 Condition
 FROM Aircraft
 ORDER BY FlightHours DESC
+
+/*
+6.	Pilots and Aircraft
+Select pilots and aircraft that they operate. Extract the pilot's First, Last names, aircraft's Manufacturer, Model, and FlightHours. Skip all plains with NULLs and up to 304 FlightHours. Order the result by the FlightHours in descending order, then by the pilot's FirstName alphabetically. 
+Required columns:
+•	FirstName
+•	LastName
+•	Manufacturer
+•	Model
+•	FlightHours
+Example
+
+		FirstName		LastName		Manufacturer			Model		FlightHours
+		Genna			Jaquet				Safran				SaM146			303
+		Jaynell			Kidson				Safran				SaM146			303
+		Lexie			Salasar				Safran				SaM146			303
+		Roddie			Gribben				Safran				SaM146			303
+		Delaney			Stove				GE Aviation			CT10			275
+		Crosby			Godlee				Lockheed Martin		F-22 Raptor		271
+*/
+
+SELECT * FROM Aircraft
+SELECT * FROM AircraftTypes
+SELECT * FROM Airports
+SELECT * FROM FlightDestinations
+SELECT * FROM Passengers
+SELECT * FROM Pilots
+SELECT * FROM PilotsAircraft
+
+SELECT 
+p.FirstName, 
+p.LastName,
+a.Manufacturer,
+a.Model,
+a.FlightHours
+FROM Pilots AS p
+JOIN PilotsAircraft AS pe ON pe.PilotId = p.Id
+JOIN Aircraft AS a ON a.Id = pe.AircraftId
+WHERE a.FlightHours < 304 AND a.FlightHours IS NOT NULL
+ORDER BY a.FlightHours DESC, p.FirstName
 
