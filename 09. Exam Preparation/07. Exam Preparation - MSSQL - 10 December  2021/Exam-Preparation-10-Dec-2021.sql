@@ -127,6 +127,31 @@ Delete every passenger whose FullName is up to 10 characters (inclusive) long.
 
  */
 
+
+DELETE FROM Passengers WHERE LEN(FullName) <= 10
+
+/*
+Section 3. Querying (40 pts)
+You need to start with a fresh dataset, so recreate your DB and import the sample data again ("01. DDL_Dataset.sql").
+
+5.	Aircraft
+Extract information about all the Aircraft. Order the results by aircraft's FlightHours descending.
+Required columns:
+•	Manufacturer
+•	Model
+•	FlightHours
+•	Condition
+Example
+
+		Manufacturer				Model			FlightHours		Condition
+		Northrop Grumman			Bat	1				49039			C
+		Airbus						A330				999				B
+		Rolls-Royce Holdings		Trent900			958				B
+		GE Aviation					CF6					936				C
+		Boeing						BBJ					925				C
+		Northrop Grumman			X-47A Pegasus		906				B
+*/
+
 SELECT * FROM Aircraft
 SELECT * FROM AircraftTypes
 SELECT * FROM Airports
@@ -135,4 +160,11 @@ SELECT * FROM Passengers
 SELECT * FROM Pilots
 SELECT * FROM PilotsAircraft
 
-DELETE FROM Passengers WHERE LEN(FullName) <= 10
+SELECT
+Manufacturer,
+Model,
+FlightHours,
+Condition
+FROM Aircraft
+ORDER BY FlightHours DESC
+
