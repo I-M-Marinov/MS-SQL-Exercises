@@ -114,7 +114,18 @@ Update all Aircraft, which:
  By setting their condition to 'A'.
 */
 
+UPDATE Aircraft
+SET Condition = 'A'
+ WHERE Condition = 'C' AND FlightHours IS NULL AND [Year] >= 2013
+ OR FlightHours <= 100 AND [Year] >= 2013
+ OR Condition = 'B' AND FlightHours IS NULL AND [Year] >= 2013
+ OR FlightHours <= 100 AND [Year] >= 2013
+ 
+ /*
+ 4.	Delete
+Delete every passenger whose FullName is up to 10 characters (inclusive) long.
 
+ */
 
 SELECT * FROM Aircraft
 SELECT * FROM AircraftTypes
@@ -124,10 +135,4 @@ SELECT * FROM Passengers
 SELECT * FROM Pilots
 SELECT * FROM PilotsAircraft
 
-UPDATE Aircraft
-SET Condition = 'A'
- WHERE Condition = 'C' AND FlightHours IS NULL AND [Year] >= 2013
- OR FlightHours <= 100 AND [Year] >= 2013
- OR Condition = 'B' AND FlightHours IS NULL AND [Year] >= 2013
- OR FlightHours <= 100 AND [Year] >= 2013
- 
+DELETE FROM Passengers WHERE LEN(FullName) <= 10
