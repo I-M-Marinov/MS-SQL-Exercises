@@ -323,16 +323,6 @@ King Mswati III International Airport						2020-06-13 10:53:40.000			3190.57			J
 
 */
 
-
-SELECT * FROM Aircraft
-SELECT * FROM AircraftTypes
-SELECT * FROM Airports
-SELECT * FROM FlightDestinations
-SELECT * FROM Passengers
-SELECT * FROM Pilots
-SELECT * FROM PilotsAircraft
-
-
 SELECT 
 a.AirportName,
 fd.[Start] AS DayTime,
@@ -348,3 +338,40 @@ WHERE DATEPART(HOUR,fd.[Start]) >= 6
 AND DATEPART(HOUR,fd.[Start]) <= 20
 AND fd.TicketPrice > 2500
 ORDER BY air.Model ASC 
+
+/*
+11.	Find all Destinations by Email Address
+Create a user-defined function named udf_FlightDestinationsByEmail(@email) that receives a passenger's email address and returns the number of flight destinations that the passenger has in the database.
+Examples
+
+												Query
+				SELECT dbo.udf_FlightDestinationsByEmail ('PierretteDunmuir@gmail.com')
+												Output
+												   1
+*/
+
+
+SELECT * FROM Aircraft
+SELECT * FROM AircraftTypes
+SELECT * FROM Airports
+SELECT * FROM FlightDestinations
+SELECT * FROM Passengers
+SELECT * FROM Pilots
+SELECT * FROM PilotsAircraft
+
+
+CREATE FUNCTION dbo.udf_FlightDestinationsByEmail(@email VARCHAR(50))
+RETURNS INT
+AS
+BEGIN
+	DECLARE @numberOfDestinations INT;
+    SELECT @numberOfDestinations = COUNT(fd.PassengerId)
+    FROM Passengers AS p
+	LEFT JOIN FlightDestinations AS fd ON fd.PassengerId = p.Id
+    WHERE p.Email = @email;
+	RETURN @numberOfDestinations
+END;
+
+SELECT dbo.udf_FlightDestinationsByEmail ('PierretteDunmuir@gmail.com') -- 1 
+SELECT dbo.udf_FlightDestinationsByEmail('Montacute@gmail.com')	-- 3
+SELECT dbo.udf_FlightDestinationsByEmail('MerisShale@gmail.com') -- 0
