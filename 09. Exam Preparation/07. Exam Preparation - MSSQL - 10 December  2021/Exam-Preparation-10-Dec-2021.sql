@@ -82,3 +82,35 @@ CONSTRAINT FK_FlightDestinations_Aircraft FOREIGN KEY (AircraftId) REFERENCES Ai
 CONSTRAINT FK_FlightDestinations_Passengers FOREIGN KEY (PassengerId) REFERENCES Passengers(Id)
 )
 
+/*
+											Section 2. DML (10 pts)
+Before you start you have to import "01.DDL_Dataset.sql". If you have created the structure correctly the data should be successfully inserted.
+In this section, you have to do some data manipulations:
+
+
+
+2.	Insert
+Write a query to insert data into the Passengers table, based on the Pilots table. For all Pilots with an id between 5 and 15 (both inclusive), insert data in the Passengers table with the following values:
+-	FullName  -  get the first and last name of the pilot separated by a single space
+-	Example - 'Lois Leidle'
+-	Email - set it to start with full name with no space and add '@gmail.com' - 'FullName@gmail.com'
+-	 Example - 'LoisLeidle@gmail.com'
+
+*/
+
+SELECT * FROM Aircraft
+SELECT * FROM AircraftTypes
+SELECT * FROM Airports
+SELECT * FROM FlightDestinations
+SELECT * FROM Passengers
+SELECT * FROM Pilots
+SELECT * FROM PilotsAircraft
+
+
+INSERT INTO Passengers (FullName, Email)
+SELECT 
+    CONCAT(FirstName, ' ', LastName) AS FullName,
+    CONCAT(FirstName, LastName, '@gmail.com') AS Email
+FROM Pilots AS p
+WHERE p.Id BETWEEN 5 AND 15;
+
