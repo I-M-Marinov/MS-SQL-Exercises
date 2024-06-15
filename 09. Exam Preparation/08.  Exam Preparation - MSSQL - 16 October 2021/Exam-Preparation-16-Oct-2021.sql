@@ -115,9 +115,35 @@ Also add the text "New description" to every brand, which does not has BrandDesc
 */
 
 
-UPDATE Sites
-SET Establishment = '(not defined)'
-WHERE Establishment IS NULL 
+DECLARE @SpicyTasteId INT;
+SELECT @SpicyTasteId = Id FROM Tastes WHERE TasteType = 'Spicy';
 
+UPDATE Cigars
+SET PriceForSingleCigar = PriceForSingleCigar * 1.20
+WHERE TastId = @SpicyTasteId;
 
+UPDATE Brands
+SET BrandDescription = 'New description'
+WHERE BrandDescription IS NULL;
 	   
+
+/*
+4.	Delete
+In table Addresses, delete every country which name starts with 'C', 
+keep in mind that could be foreign key constraint conflicts.
+*/
+
+DELETE FROM ClientsCigars
+WHERE ClientId IN (SELECT ClientId FROM Clients IN ( AddressID IN ( SELECT AddressID FROM Addresses WHERE Country LIKE 'C%')
+
+DELETE FROM Clients
+WHERE AddressID IN ( SELECT AddressID FROM Addresses WHERE Country LIKE 'C%')
+
+DELETE FROM Addresses
+WHERE Country LIKE 'C%'
+
+SELECT * FROM ClientsCigars 
+SELECT * FROM Clients
+
+
+
