@@ -106,4 +106,18 @@ INSERT INTO Addresses (Town,Country,Streat,ZIP)
 VALUES ('Sofia', 'Bulgaria', '18 Bul. Vasil levski', 1000),
 ('Athens', 'Greece', '4342 McDonald Avenue', 10435),
 ('Zagreb', 'Croatia', '4333 Lauren Drive', 10000)
+
+/*
+3.	Update
+We've decided to increase the price of some cigars by 20%. 
+Update the table Cigars and increase the price of all cigars, which TasteType is "Spicy" by 20%. 
+Also add the text "New description" to every brand, which does not has BrandDescription.
+*/
+
+
+UPDATE Sites
+SET Establishment = '(not defined)'
+WHERE Establishment IS NULL 
+
+
 	   
