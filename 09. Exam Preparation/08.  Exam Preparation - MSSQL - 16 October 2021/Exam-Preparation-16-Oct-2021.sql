@@ -133,17 +133,35 @@ In table Addresses, delete every country which name starts with 'C',
 keep in mind that could be foreign key constraint conflicts.
 */
 
-DELETE FROM ClientsCigars
-WHERE ClientId IN (SELECT ClientId FROM Clients IN ( AddressID IN ( SELECT AddressID FROM Addresses WHERE Country LIKE 'C%')
-
 DELETE FROM Clients
-WHERE AddressID IN ( SELECT AddressID FROM Addresses WHERE Country LIKE 'C%')
+WHERE AddressID IN ( SELECT Id FROM Addresses WHERE Country LIKE 'C%')
 
 DELETE FROM Addresses
 WHERE Country LIKE 'C%'
 
-SELECT * FROM ClientsCigars 
-SELECT * FROM Clients
+/*
+Section 3. Querying (40 pts)
+You need to start with a fresh dataset, so recreate your DB and import the sample data again ("01-DDL-Data-Seeder.sql").
 
+5.	Cigars by Price
+Select all cigars ordered by price (ascending) then by cigar name (descending). 
+Required columns
 
+•	CigarName
+•	PriceForSingleCigar
+•	ImageURL
+Example
 
+		CigarName						PriceForSingleCigar						ImageURL
+		H.UPMANN NO. 2							5.45						h-upmann-magnum-50_6_4_1_9.png
+		EL-REY-DEL-MUNDO DEMI TASSE				11.45						EL-REY-DEL-MUNDO-magnum-50_6_4_1_9.jpg
+		VEGUEROS TAPADOS						15.62						VEGUEROS-open-junior_1_1_2_1_1_1_4_1_1_1_1_1_1_1_1_2_4_1_9.jpg
+		BOLIVAR CORONAS JUNIOR					17.34						bolivar-coronas-junior.jpg
+*/
+
+SELECT 
+CigarName,
+PriceForSingleCigar,
+ImageURL
+FROM Cigars
+ORDER BY PriceForSingleCigar, CigarName DESC
