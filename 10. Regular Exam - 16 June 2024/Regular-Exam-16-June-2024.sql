@@ -272,3 +272,36 @@ WHERE NOT EXISTS (
     AND b.GenreId = 1
 )
 ORDER BY l.[Name];
+
+/*
+8.	First 3 Books
+Your task is to write a query to select the first 3 books from the library database (LibraryDb) that meet the following criteria:
+•	The book was published after the year 2000 and contains the letter 'a' in the book title, 
+•	OR
+•	The book was published before 1950 and the genre name contains the word 'Fantasy'.
+
+The results should be ordered by the book title in ascending order, and then by the year published in descending order.
+
+Required columns:
+
+•	Title
+•	Year
+•	Genre
+Example
+
+	Title				Year	Genre
+	Educated			2018	Memoir
+	The Great Alone		2018	Historical Fiction
+	The Hobbit			1937	Fantasy
+
+*/
+
+SELECT TOP 3
+b.Title,
+b.YearPublished AS [Year],
+g.[Name] AS Genre
+FROM Books AS b
+JOIN Genres AS g ON g.Id = b.GenreId
+WHERE b.YearPublished > 2000 AND b.Title LIKE '%a%'
+OR b.YearPublished < 1950 AND g.[Name] LIKE '%Fantasy%'
+ORDER BY b.Title, b.YearPublished DESC
