@@ -152,3 +152,21 @@ VALUES (1, 36),
 	   (4, 42),
 	   (4, 43),
 	   (5, 44);
+
+/*
+3.	Update
+For all authors who do not have a website listed in their contact information, update their contact information to include a website. 
+The website should be in the format: "www." + "authorname" + ".com"
+
+'authorname' -> in lowercase without spaces
+
+'George Orwell' -> www.georgeorwell.com
+
+*/
+
+UPDATE c
+SET c.Website = CONCAT('www.', LOWER(REPLACE(a.Name, ' ', '')), '.com')
+FROM Contacts AS c
+JOIN Authors a ON a.ContactId = c.Id
+WHERE c.Website IS NULL;
+
