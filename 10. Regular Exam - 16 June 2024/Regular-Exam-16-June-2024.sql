@@ -241,3 +241,34 @@ JOIN Genres AS g ON g.Id = b.GenreId
 WHERE g.[Name] = 'Biography' OR  g.[Name] = 'Historical Fiction' 
 ORDER BY g.[Name], b.Title
 
+/*
+7.	Libraries Missing Specific Genre
+Select all libraries that do not have any books of a specific genre ('Mystery'). 
+Order the results by the name of the library in ascending order.
+
+Required columns:
+•	Library
+•	Email
+
+Example
+		       Library					Email
+		Politics and Prose		politics@example.com
+		Powell's City of Books	powells@example.com
+		Strand Bookstore		strand@example.com
+		Tattered Cover			tattered@example.com
+
+*/
+
+SELECT 
+l.[Name],
+c.Email
+FROM Libraries AS l
+JOIN Contacts c ON c.Id = l.ContactId
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM LibrariesBooks AS lb
+    JOIN Books AS b ON b.Id = lb.BookId
+    WHERE lb.LibraryId = l.Id
+    AND b.GenreId = 1
+)
+ORDER BY l.[Name];
