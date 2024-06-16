@@ -182,3 +182,33 @@ DELETE FROM LibrariesBooks WHERE BookId = 1
 DELETE FROM Books WHERE AuthorId = 1 -- Alex Michaelides's Id is 1
 DELETE FROM Authors WHERE Name = 'Alex Michaelides';
 
+/*
+Section 3. Querying (40 pts)
+You need to start with a fresh dataset, so recreate your DB and import the sample data again ("Dataset.sql").
+5.	Books by Year of Publication
+
+Select all books, ordered by year of publication – descending, and then by title - alphabetically.
+Required columns:
+
+•	Book Title
+•	ISBN
+•	YearReleased
+
+Example
+
+			Book Title						ISBN			YearReleased
+			'The Silent Patient'		'9781250301697'			2019
+			'Becoming'					'9781524763138'			2018
+			'Educated'					'9780399590504'			2018
+			'The Great Alone'			'9780312577230'			2018
+			'Where the Crawdads Sing'	'9780735219090'			2018
+			'A Storm of Swords'			'9780553106633'			2000
+
+*/
+
+SELECT 
+Title AS 'Book Title',
+ISBN,
+YearPublished AS 'YearReleased'
+FROM Books
+ORDER BY YearPublished DESC, Title 
