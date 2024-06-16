@@ -170,3 +170,15 @@ FROM Contacts AS c
 JOIN Authors a ON a.ContactId = c.Id
 WHERE c.Website IS NULL;
 
+/*
+4.	Delete
+You are required to delete 'Alex Michaelides' from the Authors table. 
+This is challenging because the Authors table is referenced by the Books table, which in turn is referenced by the LibrariesBooks table. 
+Therefore, you need to handle these references correctly to maintain the integrity of the database.
+
+*/
+
+DELETE FROM LibrariesBooks WHERE BookId = 1 
+DELETE FROM Books WHERE AuthorId = 1 -- Alex Michaelides's Id is 1
+DELETE FROM Authors WHERE Name = 'Alex Michaelides';
+
