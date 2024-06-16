@@ -183,8 +183,9 @@ DELETE FROM Books WHERE AuthorId = 1 -- Alex Michaelides's Id is 1
 DELETE FROM Authors WHERE Name = 'Alex Michaelides';
 
 /*
-Section 3. Querying (40 pts)
-You need to start with a fresh dataset, so recreate your DB and import the sample data again ("Dataset.sql").
+															Section 3. Querying (40 pts)
+						You need to start with a fresh dataset, so recreate your DB and import the sample data again ("Dataset.sql").
+
 5.	Books by Year of Publication
 
 Select all books, ordered by year of publication – descending, and then by title - alphabetically.
@@ -212,3 +213,31 @@ ISBN,
 YearPublished AS 'YearReleased'
 FROM Books
 ORDER BY YearPublished DESC, Title 
+
+/*
+6.	Books by Genre
+Select all books with 'Biography' or 'Historical Fiction' genres. Order results by Genre, and then by book title – alphabetically.
+
+Required columns:
+•	Id
+•	Title
+•	ISBN
+•	Genre
+Example
+
+		Id			Title					ISBN			Genre
+		3		Becoming				9781524763138	Biography
+		25		Anna Karenina			9780143035008	Historical Fiction
+		33		Crime and Punishment	9780140449136	Historical Fiction
+*/
+
+SELECT 
+b.Id,
+b.Title,
+b.ISBN,
+g.[Name]
+FROM Books AS b
+JOIN Genres AS g ON g.Id = b.GenreId
+WHERE g.[Name] = 'Biography' OR  g.[Name] = 'Historical Fiction' 
+ORDER BY g.[Name], b.Title
+
