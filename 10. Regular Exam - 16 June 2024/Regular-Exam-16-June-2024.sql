@@ -305,3 +305,66 @@ JOIN Genres AS g ON g.Id = b.GenreId
 WHERE b.YearPublished > 2000 AND b.Title LIKE '%a%'
 OR b.YearPublished < 1950 AND g.[Name] LIKE '%Fantasy%'
 ORDER BY b.Title, b.YearPublished DESC
+
+/*
+9.	Authors from the UK
+Your task is to write a query to select all authors from the UK (their PostAddress contains 'UK'). 
+The address information is stored in the Contacts table under the PostAddress column. 
+The results should be ordered by the author's name in ascending order.
+
+Required columns:
+•	Author
+•	Email
+•	Address
+
+Example
+
+Author					Email				Address
+J.K. Rowling	jk@example.com	100 Kings Rd, London, UK
+J.R.R. Tolkien	jrr@example.com	221B Baker St, London, UK
+
+*/
+
+SELECT 
+a.[Name] AS Author,
+c.Email,
+c.PostAddress AS [Address]
+FROM Authors AS a
+JOIN Contacts AS c ON c.Id = a.ContactId
+WHERE c.PostAddress LIKE '%UK%'
+ORDER BY a.[Name]
+
+/*
+10.	Fictions in Denver
+Your task is to write a query to select details for books of a specific genre -'Fiction', 
+and are sold in libraries located in Denver - their PostAddress contains 'Denver'. 
+Order the result by book title – alphabetically.
+
+Required columns:
+•	Author
+•	Title
+•	Library
+•	Library Addres
+
+Example
+
+    Author					Title				Library				Library Address
+Charles Dickens		A Tale of Two Cities	Tattered Cover	2526 E Colfax Ave, Denver, CO
+Charles Dickens		Great Expectations		Tattered Cover	2526 E Colfax Ave, Denver, CO
+
+*/
+
+SELECT 
+a.[Name] AS Author,
+b.Title AS Title,
+l.[Name] AS [Library],
+c.PostAddress AS 'Library Address'
+FROM Books AS b
+JOIN Genres	AS g ON g.Id = b.GenreId
+JOIN LibrariesBooks AS lb ON lb.BookId = b.Id
+JOIN Libraries AS l ON l.Id = lb.LibraryId
+JOIN Contacts AS c ON c.Id = l.ContactId
+JOIN Authors AS a ON a.Id = b.AuthorId
+WHERE g.Name = 'Fiction' AND c.PostAddress LIKE '%Denver%'
+ORDER BY b.Title
+
