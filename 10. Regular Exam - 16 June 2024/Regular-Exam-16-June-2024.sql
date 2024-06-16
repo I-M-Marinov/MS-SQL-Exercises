@@ -368,3 +368,37 @@ JOIN Authors AS a ON a.Id = b.AuthorId
 WHERE g.Name = 'Fiction' AND c.PostAddress LIKE '%Denver%'
 ORDER BY b.Title
 
+/*
+																Section 4. Programmability (20 pts)
+
+
+11.	Authors with Books
+Create a user-defined function, named udf_AuthorsWithBooks(@name) that receives an author's name.
+•	The function will accept an author's name as a parameter
+•	It will join the relevant tables to count the total number of books by that author available in all libraries
+Example
+
+										Query
+					SELECT dbo.udf_AuthorsWithBooks('J.K. Rowling')
+
+										Output
+										  3
+
+*/
+
+CREATE FUNCTION udf_AuthorsWithBooks(@name VARCHAR(40))
+RETURNS INT
+AS
+BEGIN
+	DECLARE @numberOfBooks INT;
+    SELECT @numberOfBooks = COUNT(b.AuthorId)
+    FROM Books AS b
+	JOIN Authors AS a ON a.Id = b.AuthorId
+    WHERE a.[Name] = @name;
+	RETURN @numberOfBooks
+END;
+
+SELECT dbo.udf_AuthorsWithBooks('J.K. Rowling') AS [Output] -- Output: 3
+SELECT dbo.udf_AuthorsWithBooks('Kristin Hannah') AS [Output] -- Output: 1
+SELECT dbo.udf_AuthorsWithBooks('Mark Twain') AS [Output] -- Output: 3
+
