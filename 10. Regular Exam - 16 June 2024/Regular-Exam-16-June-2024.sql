@@ -402,3 +402,47 @@ SELECT dbo.udf_AuthorsWithBooks('J.K. Rowling') AS [Output] -- Output: 3
 SELECT dbo.udf_AuthorsWithBooks('Kristin Hannah') AS [Output] -- Output: 1
 SELECT dbo.udf_AuthorsWithBooks('Mark Twain') AS [Output] -- Output: 3
 
+/*
+12.	Search for Books from a Specific Genre
+Create a stored procedure, named usp_SearchByGenre(@genreName) that receives a genre name as a parameter. 
+The procedure must print full information about all books that belong to the specific genre. 
+Order them by book title – alphabetically.
+
+Required columns:
+•	Title
+•	Year
+•	ISBN
+•	Author
+•	Genre
+
+Example
+									Query
+						EXEC usp_SearchByGenre 'Fantasy'
+
+									Output
+                     Title					Year		ISBN			Author		Genre
+Harry Potter and the Chamber of Secrets		1998	9780747538493	J.K. Rowling	Fantasy
+Harry Potter and the Prisoner of Azkaban	1999	9780747542155	J.K. Rowling	Fantasy
+....................................
+*/
+
+CREATE PROCEDURE usp_SearchByGenre(@genreName VARCHAR(20))
+AS
+BEGIN
+		SELECT 
+			b.Title,
+			b.YearPublished AS [Year],
+			b.ISBN,
+			a.[Name],
+			g.[Name]
+			FROM Genres AS g
+			JOIN Books AS b ON b.GenreId = g.Id
+			JOIN Authors AS a ON a.Id = b.AuthorId
+			WHERE g.[Name] = @genreName
+			ORDER BY b.Title
+END;
+
+EXEC usp_SearchByGenre 'Fantasy'
+EXEC usp_SearchByGenre 'Historical Fiction'
+EXEC usp_SearchByGenre 'Biography'
+EXEC usp_SearchByGenre 'Fiction'
