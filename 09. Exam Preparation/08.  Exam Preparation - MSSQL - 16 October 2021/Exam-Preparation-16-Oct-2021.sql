@@ -165,3 +165,38 @@ PriceForSingleCigar,
 ImageURL
 FROM Cigars
 ORDER BY PriceForSingleCigar, CigarName DESC
+
+/*
+6.	Cigars by Taste
+Select all cigars with "Earthy" or "Woody" tastes. Order results by PriceForSingleCigar (descending).
+Required columns
+
+•	Id
+•	CigarName
+•	PriceForSingleCigar
+•	TasteType
+•	TasteStrength
+
+Example
+
+			Id	CigarName									PriceForSingleCigar		TasteType		TasteStrength
+			18	TRINIDAD CASILDA COLECCION HABANOS 2019		756.82						Woody			Medium
+			25	RAMON ALLONES SMALL CLUB CORONAS			567.34						Earthy			Medium to Full
+			39	MONTECRISTO OPEN MASTER TUBOS				555.45						Earthy			Medium to Full
+			38	MONTECRISTO OPEN JUNIOR						545.45						Woody			Medium
+
+*/
+
+SELECT * FROM Cigars
+SELECT * FROM Tastes
+
+SELECT 
+c.Id,
+c.CigarName,
+c.PriceForSingleCigar,
+t.TasteType,
+t.TasteStrength
+FROM Cigars AS c
+JOIN Tastes AS t ON t.Id = c.TastId
+WHERE t.TasteType = 'Earthy' OR  t.TasteType = 'Woody'
+ORDER BY c.PriceForSingleCigar DESC
