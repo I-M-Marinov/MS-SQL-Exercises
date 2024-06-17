@@ -200,3 +200,29 @@ FROM Cigars AS c
 JOIN Tastes AS t ON t.Id = c.TastId
 WHERE t.TasteType = 'Earthy' OR  t.TasteType = 'Woody'
 ORDER BY c.PriceForSingleCigar DESC
+
+/*
+7.	Clients without Cigars
+Select all clients without cigars. Order them by name (ascending).
+Required columns
+
+•	Id
+•	ClientName – customer's first and last name, concatenated with space
+•	Email
+Example
+
+		Id		ClientName					Email
+		8		Brenda Wallace		Wallace.khan@gmail.com
+		10		Harry Jones			5ornob.Jones@gmail.com
+		7		Jason Hamilton		nob.Jason@gmail.com
+*/
+
+SELECT 
+c.Id,
+CONCAT(c.FirstName, ' ', c.LastName) AS ClientName,
+c.Email
+FROM Clients AS c
+LEFT JOIN ClientsCigars AS cs ON cs.ClientId = c.Id
+WHERE cs.CigarId IS NULL
+ORDER BY c.FirstName
+
