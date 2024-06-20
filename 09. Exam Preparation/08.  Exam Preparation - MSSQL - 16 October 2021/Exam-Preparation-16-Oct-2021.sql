@@ -248,11 +248,6 @@ HOYO-DE-MONTERREY EPICURE NO. 2					78.57						HOYO-DE-MONTERREY-siglo-i-stick_1
 
 */
 
-SELECT * FROM Cigars
-SELECT * FROM Sizes
-SELECT * FROM Tastes
-
-
 SELECT TOP 5
 c.CigarName,
 c.PriceForSingleCigar,
@@ -262,4 +257,42 @@ JOIN Sizes AS s ON s.Id = c.SizeId
 WHERE s.[Length] >= 12 AND (c.CigarName LIKE '%ci%' 
 OR (c.PriceForSingleCigar > 50 AND s.RingRange > 2.55))
 ORDER BY c.CigarName, c.PriceForSingleCigar DESC
+
+/*
+9.	Clients with ZIP Codes
+Select all clients which have addresses with ZIP code that contains only digits, and display they're the most expensive cigar. 
+Order by client full name ascending.
+Required columns
+•	FullName
+•	Country
+•	ZIP
+•	CigarPrice – formated as "${CigarPrice}"
+Example
+
+FullName					Country	ZIP			CigarPrice
+Betty Wallace	Turkey			13760			$555.45
+Joan Peters	Japan				06511			$543.23
+Rachel Bishop	Andorra			08043			$555.45
+
+*/
+
+SELECT * FROM Cigars
+SELECT * FROM Sizes
+SELECT * FROM Tastes
+SELECT * FROM Clients
+SELECT * FROM Addresses
+SELECT * FROM ClientsCigars
+
+SELECT 
+CONCAT_WS(' ', c.FirstName, c.LastName) AS FullName,
+a.Country,
+a.ZIP,
+FORMAT(MAX(ci.PriceForSingleCigar), '$####.###') AS CigarPrice
+FROM Clients AS c
+LEFT JOIN [Addresses] AS a ON a.Id = c.AddressId
+LEFT JOIN ClientsCigars AS cc ON cc.ClientId = c.Id
+LEFT JOIN Cigars AS ci ON ci.Id = cc.CigarId
+WHERE a.ZIP NOT LIKE '%[^0-9]%' --- REGEX
+GROUP BY c.FirstName, c.LastName, a.Country, a.ZIP
+ORDER BY FullName
 
