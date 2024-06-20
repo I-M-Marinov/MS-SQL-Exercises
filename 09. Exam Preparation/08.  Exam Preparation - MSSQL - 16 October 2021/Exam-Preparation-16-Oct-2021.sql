@@ -276,12 +276,6 @@ Rachel Bishop	Andorra			08043			$555.45
 
 */
 
-SELECT * FROM Cigars
-SELECT * FROM Sizes
-SELECT * FROM Tastes
-SELECT * FROM Clients
-SELECT * FROM Addresses
-SELECT * FROM ClientsCigars
 
 SELECT 
 CONCAT_WS(' ', c.FirstName, c.LastName) AS FullName,
@@ -295,4 +289,37 @@ LEFT JOIN Cigars AS ci ON ci.Id = cc.CigarId
 WHERE a.ZIP NOT LIKE '%[^0-9]%' --- REGEX
 GROUP BY c.FirstName, c.LastName, a.Country, a.ZIP
 ORDER BY FullName
+
+/*
+10.	Cigars by Size
+Select all clients which own cigars. Select their last name, average length, and ring range 
+(rounded up to the next biggest integer) of their cigars.
+Order the results by average cigar length (descending).
+Example
+
+LastName	CiagrLength		CiagrRingRange
+Miller			20				5
+Riley			19				3
+Ramirez			18				5
+*/
+
+
+SELECT * FROM Cigars
+SELECT * FROM Sizes
+SELECT * FROM Tastes
+SELECT * FROM Clients
+SELECT * FROM Addresses
+SELECT * FROM ClientsCigars
+
+SELECT
+c.LastName,
+AVG(s.[Length]) AS CigarLengt,
+CEILING(s.RingRange) AS CigarRingRange
+FROM Clients AS c JOIN ClientsCigars AS cc ON c.Id = cc.ClientId
+LEFT JOIN Cigars AS ci ON ci.Id = cc.CigarId
+JOIN Sizes AS s ON s.Id = ci.SizeId
+WHERE cc.CigarId IS NOT NULL 
+GROUP BY c.LastName, s.[Length], s.RingRange
+ORDER BY AVG(s.[Length]) DESC
+
 
