@@ -303,7 +303,6 @@ Riley			19				3
 Ramirez			18				5
 */
 
-
 SELECT * FROM Cigars
 SELECT * FROM Sizes
 SELECT * FROM Tastes
@@ -313,13 +312,11 @@ SELECT * FROM ClientsCigars
 
 SELECT
 c.LastName,
-AVG(s.[Length]) AS CigarLengt,
-CEILING(s.RingRange) AS CigarRingRange
-FROM Clients AS c JOIN ClientsCigars AS cc ON c.Id = cc.ClientId
-LEFT JOIN Cigars AS ci ON ci.Id = cc.CigarId
+AVG(s.[Length]) AS CigarLength,
+CEILING(MAX(s.RingRange)) AS CigarRingRange
+FROM Clients AS c 
+JOIN ClientsCigars AS cc ON c.Id = cc.ClientId
+JOIN Cigars AS ci ON ci.Id = cc.CigarId
 JOIN Sizes AS s ON s.Id = ci.SizeId
-WHERE cc.CigarId IS NOT NULL 
-GROUP BY c.LastName, s.[Length], s.RingRange
-ORDER BY AVG(s.[Length]) DESC
-
-
+GROUP BY c.LastName
+ORDER BY CigarLength DESC;
