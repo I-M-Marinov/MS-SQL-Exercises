@@ -226,3 +226,40 @@ LEFT JOIN ClientsCigars AS cs ON cs.ClientId = c.Id
 WHERE cs.CigarId IS NULL
 ORDER BY c.FirstName
 
+/*
+8.	First 5 Cigars
+Select the first 5 cigars that are at least 12cm long and contain "ci" in the cigar name or price for a 
+single cigar is bigger than $50 and ring range is bigger than 2.55. 
+Order the result by cigar name (ascending), then by price for a single cigar (descending).
+
+Required columns
+•	CigarName
+•	PriceForSingleCigar
+•	ImageURL
+Example
+
+CigarName									PriceForSingleCigar					ImageURL
+
+COHIBA 1966 EDICION LIMITADA 2011				19.45						cohiba-siglo-i-stick_18.png
+COHIBA BEHIKE 54								254.09						cohiba-esplendidos-stick.jpg
+FONSECA NO. 1									76.34						FONSECA-50_6_4_1_9.jpg
+HOYO-DE-MONTERREY EPICURE ESPECIAL				98.89						HOYO-DE-MONTERREY-siglo-i-stick_18.jpg
+HOYO-DE-MONTERREY EPICURE NO. 2					78.57						HOYO-DE-MONTERREY-siglo-i-stick_18.jpg
+
+*/
+
+SELECT * FROM Cigars
+SELECT * FROM Sizes
+SELECT * FROM Tastes
+
+
+SELECT TOP 5
+c.CigarName,
+c.PriceForSingleCigar,
+c.ImageURL
+FROM Cigars AS c
+JOIN Sizes AS s ON s.Id = c.SizeId 
+WHERE s.[Length] >= 12 AND (c.CigarName LIKE '%ci%' 
+OR (c.PriceForSingleCigar > 50 AND s.RingRange > 2.55))
+ORDER BY c.CigarName, c.PriceForSingleCigar DESC
+
