@@ -328,13 +328,6 @@ Example
 
 
 
-SELECT * FROM Cigars
-SELECT * FROM Sizes
-SELECT * FROM Tastes
-SELECT * FROM Clients
-SELECT * FROM Addresses
-SELECT * FROM ClientsCigars
-
 CREATE OR ALTER FUNCTION dbo.udf_ClientWithCigars(@name VARCHAR(15)) 
 RETURNS INT
 AS
@@ -365,3 +358,42 @@ LEFT JOIN ClientsCigars AS cs ON cs.ClientId = c.Id
 LEFT JOIN Cigars AS ci ON ci.Id = cs.CigarId
 GROUP BY c.FirstName, c.LastName
 ORDER BY CigarsCount DESC, c.FirstName, c.LastName
+
+
+/* 
+12.	Search for Cigar with Specific Taste
+Create a stored procedure, named usp_SearchByTaste(@taste), that receives taste type. 
+The procedure must print full information about all cigars with the given tastes: CigarName, Price, TasteType, BrandName, CigarLength, CigarRingRange. 
+Add '$' at the beginning of the price and "cm" at the end of both CigarLength and CigarRingRange. Order them by CigarLength (ascending), and CigarRingRange (descending).
+
+Example
+												Query
+									EXEC usp_SearchByTaste 'Woody'
+												Output
+CigarName							Price		TasteType	BrandName		CigarLength		CigarRingRange
+BOLIVAR PETIT CORONAS				$18.76		Woody		BOLIVAR				10 cm			2.90 cm
+DAVIDOFF MILLENNIUM BLEND ROBUSTO	$86.45		Woody		DAVIDOFF			11 cm			5.30 cm
+H.UPMANN MAGNUM 50 TUBOS			$23.66		Woody		H.UPMANN			11 cm			4.30 cm
+..........................
+
+*/
+
+CREATE PROCEDURE usp_SearchByTaste(@taste VARCHAR(10))
+AS
+BEGIN
+	SELECT 
+	ci.CigarName AS CigarName, 
+	CONCAT_WS('', '$',ci.PriceForSingleCigar) AS Price,
+	t.TasteType,
+	b.BrandName,
+	CONCAT_WS(' ', s.[Length], 'cm') AS CigarLength,
+	CONCAT_WS(' ', s.RingRange, 'cm') AS CigarRingRange
+	FROM Cigars AS ci
+	JOIN Tastes AS t ON ci.TastId = t.Id
+	JOIN Sizes AS s ON s.Id = ci.SizeId
+	JOIN Brands AS b ON b.Id = ci.BrandId
+	WHERE t.TasteType = @taste
+	ORDER BY CigarLength, CigarRingRange DESC
+END 
+
+EXEC usp_SearchByTaste 'Woody'
