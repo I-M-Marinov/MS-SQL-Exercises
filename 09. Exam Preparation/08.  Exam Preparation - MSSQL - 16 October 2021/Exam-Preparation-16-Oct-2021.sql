@@ -187,9 +187,6 @@ Example
 
 */
 
-SELECT * FROM Cigars
-SELECT * FROM Tastes
-
 SELECT 
 c.Id,
 c.CigarName,
@@ -303,12 +300,7 @@ Riley			19				3
 Ramirez			18				5
 */
 
-SELECT * FROM Cigars
-SELECT * FROM Sizes
-SELECT * FROM Tastes
-SELECT * FROM Clients
-SELECT * FROM Addresses
-SELECT * FROM ClientsCigars
+
 
 SELECT
 c.LastName,
@@ -321,3 +313,55 @@ JOIN Sizes AS s ON s.Id = ci.SizeId
 GROUP BY c.LastName
 ORDER BY CigarLength DESC;
 
+
+/*
+11.	Client with Cigars
+Create a user-defined function, named udf_ClientWithCigars(@name) that receives a client's first name.
+The function should return the total number of cigars that the client has.
+Example
+											Query
+						SELECT dbo.udf_ClientWithCigars('Betty')
+
+											Output
+											   5
+*/
+
+
+
+SELECT * FROM Cigars
+SELECT * FROM Sizes
+SELECT * FROM Tastes
+SELECT * FROM Clients
+SELECT * FROM Addresses
+SELECT * FROM ClientsCigars
+
+CREATE OR ALTER FUNCTION dbo.udf_ClientWithCigars(@name VARCHAR(15)) 
+RETURNS INT
+AS
+BEGIN
+	DECLARE @totalCigars INT;
+    SELECT @totalCigars = COUNT(ci.CigarName)
+    FROM Clients AS c
+	LEFT JOIN ClientsCigars AS cs ON cs.ClientId = c.Id
+	LEFT JOIN Cigars AS ci ON ci.Id = cs.CigarId
+    WHERE c.FirstName = @name
+	RETURN @totalCigars
+END;
+
+SELECT dbo.udf_ClientWithCigars('Betty') AS [Output] -- Expected Output: 5 
+SELECT dbo.udf_ClientWithCigars('Lisa') AS [Output] -- Expected Output: 4 
+SELECT dbo.udf_ClientWithCigars('Irene') AS [Output] -- Expected Output: 2 
+
+
+-- Extra query from me that returns the FirstName,LastName and number of Cigars per Client. 
+-- The result is ordered by the Number of the cigars descending, FirstName ascending and LastName ascending
+
+SELECT 
+c.FirstName,
+c.LastName,
+COUNT(c.Id) AS CigarsCount
+FROM Clients AS c
+LEFT JOIN ClientsCigars AS cs ON cs.ClientId = c.Id
+LEFT JOIN Cigars AS ci ON ci.Id = cs.CigarId
+GROUP BY c.FirstName, c.LastName
+ORDER BY CigarsCount DESC, c.FirstName, c.LastName
